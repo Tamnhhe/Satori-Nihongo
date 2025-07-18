@@ -1,0 +1,16 @@
+[
+  {
+    "quizId": "d4cdfd87-aba7-4280-b1c1-e672e4f690e7",
+    "studentId": "student1",
+    "answers": {
+      "0": "か",
+      "7b73889f-d9f0-4fe6-a5f8-16cc4264bf19": "き"
+    },
+    "score": 1,
+    "totalPoints": 2,
+    "startedAt": "2025-07-18T17:27:46.439Z",
+    "isCompleted": true,
+    "id": "570fd987-9bc0-4ddb-8954-3a901ccb5298",
+    "completedAt": "2025-07-18T17:28:09.202Z"
+  }
+]

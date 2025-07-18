@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Satori-Nihongo - Japanese Learning Quiz System</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <h1>🎌 Satori-Nihongo</h1>
+        <p>Japanese Learning Quiz System</p>
+    </header>
+
+    <main>
+        <div id="user-selection">
+            <h2>Select User Type</h2>
+            <div class="user-buttons">
+                <button onclick="loginAs('teacher')" class="btn btn-primary">
+                    👨‍🏫 Login as Teacher
+                </button>
+                <button onclick="loginAs('student')" class="btn btn-secondary">
+                    👨‍🎓 Login as Student
+                </button>
+            </div>
+        </div>
+
+        <div id="teacher-dashboard" style="display: none;">
+            <h2>Teacher Dashboard</h2>
+            <div class="dashboard-section">
+                <h3>Quiz Management</h3>
+                <button onclick="showCreateQuiz()" class="btn btn-primary">Create New Quiz</button>
+                <button onclick="loadQuizzes()" class="btn btn-secondary">View My Quizzes</button>
+            </div>
+            
+            <div id="create-quiz-form" style="display: none;">
+                <h4>Create New Quiz</h4>
+                <form onsubmit="createQuiz(event)">
+                    <input type="text" id="quiz-title" placeholder="Quiz Title" required>
+                    <textarea id="quiz-description" placeholder="Quiz Description"></textarea>
+                    <input type="number" id="quiz-time-limit" placeholder="Time Limit (minutes)">
+                    <button type="submit" class="btn btn-primary">Create Quiz</button>
+                </form>
+            </div>
+
+            <div id="quiz-list"></div>
+        </div>
+
+        <div id="student-dashboard" style="display: none;">
+            <h2>Student Dashboard</h2>
+            <div class="dashboard-section">
+                <h3>Take Quizzes</h3>
+                <button onclick="loadAvailableQuizzes()" class="btn btn-primary">Available Quizzes</button>
+                <button onclick="loadHistory()" class="btn btn-secondary">My History</button>
+                <button onclick="loadFlashcards()" class="btn btn-accent">Study Flashcards</button>
+                <button onclick="showPracticeTestForm()" class="btn btn-accent">Create Practice Test</button>
+            </div>
+
+            <div id="practice-test-form" style="display: none;">
+                <h4>Create AI Practice Test</h4>
+                <form onsubmit="createPracticeTest(event)">
+                    <input type="text" id="practice-topic" placeholder="Topic (e.g., Hiragana, Katakana)" required>
+                    <select id="practice-difficulty">
+                        <option value="easy">Easy</option>
+                        <option value="medium">Medium</option>
+                        <option value="hard">Hard</option>
+                    </select>
+                    <input type="number" id="practice-count" placeholder="Number of questions" min="1" max="20" value="5">
+                    <button type="submit" class="btn btn-primary">Generate Practice Test</button>
+                </form>
+            </div>
+
+            <div id="available-quizzes"></div>
+            <div id="quiz-history"></div>
+            <div id="flashcards"></div>
+        </div>
+
+        <div id="quiz-taking" style="display: none;">
+            <h2>Taking Quiz</h2>
+            <div id="quiz-content"></div>
+        </div>
+
+        <div id="results" style="display: none;">
+            <h2>Quiz Results</h2>
+            <div id="results-content"></div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Satori-Nihongo - Japanese Learning Platform</p>
+    </footer>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
