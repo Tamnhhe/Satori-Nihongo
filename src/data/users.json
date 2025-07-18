@@ -1,0 +1,16 @@
+[
+  {
+    "username": "teacher1",
+    "email": "teacher1@demo.com",
+    "role": "teacher",
+    "name": "Demo Teacher",
+    "id": "7fc66777-e8bb-4063-ba95-2b2a8617f635"
+  },
+  {
+    "username": "student1",
+    "email": "student1@demo.com",
+    "role": "student",
+    "name": "Demo Student",
+    "id": "cb666631-ed02-4bbb-911e-c194ac74251d"
+  }
+]
