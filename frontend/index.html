@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Satori-Nihongo - Japanese Learning Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+
+        .auth-container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            padding: 40px;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .dashboard {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            padding: 40px;
+            display: none;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #555;
+        }
+
+        input[type="text"], input[type="email"], input[type="password"], select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e1e1e1;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+        }
+
+        .form-switch {
+            text-align: center;
+            margin-top: 20px;
+            color: #666;
+        }
+
+        .form-switch a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .message {
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .error {
+            background-color: #ffe6e6;
+            color: #d63031;
+            border: 1px solid #d63031;
+        }
+
+        .success {
+            background-color: #e6ffe6;
+            color: #00b894;
+            border: 1px solid #00b894;
+        }
+
+        .course-list {
+            margin-top: 30px;
+        }
+
+        .course-item {
+            background: #f8f9fa;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .user-info {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .logout-btn {
+            background: #d63031;
+            margin-top: 20px;
+        }
+
+        .gift-code-section {
+            margin: 30px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🌸 Satori-Nihongo</h1>
+            <p>Master Japanese with our interactive learning platform</p>
+        </div>
+
+        <!-- Authentication Forms -->
+        <div id="auth-section" class="auth-container">
+            <!-- Login Form -->
+            <div id="login-form">
+                <h2>Login to Your Account</h2>
+                <div id="login-message"></div>
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="loginEmail">Email:</label>
+                        <input type="email" id="loginEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="loginPassword">Password:</label>
+                        <input type="password" id="loginPassword" required>
+                    </div>
+                    <button type="submit">Login</button>
+                </form>
+                <div class="form-switch">
+                    Don't have an account? <a href="#" onclick="showRegister()">Register here</a>
+                </div>
+            </div>
+
+            <!-- Register Form -->
+            <div id="register-form" class="hidden">
+                <h2>Create Your Account</h2>
+                <div id="register-message"></div>
+                <form id="registerForm">
+                    <div class="form-group">
+                        <label for="registerUsername">Username:</label>
+                        <input type="text" id="registerUsername" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="registerEmail">Email:</label>
+                        <input type="email" id="registerEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="registerPassword">Password:</label>
+                        <input type="password" id="registerPassword" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="registerRole">Role:</label>
+                        <select id="registerRole">
+                            <option value="student">Student</option>
+                            <option value="instructor">Instructor</option>
+                        </select>
+                    </div>
+                    <button type="submit">Register</button>
+                </form>
+                <div class="form-switch">
+                    Already have an account? <a href="#" onclick="showLogin()">Login here</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard -->
+        <div id="dashboard" class="dashboard">
+            <div class="user-info">
+                <h2>Welcome, <span id="username"></span>!</h2>
+                <p>Role: <span id="userRole"></span></p>
+                <p>Email: <span id="userEmail"></span></p>
+            </div>
+
+            <!-- Gift Code Section for Students -->
+            <div id="gift-code-section" class="gift-code-section">
+                <h3>Join a Course</h3>
+                <div id="gift-code-message"></div>
+                <form id="giftCodeForm">
+                    <div class="form-group">
+                        <label for="giftCode">Enter Gift Code:</label>
+                        <input type="text" id="giftCode" placeholder="Enter course gift code" required>
+                    </div>
+                    <button type="submit">Join Course</button>
+                </form>
+            </div>
+
+            <!-- Course Creation for Instructors -->
+            <div id="course-creation-section" class="gift-code-section hidden">
+                <h3>Create a New Course</h3>
+                <div id="course-creation-message"></div>
+                <form id="courseCreationForm">
+                    <div class="form-group">
+                        <label for="courseTitle">Course Title:</label>
+                        <input type="text" id="courseTitle" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="courseDescription">Description:</label>
+                        <input type="text" id="courseDescription">
+                    </div>
+                    <button type="submit">Create Course</button>
+                </form>
+            </div>
+
+            <!-- My Courses -->
+            <div class="course-list">
+                <h3>My Courses</h3>
+                <div id="coursesList"></div>
+            </div>
+
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+    </div>
+
+    <script>
+        let currentUser = null;
+
+        // Check if user is already logged in
+        window.onload = function() {
+            const token = localStorage.getItem('token');
+            if (token) {
+                // Verify token and load dashboard
+                loadDashboard();
+            }
+        };
+
+        function showRegister() {
+            document.getElementById('login-form').classList.add('hidden');
+            document.getElementById('register-form').classList.remove('hidden');
+        }
+
+        function showLogin() {
+            document.getElementById('register-form').classList.add('hidden');
+            document.getElementById('login-form').classList.remove('hidden');
+        }
+
+        function showMessage(elementId, message, isError = false) {
+            const messageEl = document.getElementById(elementId);
+            messageEl.innerHTML = `<div class="message ${isError ? 'error' : 'success'}">${message}</div>`;
+        }
+
+        // Login form handler
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+
+            try {
+                const response = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email, password }),
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    localStorage.setItem('token', data.token);
+                    currentUser = data.user;
+                    showMessage('login-message', 'Login successful!');
+                    setTimeout(() => {
+                        loadDashboard();
+                    }, 1000);
+                } else {
+                    showMessage('login-message', data.error, true);
+                }
+            } catch (error) {
+                showMessage('login-message', 'An error occurred. Please try again.', true);
+            }
+        });
+
+        // Register form handler
+        document.getElementById('registerForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('registerUsername').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+            const role = document.getElementById('registerRole').value;
+
+            try {
+                const response = await fetch('/api/auth/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ username, email, password, role }),
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    localStorage.setItem('token', data.token);
+                    currentUser = data.user;
+                    showMessage('register-message', 'Registration successful!');
+                    setTimeout(() => {
+                        loadDashboard();
+                    }, 1000);
+                } else {
+                    showMessage('register-message', data.error, true);
+                }
+            } catch (error) {
+                showMessage('register-message', 'An error occurred. Please try again.', true);
+            }
+        });
+
+        // Gift code form handler
+        document.getElementById('giftCodeForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const giftCode = document.getElementById('giftCode').value;
+
+            try {
+                const response = await fetch('/api/courses/join', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                    },
+                    body: JSON.stringify({ giftCode }),
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    showMessage('gift-code-message', data.message);
+                    document.getElementById('giftCode').value = '';
+                    loadCourses();
+                } else {
+                    showMessage('gift-code-message', data.error, true);
+                }
+            } catch (error) {
+                showMessage('gift-code-message', 'An error occurred. Please try again.', true);
+            }
+        });
+
+        // Course creation form handler
+        document.getElementById('courseCreationForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const title = document.getElementById('courseTitle').value;
+            const description = document.getElementById('courseDescription').value;
+
+            try {
+                const response = await fetch('/api/courses', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                    },
+                    body: JSON.stringify({ title, description }),
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    showMessage('course-creation-message', `Course created! Gift code: ${data.course.gift_code}`);
+                    document.getElementById('courseTitle').value = '';
+                    document.getElementById('courseDescription').value = '';
+                    loadCourses();
+                } else {
+                    showMessage('course-creation-message', data.error, true);
+                }
+            } catch (error) {
+                showMessage('course-creation-message', 'An error occurred. Please try again.', true);
+            }
+        });
+
+        async function loadDashboard() {
+            try {
+                // Decode token to get user info
+                const token = localStorage.getItem('token');
+                const payload = JSON.parse(atob(token.split('.')[1]));
+                
+                currentUser = {
+                    id: payload.userId,
+                    email: payload.email,
+                    role: payload.role
+                };
+
+                document.getElementById('username').textContent = payload.email.split('@')[0];
+                document.getElementById('userRole').textContent = payload.role;
+                document.getElementById('userEmail').textContent = payload.email;
+
+                // Show appropriate sections based on role
+                if (payload.role === 'instructor') {
+                    document.getElementById('gift-code-section').classList.add('hidden');
+                    document.getElementById('course-creation-section').classList.remove('hidden');
+                } else {
+                    document.getElementById('gift-code-section').classList.remove('hidden');
+                    document.getElementById('course-creation-section').classList.add('hidden');
+                }
+
+                document.getElementById('auth-section').style.display = 'none';
+                document.getElementById('dashboard').style.display = 'block';
+
+                loadCourses();
+            } catch (error) {
+                console.error('Error loading dashboard:', error);
+                logout();
+            }
+        }
+
+        async function loadCourses() {
+            try {
+                const response = await fetch('/api/courses/my-courses', {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                    },
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    const coursesList = document.getElementById('coursesList');
+                    if (data.courses.length === 0) {
+                        coursesList.innerHTML = '<p>No courses found. Join a course using a gift code!</p>';
+                    } else {
+                        coursesList.innerHTML = data.courses.map(course => `
+                            <div class="course-item">
+                                <h4>${course.title}</h4>
+                                <p>${course.description || 'No description'}</p>
+                                <small>Enrolled: ${new Date(course.enrolled_at).toLocaleDateString()}</small>
+                            </div>
+                        `).join('');
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading courses:', error);
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('token');
+            currentUser = null;
+            document.getElementById('auth-section').style.display = 'block';
+            document.getElementById('dashboard').style.display = 'none';
+            showLogin();
+        }
+    </script>
+</body>
+</html>
