@@ -1,0 +1,27 @@
+{
+  "onlineSatoriPlatformApp": {
+    "studentProfile": {
+      "home": {
+        "title": "Student Profiles",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Student Profile",
+        "createOrEditLabel": "Create or edit a Student Profile",
+        "notFound": "No Student Profiles found"
+      },
+      "created": "A new Student Profile is created with identifier {{ param }}",
+      "updated": "A Student Profile is updated with identifier {{ param }}",
+      "deleted": "A Student Profile is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Student Profile {{ id }}?"
+      },
+      "detail": {
+        "title": "Student Profile"
+      },
+      "id": "ID",
+      "studentId": "Student Id",
+      "gpa": "Gpa",
+      "userProfile": "User Profile",
+      "classes": "Classes"
+    }
+  }
+}

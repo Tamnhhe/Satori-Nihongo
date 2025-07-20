@@ -1,0 +1,25 @@
+{
+  "onlineSatoriPlatformApp": {
+    "teacherProfile": {
+      "home": {
+        "title": "Teacher Profiles",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Teacher Profile",
+        "createOrEditLabel": "Create or edit a Teacher Profile",
+        "notFound": "No Teacher Profiles found"
+      },
+      "created": "A new Teacher Profile is created with identifier {{ param }}",
+      "updated": "A Teacher Profile is updated with identifier {{ param }}",
+      "deleted": "A Teacher Profile is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Teacher Profile {{ id }}?"
+      },
+      "detail": {
+        "title": "Teacher Profile"
+      },
+      "id": "ID",
+      "teacherCode": "Teacher Code",
+      "userProfile": "User Profile"
+    }
+  }
+}

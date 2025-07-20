@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+    <!--
+        Added the constraints for entity CourseClass.
+    -->
+    <changeSet id="20250720033706-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="course_id"
+                                 baseTableName="course_class"
+                                 constraintName="fk_course_class__course_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="course"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="teacher_id"
+                                 baseTableName="course_class"
+                                 constraintName="fk_course_class__teacher_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="teacher_profile"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="course_class_id"
+                                 baseTableName="rel_course_class__students"
+                                 constraintName="fk_rel_course_class__students__course_class_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="course_class"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="students_id"
+                                 baseTableName="rel_course_class__students"
+                                 constraintName="fk_rel_course_class__students__students_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="student_profile"
+                                 />
+    </changeSet>
+</databaseChangeLog>

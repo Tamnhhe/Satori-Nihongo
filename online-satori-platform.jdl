@@ -1,0 +1,157 @@
+application {
+  config {
+    baseName onlineSatoriPlatform
+    applicationType monolith
+    packageName com.satori.platform
+    authenticationType jwt
+    prodDatabaseType mysql
+    devDatabaseType mysql
+    enableHibernateCache true
+    buildTool maven
+    clientFramework react
+    clientPackageManager npm
+    enableTranslation true
+    nativeLanguage vi
+    languages [en, vi, ja]
+  }
+  entities UserProfile, SocialAccount, TeacherProfile, StudentProfile, Course, CourseClass, Lesson, Schedule, Quiz, Question, QuizQuestion, StudentQuiz, Flashcard
+}
+
+enum Role {
+  ADMIN,
+  GIANG_VIEN,
+  HOC_VIEN
+}
+enum AuthProvider {
+  LOCAL,
+  GOOGLE,
+  FACEBOOK,	
+  GITHUB
+}
+enum QuizType {
+  COURSE,
+  LESSON
+}
+
+entity UserProfile {
+  username     String required,
+  passwordHash String required,
+  email        String required,
+  fullName     String required,
+  gender 	   Boolean
+  role         Role   required
+}
+entity SocialAccount {
+  provider        AuthProvider required,
+  providerUserId  String       required maxlength(100),
+  accessToken     String       maxlength(500),
+  refreshToken    String       maxlength(500),
+  tokenExpiry     Instant
+}
+
+entity TeacherProfile {
+  teacherCode  String required,
+  
+}
+
+entity StudentProfile {
+  studentId   String  required,
+  gpa         Double
+}
+
+entity Course {
+  title       String required,
+  description String,
+  courseCode  String //mã môn
+}
+
+entity CourseClass {
+  code        String required unique,   // mã lớp
+  name        String required,          // tên lớp, ví dụ "Lớp Love 101"
+  description String,
+  startDate   Instant required,
+  endDate     Instant required,
+  capacity    Integer                   // sức chứa tối đa
+}
+
+entity Lesson {
+  title    String required,
+  content  TextBlob,
+  videoUrl String,
+  slideUrl String
+}
+
+entity Schedule {
+  date       Instant required,
+  startTime  Instant required,
+  endTime    Instant required,
+  location   String
+}
+
+entity Quiz {
+  title       String required,
+  description String,
+  isTest      Boolean required,
+  isPractice  Boolean required,
+  quizType    QuizType  required
+}
+
+entity Question {
+  content           String required,
+  imageUrl          String,
+  suggestion        String,
+  answerExplanation String,
+  correctAnswer     String required,
+  type              String required
+}
+
+entity QuizQuestion {
+  position Integer required
+}
+
+entity StudentQuiz {
+  startTime Instant,
+  endTime   Instant,
+  score     Double,
+  completed Boolean
+}
+
+entity Flashcard {
+  term        String   required,      // the prompt, e.g. "What is Love?"
+  definition  TextBlob,                // the answer/explanation
+  imageUrl    String,                  // optional diagram
+  hint        String,                  // optional hint
+  position    Integer  required        // ordering within a lesson
+}
+
+relationship OneToOne {
+  UserProfile{teacherProfile} to TeacherProfile{userProfile},
+  UserProfile{studentProfile} to StudentProfile{userProfile}
+}
+
+relationship OneToMany {
+  Course{lessons}         to Lesson{course},
+  UserProfile{createdCourses} to Course{teacher},
+  Course{schedules}       to Schedule{course},
+  Quiz{questions}         to QuizQuestion{quiz},
+  Question{quizQuestions} to QuizQuestion{question},
+  Quiz{assignedTo}        to StudentQuiz{quiz},
+  UserProfile{quizAttempts}   to StudentQuiz{student},
+  Lesson{flashcards}      to Flashcard{lesson}
+}
+
+relationship ManyToOne {
+  CourseClass{course}  to Course,       // mỗi lớp thuộc 1 khóa
+  CourseClass{teacher} to TeacherProfile, // mỗi lớp do 1 giảng viên phụ trách
+  SocialAccount{userProfile} to UserProfile
+}
+
+relationship ManyToMany {
+  CourseClass{students} to StudentProfile{classes}, // nhiều học viên trong lớp
+  Quiz{course} to Course,
+  Quiz{lesson} to Lesson
+}
+
+dto * with mapstruct
+paginate * with pagination
+service all with serviceClass

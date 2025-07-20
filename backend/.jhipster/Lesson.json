@@ -1,0 +1,46 @@
+{
+  "annotations": {
+    "changelogDate": "20250720033806"
+  },
+  "applications": ["onlineSatoriPlatform"],
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "title",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "content",
+      "fieldType": "TextBlob"
+    },
+    {
+      "fieldName": "videoUrl",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "slideUrl",
+      "fieldType": "String"
+    }
+  ],
+  "name": "Lesson",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "flashcard",
+      "otherEntityRelationshipName": "lesson",
+      "relationshipName": "flashcards",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "course",
+      "otherEntityRelationshipName": "lessons",
+      "relationshipName": "course",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceClass"
+}

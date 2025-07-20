@@ -1,0 +1,32 @@
+{
+  "onlineSatoriPlatformApp": {
+    "courseClass": {
+      "home": {
+        "title": "Course Classes",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Course Class",
+        "createOrEditLabel": "Create or edit a Course Class",
+        "notFound": "No Course Classes found"
+      },
+      "created": "A new Course Class is created with identifier {{ param }}",
+      "updated": "A Course Class is updated with identifier {{ param }}",
+      "deleted": "A Course Class is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Course Class {{ id }}?"
+      },
+      "detail": {
+        "title": "Course Class"
+      },
+      "id": "ID",
+      "code": "Code",
+      "name": "Name",
+      "description": "Description",
+      "startDate": "Start Date",
+      "endDate": "End Date",
+      "capacity": "Capacity",
+      "course": "Course",
+      "teacher": "Teacher",
+      "students": "Students"
+    }
+  }
+}

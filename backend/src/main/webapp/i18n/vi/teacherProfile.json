@@ -1,0 +1,25 @@
+{
+  "onlineSatoriPlatformApp": {
+    "teacherProfile": {
+      "home": {
+        "title": "Teacher Profiles",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Thêm mới một Teacher Profile",
+        "createOrEditLabel": "Thêm mới hoặc cập nhật Teacher Profile",
+        "notFound": "No Teacher Profiles found"
+      },
+      "created": "Một Teacher Profile mới được tạo với định danh {{ param }}",
+      "updated": "Một Teacher Profile cập nhật với định danh {{ param }}",
+      "deleted": "Một Teacher Profile đã xóa với định danh {{ param }}",
+      "delete": {
+        "question": "Bạn có chắc là muốn xóa Teacher Profile {{ id }}?"
+      },
+      "detail": {
+        "title": "Teacher Profile"
+      },
+      "id": "ID",
+      "teacherCode": "Teacher Code",
+      "userProfile": "User Profile"
+    }
+  }
+}

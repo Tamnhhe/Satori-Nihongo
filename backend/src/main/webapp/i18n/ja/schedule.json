@@ -1,0 +1,28 @@
+{
+  "onlineSatoriPlatformApp": {
+    "schedule": {
+      "home": {
+        "title": "Schedules",
+        "refreshListLabel": "リストの更新",
+        "createLabel": "Schedule の作成",
+        "createOrEditLabel": "Scheduleの作成または編集",
+        "notFound": "Schedules が見つかりません。"
+      },
+      "created": "新しい Schedule がID {{ param }} で作成されました。",
+      "updated": "ID {{ param }} の Schedule が更新されました。",
+      "deleted": "ID {{ param }} の Schedule が削除されました。",
+      "delete": {
+        "question": "Schedule {{ id }}を削除してもよろしいですか？"
+      },
+      "detail": {
+        "title": "Schedule"
+      },
+      "id": "ID",
+      "date": "Date",
+      "startTime": "Start Time",
+      "endTime": "End Time",
+      "location": "Location",
+      "course": "Course"
+    }
+  }
+}

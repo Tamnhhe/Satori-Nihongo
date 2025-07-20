@@ -1,0 +1,29 @@
+{
+  "onlineSatoriPlatformApp": {
+    "socialAccount": {
+      "home": {
+        "title": "SocialAccounts",
+        "refreshListLabel": "リストの更新",
+        "createLabel": "Social Account の作成",
+        "createOrEditLabel": "Social Accountの作成または編集",
+        "notFound": "Social Accounts が見つかりません。"
+      },
+      "created": "新しい Social Account がID {{ param }} で作成されました。",
+      "updated": "ID {{ param }} の Social Account が更新されました。",
+      "deleted": "ID {{ param }} の Social Account が削除されました。",
+      "delete": {
+        "question": "Social Account {{ id }}を削除してもよろしいですか？"
+      },
+      "detail": {
+        "title": "Social Account"
+      },
+      "id": "ID",
+      "provider": "Provider",
+      "providerUserId": "Provider User Id",
+      "accessToken": "Access Token",
+      "refreshToken": "Refresh Token",
+      "tokenExpiry": "Token Expiry",
+      "userProfile": "User Profile"
+    }
+  }
+}

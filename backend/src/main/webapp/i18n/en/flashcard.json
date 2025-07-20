@@ -1,0 +1,29 @@
+{
+  "onlineSatoriPlatformApp": {
+    "flashcard": {
+      "home": {
+        "title": "Flashcards",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Flashcard",
+        "createOrEditLabel": "Create or edit a Flashcard",
+        "notFound": "No Flashcards found"
+      },
+      "created": "A new Flashcard is created with identifier {{ param }}",
+      "updated": "A Flashcard is updated with identifier {{ param }}",
+      "deleted": "A Flashcard is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Flashcard {{ id }}?"
+      },
+      "detail": {
+        "title": "Flashcard"
+      },
+      "id": "ID",
+      "term": "Term",
+      "definition": "Definition",
+      "imageUrl": "Image Url",
+      "hint": "Hint",
+      "position": "Position",
+      "lesson": "Lesson"
+    }
+  }
+}

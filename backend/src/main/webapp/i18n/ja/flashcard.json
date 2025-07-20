@@ -1,0 +1,29 @@
+{
+  "onlineSatoriPlatformApp": {
+    "flashcard": {
+      "home": {
+        "title": "Flashcards",
+        "refreshListLabel": "リストの更新",
+        "createLabel": "Flashcard の作成",
+        "createOrEditLabel": "Flashcardの作成または編集",
+        "notFound": "Flashcards が見つかりません。"
+      },
+      "created": "新しい Flashcard がID {{ param }} で作成されました。",
+      "updated": "ID {{ param }} の Flashcard が更新されました。",
+      "deleted": "ID {{ param }} の Flashcard が削除されました。",
+      "delete": {
+        "question": "Flashcard {{ id }}を削除してもよろしいですか？"
+      },
+      "detail": {
+        "title": "Flashcard"
+      },
+      "id": "ID",
+      "term": "Term",
+      "definition": "Definition",
+      "imageUrl": "Image Url",
+      "hint": "Hint",
+      "position": "Position",
+      "lesson": "Lesson"
+    }
+  }
+}

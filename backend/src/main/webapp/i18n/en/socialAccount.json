@@ -1,0 +1,29 @@
+{
+  "onlineSatoriPlatformApp": {
+    "socialAccount": {
+      "home": {
+        "title": "Social Accounts",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Social Account",
+        "createOrEditLabel": "Create or edit a Social Account",
+        "notFound": "No Social Accounts found"
+      },
+      "created": "A new Social Account is created with identifier {{ param }}",
+      "updated": "A Social Account is updated with identifier {{ param }}",
+      "deleted": "A Social Account is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Social Account {{ id }}?"
+      },
+      "detail": {
+        "title": "Social Account"
+      },
+      "id": "ID",
+      "provider": "Provider",
+      "providerUserId": "Provider User Id",
+      "accessToken": "Access Token",
+      "refreshToken": "Refresh Token",
+      "tokenExpiry": "Token Expiry",
+      "userProfile": "User Profile"
+    }
+  }
+}

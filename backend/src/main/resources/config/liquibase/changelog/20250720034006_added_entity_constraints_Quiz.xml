@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+    <!--
+        Added the constraints for entity Quiz.
+    -->
+    <changeSet id="20250720034006-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="quiz_id"
+                                 baseTableName="rel_quiz__course"
+                                 constraintName="fk_rel_quiz__course__quiz_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="quiz"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="course_id"
+                                 baseTableName="rel_quiz__course"
+                                 constraintName="fk_rel_quiz__course__course_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="course"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="quiz_id"
+                                 baseTableName="rel_quiz__lesson"
+                                 constraintName="fk_rel_quiz__lesson__quiz_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="quiz"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="lesson_id"
+                                 baseTableName="rel_quiz__lesson"
+                                 constraintName="fk_rel_quiz__lesson__lesson_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="lesson"
+                                 />
+    </changeSet>
+</databaseChangeLog>

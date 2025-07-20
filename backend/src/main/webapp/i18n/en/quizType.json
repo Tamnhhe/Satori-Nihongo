@@ -1,0 +1,9 @@
+{
+  "onlineSatoriPlatformApp": {
+    "QuizType": {
+      "null": "",
+      "COURSE": "COURSE",
+      "LESSON": "LESSON"
+    }
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "onlineSatoriPlatformApp": {
+    "flashcard": {
+      "home": {
+        "title": "Flashcards",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Thêm mới một Flashcard",
+        "createOrEditLabel": "Thêm mới hoặc cập nhật Flashcard",
+        "notFound": "No Flashcards found"
+      },
+      "created": "Một Flashcard mới được tạo với định danh {{ param }}",
+      "updated": "Một Flashcard cập nhật với định danh {{ param }}",
+      "deleted": "Một Flashcard đã xóa với định danh {{ param }}",
+      "delete": {
+        "question": "Bạn có chắc là muốn xóa Flashcard {{ id }}?"
+      },
+      "detail": {
+        "title": "Flashcard"
+      },
+      "id": "ID",
+      "term": "Term",
+      "definition": "Definition",
+      "imageUrl": "Image Url",
+      "hint": "Hint",
+      "position": "Position",
+      "lesson": "Lesson"
+    }
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "onlineSatoriPlatformApp": {
+    "lesson": {
+      "home": {
+        "title": "Lessons",
+        "refreshListLabel": "リストの更新",
+        "createLabel": "Lesson の作成",
+        "createOrEditLabel": "Lessonの作成または編集",
+        "notFound": "Lessons が見つかりません。"
+      },
+      "created": "新しい Lesson がID {{ param }} で作成されました。",
+      "updated": "ID {{ param }} の Lesson が更新されました。",
+      "deleted": "ID {{ param }} の Lesson が削除されました。",
+      "delete": {
+        "question": "Lesson {{ id }}を削除してもよろしいですか？"
+      },
+      "detail": {
+        "title": "Lesson"
+      },
+      "id": "ID",
+      "title": "Title",
+      "content": "Content",
+      "videoUrl": "Video Url",
+      "slideUrl": "Slide Url",
+      "flashcards": "Flashcards",
+      "course": "Course",
+      "quiz": "Quiz"
+    }
+  }
+}

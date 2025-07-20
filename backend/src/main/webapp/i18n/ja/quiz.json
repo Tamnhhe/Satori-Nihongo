@@ -1,0 +1,32 @@
+{
+  "onlineSatoriPlatformApp": {
+    "quiz": {
+      "home": {
+        "title": "Quizzes",
+        "refreshListLabel": "リストの更新",
+        "createLabel": "Quiz の作成",
+        "createOrEditLabel": "Quizの作成または編集",
+        "notFound": "Quizzes が見つかりません。"
+      },
+      "created": "新しい Quiz がID {{ param }} で作成されました。",
+      "updated": "ID {{ param }} の Quiz が更新されました。",
+      "deleted": "ID {{ param }} の Quiz が削除されました。",
+      "delete": {
+        "question": "Quiz {{ id }}を削除してもよろしいですか？"
+      },
+      "detail": {
+        "title": "Quiz"
+      },
+      "id": "ID",
+      "title": "Title",
+      "description": "Description",
+      "isTest": "Is Test",
+      "isPractice": "Is Practice",
+      "quizType": "Quiz Type",
+      "questions": "Questions",
+      "assignedTo": "Assigned To",
+      "course": "Course",
+      "lesson": "Lesson"
+    }
+  }
+}

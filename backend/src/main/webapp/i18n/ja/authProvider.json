@@ -1,0 +1,11 @@
+{
+  "onlineSatoriPlatformApp": {
+    "AuthProvider": {
+      "null": "",
+      "LOCAL": "LOCAL",
+      "GOOGLE": "GOOGLE",
+      "FACEBOOK": "FACEBOOK",
+      "GITHUB": "GITHUB"
+    }
+  }
+}
