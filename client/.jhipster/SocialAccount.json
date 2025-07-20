@@ -1,0 +1,48 @@
+{
+  "annotations": {
+    "changelogDate": "20250720033306"
+  },
+  "applications": ["onlineSatoriPlatform"],
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "provider",
+      "fieldType": "AuthProvider",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "LOCAL,GOOGLE,FACEBOOK,GITHUB"
+    },
+    {
+      "fieldName": "providerUserId",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "maxlength"],
+      "fieldValidateRulesMaxlength": "100"
+    },
+    {
+      "fieldName": "accessToken",
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRulesMaxlength": "500"
+    },
+    {
+      "fieldName": "refreshToken",
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRulesMaxlength": "500"
+    },
+    {
+      "fieldName": "tokenExpiry",
+      "fieldType": "Instant"
+    }
+  ],
+  "name": "SocialAccount",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "userProfile",
+      "relationshipName": "userProfile",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "service": "serviceClass"
+}

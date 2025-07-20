@@ -1,0 +1,37 @@
+{
+  "annotations": {
+    "changelogDate": "20250720033506"
+  },
+  "applications": ["onlineSatoriPlatform"],
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "studentId",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "gpa",
+      "fieldType": "Double"
+    }
+  ],
+  "name": "StudentProfile",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "userProfile",
+      "otherEntityRelationshipName": "studentProfile",
+      "relationshipName": "userProfile",
+      "relationshipSide": "right",
+      "relationshipType": "one-to-one"
+    },
+    {
+      "otherEntityName": "courseClass",
+      "otherEntityRelationshipName": "students",
+      "relationshipName": "classes",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-many"
+    }
+  ],
+  "service": "serviceClass"
+}

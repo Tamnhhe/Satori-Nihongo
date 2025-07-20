@@ -1,0 +1,72 @@
+{
+  "annotations": {
+    "changelogDate": "20250720033206"
+  },
+  "applications": ["onlineSatoriPlatform"],
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "username",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "passwordHash",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "email",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "fullName",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "gender",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "role",
+      "fieldType": "Role",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "ADMIN,GIANG_VIEN,HOC_VIEN"
+    }
+  ],
+  "name": "UserProfile",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "teacherProfile",
+      "otherEntityRelationshipName": "userProfile",
+      "relationshipName": "teacherProfile",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-one"
+    },
+    {
+      "otherEntityName": "studentProfile",
+      "otherEntityRelationshipName": "userProfile",
+      "relationshipName": "studentProfile",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-one"
+    },
+    {
+      "otherEntityName": "course",
+      "otherEntityRelationshipName": "teacher",
+      "relationshipName": "createdCourses",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "studentQuiz",
+      "otherEntityRelationshipName": "student",
+      "relationshipName": "quizAttempts",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    }
+  ],
+  "service": "serviceClass"
+}

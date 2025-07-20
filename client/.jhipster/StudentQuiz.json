@@ -1,0 +1,44 @@
+{
+  "annotations": {
+    "changelogDate": "20250720034306"
+  },
+  "applications": ["onlineSatoriPlatform"],
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "startTime",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "endTime",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "score",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "completed",
+      "fieldType": "Boolean"
+    }
+  ],
+  "name": "StudentQuiz",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "quiz",
+      "otherEntityRelationshipName": "assignedTo",
+      "relationshipName": "quiz",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "userProfile",
+      "otherEntityRelationshipName": "quizAttempts",
+      "relationshipName": "student",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "service": "serviceClass"
+}

@@ -1,0 +1,43 @@
+{
+  "annotations": {
+    "changelogDate": "20250720034406"
+  },
+  "applications": ["onlineSatoriPlatform"],
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "term",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "definition",
+      "fieldType": "TextBlob"
+    },
+    {
+      "fieldName": "imageUrl",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "hint",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "position",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "name": "Flashcard",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "lesson",
+      "otherEntityRelationshipName": "flashcards",
+      "relationshipName": "lesson",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "service": "serviceClass"
+}
