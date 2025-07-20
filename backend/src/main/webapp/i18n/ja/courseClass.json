@@ -1,0 +1,32 @@
+{
+  "onlineSatoriPlatformApp": {
+    "courseClass": {
+      "home": {
+        "title": "CourseClasses",
+        "refreshListLabel": "リストの更新",
+        "createLabel": "Course Class の作成",
+        "createOrEditLabel": "Course Classの作成または編集",
+        "notFound": "Course Classes が見つかりません。"
+      },
+      "created": "新しい Course Class がID {{ param }} で作成されました。",
+      "updated": "ID {{ param }} の Course Class が更新されました。",
+      "deleted": "ID {{ param }} の Course Class が削除されました。",
+      "delete": {
+        "question": "Course Class {{ id }}を削除してもよろしいですか？"
+      },
+      "detail": {
+        "title": "Course Class"
+      },
+      "id": "ID",
+      "code": "Code",
+      "name": "Name",
+      "description": "Description",
+      "startDate": "Start Date",
+      "endDate": "End Date",
+      "capacity": "Capacity",
+      "course": "Course",
+      "teacher": "Teacher",
+      "students": "Students"
+    }
+  }
+}

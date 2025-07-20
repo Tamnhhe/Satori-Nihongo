@@ -1,0 +1,25 @@
+{
+  "onlineSatoriPlatformApp": {
+    "teacherProfile": {
+      "home": {
+        "title": "TeacherProfiles",
+        "refreshListLabel": "リストの更新",
+        "createLabel": "Teacher Profile の作成",
+        "createOrEditLabel": "Teacher Profileの作成または編集",
+        "notFound": "Teacher Profiles が見つかりません。"
+      },
+      "created": "新しい Teacher Profile がID {{ param }} で作成されました。",
+      "updated": "ID {{ param }} の Teacher Profile が更新されました。",
+      "deleted": "ID {{ param }} の Teacher Profile が削除されました。",
+      "delete": {
+        "question": "Teacher Profile {{ id }}を削除してもよろしいですか？"
+      },
+      "detail": {
+        "title": "Teacher Profile"
+      },
+      "id": "ID",
+      "teacherCode": "Teacher Code",
+      "userProfile": "User Profile"
+    }
+  }
+}

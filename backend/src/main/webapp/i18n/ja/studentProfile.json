@@ -1,0 +1,27 @@
+{
+  "onlineSatoriPlatformApp": {
+    "studentProfile": {
+      "home": {
+        "title": "StudentProfiles",
+        "refreshListLabel": "リストの更新",
+        "createLabel": "Student Profile の作成",
+        "createOrEditLabel": "Student Profileの作成または編集",
+        "notFound": "Student Profiles が見つかりません。"
+      },
+      "created": "新しい Student Profile がID {{ param }} で作成されました。",
+      "updated": "ID {{ param }} の Student Profile が更新されました。",
+      "deleted": "ID {{ param }} の Student Profile が削除されました。",
+      "delete": {
+        "question": "Student Profile {{ id }}を削除してもよろしいですか？"
+      },
+      "detail": {
+        "title": "Student Profile"
+      },
+      "id": "ID",
+      "studentId": "Student Id",
+      "gpa": "Gpa",
+      "userProfile": "User Profile",
+      "classes": "Classes"
+    }
+  }
+}

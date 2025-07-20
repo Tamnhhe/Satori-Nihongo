@@ -1,0 +1,26 @@
+{
+  "onlineSatoriPlatformApp": {
+    "quizQuestion": {
+      "home": {
+        "title": "Quiz Questions",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Thêm mới một Quiz Question",
+        "createOrEditLabel": "Thêm mới hoặc cập nhật Quiz Question",
+        "notFound": "No Quiz Questions found"
+      },
+      "created": "Một Quiz Question mới được tạo với định danh {{ param }}",
+      "updated": "Một Quiz Question cập nhật với định danh {{ param }}",
+      "deleted": "Một Quiz Question đã xóa với định danh {{ param }}",
+      "delete": {
+        "question": "Bạn có chắc là muốn xóa Quiz Question {{ id }}?"
+      },
+      "detail": {
+        "title": "Quiz Question"
+      },
+      "id": "ID",
+      "position": "Position",
+      "quiz": "Quiz",
+      "question": "Question"
+    }
+  }
+}

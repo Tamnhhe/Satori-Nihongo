@@ -1,0 +1,29 @@
+{
+  "onlineSatoriPlatformApp": {
+    "studentQuiz": {
+      "home": {
+        "title": "StudentQuizs",
+        "refreshListLabel": "リストの更新",
+        "createLabel": "Student Quiz の作成",
+        "createOrEditLabel": "Student Quizの作成または編集",
+        "notFound": "Student Quizs が見つかりません。"
+      },
+      "created": "新しい Student Quiz がID {{ param }} で作成されました。",
+      "updated": "ID {{ param }} の Student Quiz が更新されました。",
+      "deleted": "ID {{ param }} の Student Quiz が削除されました。",
+      "delete": {
+        "question": "Student Quiz {{ id }}を削除してもよろしいですか？"
+      },
+      "detail": {
+        "title": "Student Quiz"
+      },
+      "id": "ID",
+      "startTime": "Start Time",
+      "endTime": "End Time",
+      "score": "Score",
+      "completed": "Completed",
+      "quiz": "Quiz",
+      "student": "Student"
+    }
+  }
+}

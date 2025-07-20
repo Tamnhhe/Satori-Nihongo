@@ -1,0 +1,32 @@
+{
+  "onlineSatoriPlatformApp": {
+    "courseClass": {
+      "home": {
+        "title": "Course Classes",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Thêm mới một Course Class",
+        "createOrEditLabel": "Thêm mới hoặc cập nhật Course Class",
+        "notFound": "No Course Classes found"
+      },
+      "created": "Một Course Class mới được tạo với định danh {{ param }}",
+      "updated": "Một Course Class cập nhật với định danh {{ param }}",
+      "deleted": "Một Course Class đã xóa với định danh {{ param }}",
+      "delete": {
+        "question": "Bạn có chắc là muốn xóa Course Class {{ id }}?"
+      },
+      "detail": {
+        "title": "Course Class"
+      },
+      "id": "ID",
+      "code": "Code",
+      "name": "Name",
+      "description": "Description",
+      "startDate": "Start Date",
+      "endDate": "End Date",
+      "capacity": "Capacity",
+      "course": "Course",
+      "teacher": "Teacher",
+      "students": "Students"
+    }
+  }
+}

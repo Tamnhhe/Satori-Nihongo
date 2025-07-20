@@ -1,0 +1,26 @@
+{
+  "onlineSatoriPlatformApp": {
+    "quizQuestion": {
+      "home": {
+        "title": "Quiz Questions",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Quiz Question",
+        "createOrEditLabel": "Create or edit a Quiz Question",
+        "notFound": "No Quiz Questions found"
+      },
+      "created": "A new Quiz Question is created with identifier {{ param }}",
+      "updated": "A Quiz Question is updated with identifier {{ param }}",
+      "deleted": "A Quiz Question is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Quiz Question {{ id }}?"
+      },
+      "detail": {
+        "title": "Quiz Question"
+      },
+      "id": "ID",
+      "position": "Position",
+      "quiz": "Quiz",
+      "question": "Question"
+    }
+  }
+}

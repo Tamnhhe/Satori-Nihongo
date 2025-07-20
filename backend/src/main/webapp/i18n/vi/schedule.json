@@ -1,0 +1,28 @@
+{
+  "onlineSatoriPlatformApp": {
+    "schedule": {
+      "home": {
+        "title": "Schedules",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Thêm mới một Schedule",
+        "createOrEditLabel": "Thêm mới hoặc cập nhật Schedule",
+        "notFound": "No Schedules found"
+      },
+      "created": "Một Schedule mới được tạo với định danh {{ param }}",
+      "updated": "Một Schedule cập nhật với định danh {{ param }}",
+      "deleted": "Một Schedule đã xóa với định danh {{ param }}",
+      "delete": {
+        "question": "Bạn có chắc là muốn xóa Schedule {{ id }}?"
+      },
+      "detail": {
+        "title": "Schedule"
+      },
+      "id": "ID",
+      "date": "Date",
+      "startTime": "Start Time",
+      "endTime": "End Time",
+      "location": "Location",
+      "course": "Course"
+    }
+  }
+}

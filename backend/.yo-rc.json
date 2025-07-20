@@ -1,0 +1,47 @@
+{
+  "generator-jhipster": {
+    "applicationType": "monolith",
+    "authenticationType": "jwt",
+    "baseName": "onlineSatoriPlatform",
+    "blueprints": [
+      {
+        "name": "generator-jhipster-react-native",
+        "version": "5.4.0"
+      }
+    ],
+    "buildTool": "maven",
+    "clientFramework": "react",
+    "clientPackageManager": "npm",
+    "devDatabaseType": "mysql",
+    "enableHibernateCache": true,
+    "enableTranslation": true,
+    "entities": [
+      "UserProfile",
+      "SocialAccount",
+      "TeacherProfile",
+      "StudentProfile",
+      "Course",
+      "CourseClass",
+      "Lesson",
+      "Schedule",
+      "Quiz",
+      "Question",
+      "QuizQuestion",
+      "StudentQuiz",
+      "Flashcard"
+    ],
+    "jhipsterVersion": "8.11.0",
+    "jwtSecretKey": "YzlkNDVhOWMxZDJhZGE5ZmQyNDgwYzk2Yjc3NTQyYjk3NjNiNzAzZGJlZTdiNWRlNTA3NTQxMWUwZGQyMjBlODJlZWRiYzk3MGIyM2JiZGMwYmE0MWUzMTg2MjE2MjJiZDg5YjQ1ZDdlODM2YzBlNGQyNmI5NDRiMDJkMzgzYTg=",
+    "languages": ["vi", "en", "ja"],
+    "lastLiquibaseTimestamp": 1752983046000,
+    "monorepository": true,
+    "nativeLanguage": "vi",
+    "packageName": "com.satori.platform",
+    "prodDatabaseType": "mysql",
+    "skipCommitHook": true
+  },
+  "generator-jhipster-react-native": {
+    "appDir": null,
+    "reactNativeDir": "..\\client"
+  }
+}

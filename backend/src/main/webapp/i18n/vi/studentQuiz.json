@@ -1,0 +1,29 @@
+{
+  "onlineSatoriPlatformApp": {
+    "studentQuiz": {
+      "home": {
+        "title": "Student Quizs",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Thêm mới một Student Quiz",
+        "createOrEditLabel": "Thêm mới hoặc cập nhật Student Quiz",
+        "notFound": "No Student Quizs found"
+      },
+      "created": "Một Student Quiz mới được tạo với định danh {{ param }}",
+      "updated": "Một Student Quiz cập nhật với định danh {{ param }}",
+      "deleted": "Một Student Quiz đã xóa với định danh {{ param }}",
+      "delete": {
+        "question": "Bạn có chắc là muốn xóa Student Quiz {{ id }}?"
+      },
+      "detail": {
+        "title": "Student Quiz"
+      },
+      "id": "ID",
+      "startTime": "Start Time",
+      "endTime": "End Time",
+      "score": "Score",
+      "completed": "Completed",
+      "quiz": "Quiz",
+      "student": "Student"
+    }
+  }
+}

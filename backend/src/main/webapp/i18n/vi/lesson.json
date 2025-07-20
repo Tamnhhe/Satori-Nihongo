@@ -1,0 +1,30 @@
+{
+  "onlineSatoriPlatformApp": {
+    "lesson": {
+      "home": {
+        "title": "Lessons",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Thêm mới một Lesson",
+        "createOrEditLabel": "Thêm mới hoặc cập nhật Lesson",
+        "notFound": "No Lessons found"
+      },
+      "created": "Một Lesson mới được tạo với định danh {{ param }}",
+      "updated": "Một Lesson cập nhật với định danh {{ param }}",
+      "deleted": "Một Lesson đã xóa với định danh {{ param }}",
+      "delete": {
+        "question": "Bạn có chắc là muốn xóa Lesson {{ id }}?"
+      },
+      "detail": {
+        "title": "Lesson"
+      },
+      "id": "ID",
+      "title": "Title",
+      "content": "Content",
+      "videoUrl": "Video Url",
+      "slideUrl": "Slide Url",
+      "flashcards": "Flashcards",
+      "course": "Course",
+      "quiz": "Quiz"
+    }
+  }
+}
