@@ -1,0 +1,38 @@
+{
+  "generator-jhipster": {
+    "authenticationType": "jwt",
+    "baseName": "RnApp",
+    "blueprints": [
+      {
+        "name": "generator-jhipster-react-native",
+        "version": "5.4.0"
+      }
+    ],
+    "enableTranslation": true,
+    "entities": [
+      "UserProfile",
+      "SocialAccount",
+      "TeacherProfile",
+      "StudentProfile",
+      "Course",
+      "CourseClass",
+      "Lesson",
+      "Schedule",
+      "Quiz",
+      "Question",
+      "QuizQuestion",
+      "StudentQuiz",
+      "Flashcard"
+    ],
+    "jhipsterVersion": "8.11.0",
+    "lastLiquibaseTimestamp": 1752983046000,
+    "prettierDefaultIndent": 2,
+    "projectName": "Online Satori PlatformReactNative"
+  },
+  "generator-jhipster-react-native": {
+    "appDir": "..\\code",
+    "detox": true,
+    "reactNativeBlueprintVersion": "5.4.0",
+    "reactNativeDir": null
+  }
+}

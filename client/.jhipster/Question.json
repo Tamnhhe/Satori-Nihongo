@@ -1,0 +1,48 @@
+{
+  "annotations": {
+    "changelogDate": "20250720034106"
+  },
+  "applications": ["onlineSatoriPlatform"],
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "content",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "imageUrl",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "suggestion",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "answerExplanation",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "correctAnswer",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "type",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "name": "Question",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "quizQuestion",
+      "otherEntityRelationshipName": "question",
+      "relationshipName": "quizQuestions",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    }
+  ],
+  "service": "serviceClass"
+}

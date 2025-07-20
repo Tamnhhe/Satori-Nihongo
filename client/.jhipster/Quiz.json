@@ -1,0 +1,65 @@
+{
+  "annotations": {
+    "changelogDate": "20250720034006"
+  },
+  "applications": ["onlineSatoriPlatform"],
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "title",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "isTest",
+      "fieldType": "Boolean",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "isPractice",
+      "fieldType": "Boolean",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "quizType",
+      "fieldType": "QuizType",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "COURSE,LESSON"
+    }
+  ],
+  "name": "Quiz",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "quizQuestion",
+      "otherEntityRelationshipName": "quiz",
+      "relationshipName": "questions",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "studentQuiz",
+      "otherEntityRelationshipName": "quiz",
+      "relationshipName": "assignedTo",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "course",
+      "relationshipName": "course",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityName": "lesson",
+      "relationshipName": "lesson",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-many"
+    }
+  ],
+  "service": "serviceClass"
+}
