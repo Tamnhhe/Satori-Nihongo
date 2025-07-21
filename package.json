@@ -1,0 +1,32 @@
+{
+  "name": "satori-nihongo",
+  "version": "1.0.0",
+  "description": "Web application that helps users learn Japanese",
+  "main": "backend/server.js",
+  "scripts": {
+    "start": "node backend/server.js",
+    "dev": "nodemon backend/server.js",
+    "test": "jest"
+  },
+  "keywords": ["japanese", "learning", "education"],
+  "author": "",
+  "license": "ISC",
+  "jest": {
+    "testEnvironment": "node",
+    "testTimeout": 10000,
+    "setupFiles": ["<rootDir>/tests/setup.js"]
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.0",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "sqlite3": "^5.1.7"
+  },
+  "devDependencies": {
+    "jest": "^30.0.4",
+    "nodemon": "^3.1.10",
+    "supertest": "^7.1.3"
+  }
+}
