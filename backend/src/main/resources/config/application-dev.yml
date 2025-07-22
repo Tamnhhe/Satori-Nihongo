@@ -37,7 +37,7 @@ spring:
     type: com.zaxxer.hikari.HikariDataSource
     url: jdbc:mysql://localhost:3306/onlineSatoriPlatform?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true&serverTimezone=UTC
     username: root
-    password: ${DB_PASSWORD:}
+    password: 123456
     hikari:
       poolName: Hikari
       auto-commit: false
@@ -52,8 +52,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: ${MAIL_USERNAME:dat33112@gmail.com}
-    password: ${MAIL_PASSWORD:}
+    username: ng.dinhduc.2311@gmail.com
+    password: lgtt ctfo lgwb tidz
     properties:
       mail:
         smtp:
