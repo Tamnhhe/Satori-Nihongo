@@ -1,5 +1,5 @@
 import React, { createRef } from 'react';
-import { Text } from 'react-native';
+import { Text, View, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import * as Yup from 'yup';
@@ -14,20 +14,21 @@ import styles from './register-screen.styles';
 function RegisterScreen(props) {
   const [error, setError] = React.useState('');
   const [success, setSuccess] = React.useState('');
+  const { navigation } = props;
 
   // set up validation schema for the form
   const validationSchema = Yup.object().shape({
-    login: Yup.string().required('Please enter your login').label('Login'),
-    password: Yup.string().required().label('Password'),
-    confirmPassword: Yup.string().required().label('Confirm Password'),
-    email: Yup.string().required().email().label('Email'),
+    login: Yup.string().required('Vui lòng nhập tên đăng nhập').label('Tên đăng nhập'),
+    password: Yup.string().required('Vui lòng nhập mật khẩu').label('Mật khẩu'),
+    confirmPassword: Yup.string().required('Vui lòng xác nhận mật khẩu').label('Xác nhận mật khẩu'),
+    email: Yup.string().required('Vui lòng nhập email').email('Email không hợp lệ').label('Email'),
   });
 
   const onSubmit = data => {
     setSuccess('');
     setError('');
     if (data.password !== data.confirmPassword) {
-      setError('Passwords do not match');
+      setError('Mật khẩu không khớp');
       return;
     }
     props.register(data);
@@ -38,7 +39,7 @@ function RegisterScreen(props) {
       if (props.error) {
         setError(props.error);
       } else {
-        setSuccess('Please check your email');
+        setSuccess('Vui lòng kiểm tra email của bạn');
       }
     }
   }, [props.fetching]);
@@ -61,8 +62,8 @@ function RegisterScreen(props) {
       >
         <FormField
           name="login"
-          label="Login"
-          placeholder="Enter login"
+          label="Tên đăng nhập"
+          placeholder="Nhập tên đăng nhập"
           onSubmitEditing={() => emailRef?.current?.focus()}
           autoCapitalize="none"
           textContentType="username"
@@ -71,7 +72,7 @@ function RegisterScreen(props) {
           name="email"
           ref={emailRef}
           label="Email"
-          placeholder="Enter email"
+          placeholder="Nhập email"
           onSubmitEditing={() => passwordRef?.current?.focus()}
           autoCapitalize="none"
           keyboardType="email-address"
@@ -80,8 +81,8 @@ function RegisterScreen(props) {
         <FormField
           ref={passwordRef}
           name="password"
-          label="Password"
-          placeholder="Enter password"
+          label="Mật khẩu"
+          placeholder="Nhập mật khẩu"
           autoCapitalize="none"
           autoCorrect={false}
           secureTextEntry={true}
@@ -91,16 +92,21 @@ function RegisterScreen(props) {
         <FormField
           ref={confirmPasswordRef}
           name="confirmPassword"
-          label="Confirm Password"
-          placeholder="Enter password"
+          label="Xác nhận mật khẩu"
+          placeholder="Nhập lại mật khẩu"
           autoCapitalize="none"
           autoCorrect={false}
           secureTextEntry={true}
           onSubmitEditing={() => formRef?.current?.submitForm()}
           textContentType="password"
         />
-        <FormButton title={'Register'} />
+        <FormButton title={'Đăng ký'} />
       </Form>
+
+      {/* Nút đăng nhập */}
+      <TouchableOpacity style={styles.loginLink} onPress={() => navigation.navigate('Login')}>
+        <Text style={styles.loginLinkText}>Đã có tài khoản? Đăng nhập ngay</Text>
+      </TouchableOpacity>
     </KeyboardAwareScrollView>
   );
 }

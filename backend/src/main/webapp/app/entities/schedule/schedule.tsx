@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Button, Table } from 'reactstrap';
+import { Button, Table, ButtonGroup } from 'reactstrap';
 import { JhiItemCount, JhiPagination, TextFormat, Translate, getPaginationState } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSort, faSortDown, faSortUp } from '@fortawesome/free-solid-svg-icons';
@@ -10,6 +10,7 @@ import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-u
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 
 import { getEntities } from './schedule.reducer';
+import { ScheduleCalendar } from './schedule-calendar';
 
 export const Schedule = () => {
   const dispatch = useAppDispatch();
@@ -21,15 +22,20 @@ export const Schedule = () => {
     overridePaginationStateWithQueryParams(getPaginationState(pageLocation, ITEMS_PER_PAGE, 'id'), pageLocation.search),
   );
 
+  const [viewMode, setViewMode] = useState<'calendar' | 'table'>('calendar'); // Default to calendar view
+
   const scheduleList = useAppSelector(state => state.schedule.entities);
   const loading = useAppSelector(state => state.schedule.loading);
   const totalItems = useAppSelector(state => state.schedule.totalItems);
 
   const getAllEntities = () => {
+    // For calendar view, load more items to show full calendar data
+    const size = viewMode === 'calendar' ? 1000 : paginationState.itemsPerPage;
+
     dispatch(
       getEntities({
-        page: paginationState.activePage - 1,
-        size: paginationState.itemsPerPage,
+        page: viewMode === 'calendar' ? 0 : paginationState.activePage - 1,
+        size,
         sort: `${paginationState.sort},${paginationState.order}`,
       }),
     );
@@ -45,7 +51,7 @@ export const Schedule = () => {
 
   useEffect(() => {
     sortEntities();
-  }, [paginationState.activePage, paginationState.order, paginationState.sort]);
+  }, [paginationState.activePage, paginationState.order, paginationState.sort, viewMode]);
 
   useEffect(() => {
     const params = new URLSearchParams(pageLocation.search);
@@ -94,6 +100,15 @@ export const Schedule = () => {
       <h2 id="schedule-heading" data-cy="ScheduleHeading">
         <Translate contentKey="onlineSatoriPlatformApp.schedule.home.title">Schedules</Translate>
         <div className="d-flex justify-content-end">
+          <ButtonGroup className="me-2">
+            <Button color={viewMode === 'calendar' ? 'primary' : 'outline-primary'} onClick={() => setViewMode('calendar')} size="sm">
+              <FontAwesomeIcon icon="calendar-alt" />{' '}
+              <Translate contentKey="onlineSatoriPlatformApp.schedule.calendarView">Calendar</Translate>
+            </Button>
+            <Button color={viewMode === 'table' ? 'primary' : 'outline-primary'} onClick={() => setViewMode('table')} size="sm">
+              <FontAwesomeIcon icon="table" /> <Translate contentKey="onlineSatoriPlatformApp.schedule.tableView">Table</Translate>
+            </Button>
+          </ButtonGroup>
           <Button className="me-2" color="info" onClick={handleSyncList} disabled={loading}>
             <FontAwesomeIcon icon="sync" spin={loading} />{' '}
             <Translate contentKey="onlineSatoriPlatformApp.schedule.home.refreshListLabel">Refresh List</Translate>
@@ -105,114 +120,138 @@ export const Schedule = () => {
           </Link>
         </div>
       </h2>
-      <div className="table-responsive">
-        {scheduleList && scheduleList.length > 0 ? (
-          <Table responsive>
-            <thead>
-              <tr>
-                <th className="hand" onClick={sort('id')}>
-                  <Translate contentKey="onlineSatoriPlatformApp.schedule.id">ID</Translate>{' '}
-                  <FontAwesomeIcon icon={getSortIconByFieldName('id')} />
-                </th>
-                <th className="hand" onClick={sort('date')}>
-                  <Translate contentKey="onlineSatoriPlatformApp.schedule.date">Date</Translate>{' '}
-                  <FontAwesomeIcon icon={getSortIconByFieldName('date')} />
-                </th>
-                <th className="hand" onClick={sort('startTime')}>
-                  <Translate contentKey="onlineSatoriPlatformApp.schedule.startTime">Start Time</Translate>{' '}
-                  <FontAwesomeIcon icon={getSortIconByFieldName('startTime')} />
-                </th>
-                <th className="hand" onClick={sort('endTime')}>
-                  <Translate contentKey="onlineSatoriPlatformApp.schedule.endTime">End Time</Translate>{' '}
-                  <FontAwesomeIcon icon={getSortIconByFieldName('endTime')} />
-                </th>
-                <th className="hand" onClick={sort('location')}>
-                  <Translate contentKey="onlineSatoriPlatformApp.schedule.location">Location</Translate>{' '}
-                  <FontAwesomeIcon icon={getSortIconByFieldName('location')} />
-                </th>
-                <th>
-                  <Translate contentKey="onlineSatoriPlatformApp.schedule.course">Course</Translate> <FontAwesomeIcon icon="sort" />
-                </th>
-                <th />
-              </tr>
-            </thead>
-            <tbody>
-              {scheduleList.map((schedule, i) => (
-                <tr key={`entity-${i}`} data-cy="entityTable">
-                  <td>
-                    <Button tag={Link} to={`/schedule/${schedule.id}`} color="link" size="sm">
-                      {schedule.id}
-                    </Button>
-                  </td>
-                  <td>{schedule.date ? <TextFormat type="date" value={schedule.date} format={APP_DATE_FORMAT} /> : null}</td>
-                  <td>{schedule.startTime ? <TextFormat type="date" value={schedule.startTime} format={APP_DATE_FORMAT} /> : null}</td>
-                  <td>{schedule.endTime ? <TextFormat type="date" value={schedule.endTime} format={APP_DATE_FORMAT} /> : null}</td>
-                  <td>{schedule.location}</td>
-                  <td>{schedule.course ? <Link to={`/course/${schedule.course.id}`}>{schedule.course.id}</Link> : ''}</td>
-                  <td className="text-end">
-                    <div className="btn-group flex-btn-group-container">
-                      <Button tag={Link} to={`/schedule/${schedule.id}`} color="info" size="sm" data-cy="entityDetailsButton">
-                        <FontAwesomeIcon icon="eye" />{' '}
-                        <span className="d-none d-md-inline">
-                          <Translate contentKey="entity.action.view">View</Translate>
-                        </span>
-                      </Button>
-                      <Button
-                        tag={Link}
-                        to={`/schedule/${schedule.id}/edit?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`}
-                        color="primary"
-                        size="sm"
-                        data-cy="entityEditButton"
-                      >
-                        <FontAwesomeIcon icon="pencil-alt" />{' '}
-                        <span className="d-none d-md-inline">
-                          <Translate contentKey="entity.action.edit">Edit</Translate>
-                        </span>
-                      </Button>
-                      <Button
-                        onClick={() =>
-                          (window.location.href = `/schedule/${schedule.id}/delete?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`)
-                        }
-                        color="danger"
-                        size="sm"
-                        data-cy="entityDeleteButton"
-                      >
-                        <FontAwesomeIcon icon="trash" />{' '}
-                        <span className="d-none d-md-inline">
-                          <Translate contentKey="entity.action.delete">Delete</Translate>
-                        </span>
-                      </Button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </Table>
-        ) : (
-          !loading && (
-            <div className="alert alert-warning">
-              <Translate contentKey="onlineSatoriPlatformApp.schedule.home.notFound">No Schedules found</Translate>
-            </div>
-          )
-        )}
-      </div>
-      {totalItems ? (
-        <div className={scheduleList && scheduleList.length > 0 ? '' : 'd-none'}>
-          <div className="justify-content-center d-flex">
-            <JhiItemCount page={paginationState.activePage} total={totalItems} itemsPerPage={paginationState.itemsPerPage} i18nEnabled />
-          </div>
-          <div className="justify-content-center d-flex">
-            <JhiPagination
-              activePage={paginationState.activePage}
-              onSelect={handlePagination}
-              maxButtons={5}
-              itemsPerPage={paginationState.itemsPerPage}
-              totalItems={totalItems}
-            />
-          </div>
-        </div>
+
+      {/* Conditional rendering based on view mode */}
+      {viewMode === 'calendar' ? (
+        <ScheduleCalendar schedules={scheduleList} />
       ) : (
-        ''
+        <div>
+          <div className="table-responsive">
+            {scheduleList && scheduleList.length > 0 ? (
+              <Table responsive>
+                <thead>
+                  <tr>
+                    <th className="hand" onClick={sort('id')}>
+                      <Translate contentKey="onlineSatoriPlatformApp.schedule.id">ID</Translate>{' '}
+                      <FontAwesomeIcon icon={getSortIconByFieldName('id')} />
+                    </th>
+                    <th className="hand" onClick={sort('date')}>
+                      <Translate contentKey="onlineSatoriPlatformApp.schedule.date">Date</Translate>{' '}
+                      <FontAwesomeIcon icon={getSortIconByFieldName('date')} />
+                    </th>
+                    <th className="hand" onClick={sort('startTime')}>
+                      <Translate contentKey="onlineSatoriPlatformApp.schedule.startTime">Start Time</Translate>{' '}
+                      <FontAwesomeIcon icon={getSortIconByFieldName('startTime')} />
+                    </th>
+                    <th className="hand" onClick={sort('endTime')}>
+                      <Translate contentKey="onlineSatoriPlatformApp.schedule.endTime">End Time</Translate>{' '}
+                      <FontAwesomeIcon icon={getSortIconByFieldName('endTime')} />
+                    </th>
+                    <th className="hand" onClick={sort('location')}>
+                      <Translate contentKey="onlineSatoriPlatformApp.schedule.location">Location</Translate>{' '}
+                      <FontAwesomeIcon icon={getSortIconByFieldName('location')} />
+                    </th>
+                    <th className="hand" onClick={sort('meetLink')}>
+                      <Translate contentKey="onlineSatoriPlatformApp.schedule.meetLink">Meet Link</Translate>{' '}
+                      <FontAwesomeIcon icon={getSortIconByFieldName('meetLink')} />
+                    </th>
+                    <th>
+                      <Translate contentKey="onlineSatoriPlatformApp.schedule.course">Course</Translate> <FontAwesomeIcon icon="sort" />
+                    </th>
+                    <th />
+                  </tr>
+                </thead>
+                <tbody>
+                  {scheduleList.map((schedule, i) => (
+                    <tr key={`entity-${i}`} data-cy="entityTable">
+                      <td>
+                        <Button tag={Link} to={`/schedule/${schedule.id}`} color="link" size="sm">
+                          {schedule.id}
+                        </Button>
+                      </td>
+                      <td>{schedule.date ? <TextFormat type="date" value={schedule.date} format={APP_DATE_FORMAT} /> : null}</td>
+                      <td>{schedule.startTime ? <TextFormat type="date" value={schedule.startTime} format={APP_DATE_FORMAT} /> : null}</td>
+                      <td>{schedule.endTime ? <TextFormat type="date" value={schedule.endTime} format={APP_DATE_FORMAT} /> : null}</td>
+                      <td>{schedule.location}</td>
+                      <td>
+                        {schedule.meetLink ? (
+                          <a href={schedule.meetLink} target="_blank" rel="noopener noreferrer" className="btn btn-success btn-sm">
+                            <FontAwesomeIcon icon="video" /> Meet
+                          </a>
+                        ) : null}
+                      </td>
+                      <td>{schedule.course ? <Link to={`/course/${schedule.course.id}`}>{schedule.course.id}</Link> : ''}</td>
+                      <td className="text-end">
+                        <div className="btn-group flex-btn-group-container">
+                          <Button tag={Link} to={`/schedule/${schedule.id}`} color="info" size="sm" data-cy="entityDetailsButton">
+                            <FontAwesomeIcon icon="eye" />{' '}
+                            <span className="d-none d-md-inline">
+                              <Translate contentKey="entity.action.view">View</Translate>
+                            </span>
+                          </Button>
+                          <Button
+                            tag={Link}
+                            to={`/schedule/${schedule.id}/edit?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`}
+                            color="primary"
+                            size="sm"
+                            data-cy="entityEditButton"
+                          >
+                            <FontAwesomeIcon icon="pencil-alt" />{' '}
+                            <span className="d-none d-md-inline">
+                              <Translate contentKey="entity.action.edit">Edit</Translate>
+                            </span>
+                          </Button>
+                          <Button
+                            onClick={() =>
+                              (window.location.href = `/schedule/${schedule.id}/delete?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`)
+                            }
+                            color="danger"
+                            size="sm"
+                            data-cy="entityDeleteButton"
+                          >
+                            <FontAwesomeIcon icon="trash" />{' '}
+                            <span className="d-none d-md-inline">
+                              <Translate contentKey="entity.action.delete">Delete</Translate>
+                            </span>
+                          </Button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
+            ) : (
+              !loading && (
+                <div className="alert alert-warning">
+                  <Translate contentKey="onlineSatoriPlatformApp.schedule.home.notFound">No Schedules found</Translate>
+                </div>
+              )
+            )}
+          </div>
+          {totalItems && viewMode === 'table' ? (
+            <div className={scheduleList && scheduleList.length > 0 ? '' : 'd-none'}>
+              <div className="justify-content-center d-flex">
+                <JhiItemCount
+                  page={paginationState.activePage}
+                  total={totalItems}
+                  itemsPerPage={paginationState.itemsPerPage}
+                  i18nEnabled
+                />
+              </div>
+              <div className="justify-content-center d-flex">
+                <JhiPagination
+                  activePage={paginationState.activePage}
+                  onSelect={handlePagination}
+                  maxButtons={5}
+                  itemsPerPage={paginationState.itemsPerPage}
+                  totalItems={totalItems}
+                />
+              </div>
+            </div>
+          ) : (
+            ''
+          )}
+        </div>
       )}
     </div>
   );

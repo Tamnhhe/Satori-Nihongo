@@ -1,5 +1,5 @@
 import React, { createRef } from 'react';
-import { Text } from 'react-native';
+import { Text, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import * as Yup from 'yup';
@@ -14,10 +14,11 @@ import styles from './forgot-password-screen.styles';
 function ForgotPasswordScreen(props) {
   const [error, setError] = React.useState('');
   const [success, setSuccess] = React.useState('');
+  const { navigation } = props;
 
   // set up validation schema for the form
   const validationSchema = Yup.object().shape({
-    email: Yup.string().required().email().label('Email'),
+    email: Yup.string().required('Vui lòng nhập email').email('Email không hợp lệ').label('Email'),
   });
 
   const onSubmit = data => {
@@ -31,7 +32,7 @@ function ForgotPasswordScreen(props) {
       if (props.error) {
         setError(props.error);
       } else {
-        setSuccess('Password reset email sent');
+        setSuccess('Email đặt lại mật khẩu đã được gửi');
       }
     }
   }, [props.fetching]);
@@ -47,14 +48,19 @@ function ForgotPasswordScreen(props) {
         <FormField
           name="email"
           label="Email"
-          placeholder="Enter email"
+          placeholder="Nhập email"
           onSubmitEditing={() => formRef?.current?.submitForm()}
           autoCapitalize="none"
           keyboardType="email-address"
           textContentType="username"
         />
-        <FormButton title={'Reset Password'} />
+        <FormButton title={'Đặt lại mật khẩu'} />
       </Form>
+
+      {/* Nút quay lại đăng nhập */}
+      <TouchableOpacity style={styles.backToLoginLink} onPress={() => navigation.navigate('Login')}>
+        <Text style={styles.backToLoginText}>Quay lại đăng nhập</Text>
+      </TouchableOpacity>
     </KeyboardAwareScrollView>
   );
 }
