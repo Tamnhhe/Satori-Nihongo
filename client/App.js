@@ -1,10 +1,12 @@
 import * as React from 'react';
 import { Provider } from 'react-redux';
+import { PaperProvider } from 'react-native-paper';
 import createStore from './app/shared/reducers';
 import * as SplashScreen from 'expo-splash-screen';
 import 'setimmediate';
 
 import NavContainer from './app/navigation/nav-container';
+import { materialTheme } from './app/shared/themes/material-theme';
 
 const store = createStore();
 
@@ -21,7 +23,9 @@ export default function App() {
 
   return displayApp ? (
     <Provider store={store}>
-      <NavContainer />
+      <PaperProvider theme={materialTheme}>
+        <NavContainer />
+      </PaperProvider>
     </Provider>
   ) : null;
 }

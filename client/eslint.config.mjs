@@ -65,6 +65,7 @@ export default tseslint.config(
       'no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
       'react/display-name': 'off',
       'react/prop-types': 'off',
+      'prettier/prettier': ['error', { endOfLine: 'auto' }],
     },
   },
   {
@@ -87,5 +88,5 @@ export default tseslint.config(
     // Html templates require some work
     ignores: ['**/*.html'],
     extends: [prettier],
-  },
+  }
 );

@@ -2,7 +2,7 @@ export default {
   // Functions return fixtures
 
   // entity fixtures
-  updateUserProfile: _userProfile => {
+  updateUserProfile: (_userProfile) => {
     return {
       ok: true,
       data: require('../../shared/fixtures/update-user-profile.json'),
@@ -14,18 +14,24 @@ export default {
       data: require('../../shared/fixtures/get-all-user-profiles.json'),
     };
   },
-  getUserProfile: _userProfileId => {
+  getUserProfile: (_userProfileId) => {
     return {
       ok: true,
       data: require('../../shared/fixtures/get-user-profile.json'),
     };
   },
-  deleteUserProfile: _userProfileId => {
+  getUserProfileByUserId: (_userId) => {
+    return {
+      ok: true,
+      data: require('../../shared/fixtures/get-user-profile.json'),
+    };
+  },
+  deleteUserProfile: (_userProfileId) => {
     return {
       ok: true,
     };
   },
-  updateSocialAccount: _socialAccount => {
+  updateSocialAccount: (_socialAccount) => {
     return {
       ok: true,
       data: require('../../shared/fixtures/update-social-account.json'),
@@ -37,18 +43,18 @@ export default {
       data: require('../../shared/fixtures/get-all-social-accounts.json'),
     };
   },
-  getSocialAccount: _socialAccountId => {
+  getSocialAccount: (_socialAccountId) => {
     return {
       ok: true,
       data: require('../../shared/fixtures/get-social-account.json'),
     };
   },
-  deleteSocialAccount: _socialAccountId => {
+  deleteSocialAccount: (_socialAccountId) => {
     return {
       ok: true,
     };
   },
-  updateTeacherProfile: _teacherProfile => {
+  updateTeacherProfile: (_teacherProfile) => {
     return {
       ok: true,
       data: require('../../shared/fixtures/update-teacher-profile.json'),
@@ -60,18 +66,18 @@ export default {
       data: require('../../shared/fixtures/get-all-teacher-profiles.json'),
     };
   },
-  getTeacherProfile: _teacherProfileId => {
+  getTeacherProfile: (_teacherProfileId) => {
     return {
       ok: true,
       data: require('../../shared/fixtures/get-teacher-profile.json'),
     };
   },
-  deleteTeacherProfile: _teacherProfileId => {
+  deleteTeacherProfile: (_teacherProfileId) => {
     return {
       ok: true,
     };
   },
-  updateStudentProfile: _studentProfile => {
+  updateStudentProfile: (_studentProfile) => {
     return {
       ok: true,
       data: require('../../shared/fixtures/update-student-profile.json'),
@@ -83,18 +89,18 @@ export default {
       data: require('../../shared/fixtures/get-all-student-profiles.json'),
     };
   },
-  getStudentProfile: _studentProfileId => {
+  getStudentProfile: (_studentProfileId) => {
     return {
       ok: true,
       data: require('../../shared/fixtures/get-student-profile.json'),
     };
   },
-  deleteStudentProfile: _studentProfileId => {
+  deleteStudentProfile: (_studentProfileId) => {
     return {
       ok: true,
     };
   },
-  updateCourse: _course => {
+  updateCourse: (_course) => {
     return {
       ok: true,
       data: require('../../shared/fixtures/update-course.json'),
@@ -106,18 +112,18 @@ export default {
       data: require('../../shared/fixtures/get-all-courses.json'),
     };
   },
-  getCourse: _courseId => {
+  getCourse: (_courseId) => {
     return {
       ok: true,
       data: require('../../shared/fixtures/get-course.json'),
     };
   },
-  deleteCourse: _courseId => {
+  deleteCourse: (_courseId) => {
     return {
       ok: true,
     };
   },
-  updateCourseClass: _courseClass => {
+  updateCourseClass: (_courseClass) => {
     return {
       ok: true,
       data: require('../../shared/fixtures/update-course-class.json'),
@@ -129,18 +135,18 @@ export default {
       data: require('../../shared/fixtures/get-all-course-classes.json'),
     };
   },
-  getCourseClass: _courseClassId => {
+  getCourseClass: (_courseClassId) => {
     return {
       ok: true,
       data: require('../../shared/fixtures/get-course-class.json'),
     };
   },
-  deleteCourseClass: _courseClassId => {
+  deleteCourseClass: (_courseClassId) => {
     return {
       ok: true,
     };
   },
-  updateLesson: _lesson => {
+  updateLesson: (_lesson) => {
     return {
       ok: true,
       data: require('../../shared/fixtures/update-lesson.json'),
@@ -152,18 +158,18 @@ export default {
       data: require('../../shared/fixtures/get-all-lessons.json'),
     };
   },
-  getLesson: _lessonId => {
+  getLesson: (_lessonId) => {
     return {
       ok: true,
       data: require('../../shared/fixtures/get-lesson.json'),
     };
   },
-  deleteLesson: _lessonId => {
+  deleteLesson: (_lessonId) => {
     return {
       ok: true,
     };
   },
-  updateSchedule: _schedule => {
+  updateSchedule: (_schedule) => {
     return {
       ok: true,
       data: require('../../shared/fixtures/update-schedule.json'),
@@ -175,18 +181,18 @@ export default {
       data: require('../../shared/fixtures/get-all-schedules.json'),
     };
   },
-  getSchedule: _scheduleId => {
+  getSchedule: (_scheduleId) => {
     return {
       ok: true,
       data: require('../../shared/fixtures/get-schedule.json'),
     };
   },
-  deleteSchedule: _scheduleId => {
+  deleteSchedule: (_scheduleId) => {
     return {
       ok: true,
     };
   },
-  updateQuiz: _quiz => {
+  updateQuiz: (_quiz) => {
     return {
       ok: true,
       data: require('../../shared/fixtures/update-quiz.json'),
@@ -198,18 +204,18 @@ export default {
       data: require('../../shared/fixtures/get-all-quizzes.json'),
     };
   },
-  getQuiz: _quizId => {
+  getQuiz: (_quizId) => {
     return {
       ok: true,
       data: require('../../shared/fixtures/get-quiz.json'),
     };
   },
-  deleteQuiz: _quizId => {
+  deleteQuiz: (_quizId) => {
     return {
       ok: true,
     };
   },
-  updateQuestion: _question => {
+  updateQuestion: (_question) => {
     return {
       ok: true,
       data: require('../../shared/fixtures/update-question.json'),
@@ -221,18 +227,18 @@ export default {
       data: require('../../shared/fixtures/get-all-questions.json'),
     };
   },
-  getQuestion: _questionId => {
+  getQuestion: (_questionId) => {
     return {
       ok: true,
       data: require('../../shared/fixtures/get-question.json'),
     };
   },
-  deleteQuestion: _questionId => {
+  deleteQuestion: (_questionId) => {
     return {
       ok: true,
     };
   },
-  updateQuizQuestion: _quizQuestion => {
+  updateQuizQuestion: (_quizQuestion) => {
     return {
       ok: true,
       data: require('../../shared/fixtures/update-quiz-question.json'),
@@ -244,18 +250,18 @@ export default {
       data: require('../../shared/fixtures/get-all-quiz-questions.json'),
     };
   },
-  getQuizQuestion: _quizQuestionId => {
+  getQuizQuestion: (_quizQuestionId) => {
     return {
       ok: true,
       data: require('../../shared/fixtures/get-quiz-question.json'),
     };
   },
-  deleteQuizQuestion: _quizQuestionId => {
+  deleteQuizQuestion: (_quizQuestionId) => {
     return {
       ok: true,
     };
   },
-  updateStudentQuiz: _studentQuiz => {
+  updateStudentQuiz: (_studentQuiz) => {
     return {
       ok: true,
       data: require('../../shared/fixtures/update-student-quiz.json'),
@@ -267,18 +273,18 @@ export default {
       data: require('../../shared/fixtures/get-all-student-quizs.json'),
     };
   },
-  getStudentQuiz: _studentQuizId => {
+  getStudentQuiz: (_studentQuizId) => {
     return {
       ok: true,
       data: require('../../shared/fixtures/get-student-quiz.json'),
     };
   },
-  deleteStudentQuiz: _studentQuizId => {
+  deleteStudentQuiz: (_studentQuizId) => {
     return {
       ok: true,
     };
   },
-  updateFlashcard: _flashcard => {
+  updateFlashcard: (_flashcard) => {
     return {
       ok: true,
       data: require('../../shared/fixtures/update-flashcard.json'),
@@ -290,13 +296,13 @@ export default {
       data: require('../../shared/fixtures/get-all-flashcards.json'),
     };
   },
-  getFlashcard: _flashcardId => {
+  getFlashcard: (_flashcardId) => {
     return {
       ok: true,
       data: require('../../shared/fixtures/get-flashcard.json'),
     };
   },
-  deleteFlashcard: _flashcardId => {
+  deleteFlashcard: (_flashcardId) => {
     return {
       ok: true,
     };
@@ -304,7 +310,7 @@ export default {
   // jhipster-react-native-api-fixture-needle
 
   // user fixtures
-  updateUser: _user => {
+  updateUser: (_user) => {
     return {
       ok: true,
       data: require('../fixtures/update-user.json'),
@@ -316,13 +322,13 @@ export default {
       data: require('../fixtures/get-users.json'),
     };
   },
-  getUser: _userId => {
+  getUser: (_userId) => {
     return {
       ok: true,
       data: require('../fixtures/get-user.json'),
     };
   },
-  deleteUser: _userId => {
+  deleteUser: (_userId) => {
     return {
       ok: true,
     };
@@ -330,7 +336,7 @@ export default {
   // auth fixtures
   setAuthToken: () => {},
   removeAuthToken: () => {},
-  login: authObj => {
+  login: (authObj) => {
     if (authObj.username === 'user' && authObj.password === 'user') {
       return {
         ok: true,

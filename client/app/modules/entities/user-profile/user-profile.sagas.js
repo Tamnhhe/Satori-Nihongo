@@ -16,6 +16,20 @@ function* getUserProfile(api, action) {
   }
 }
 
+function* getUserProfileByUserId(api, action) {
+  const { userId } = action;
+  // make the call to the api
+  const apiCall = call(api.getUserProfileByUserId, userId);
+  const response = yield call(callApi, apiCall);
+
+  // success?
+  if (response.ok) {
+    yield put(UserProfileActions.userProfileByUserIdSuccess(response.data));
+  } else {
+    yield put(UserProfileActions.userProfileByUserIdFailure(response.data));
+  }
+}
+
 function* getAllUserProfiles(api, action) {
   const { options } = action;
   // make the call to the api
@@ -62,6 +76,7 @@ function* deleteUserProfile(api, action) {
 export default {
   getAllUserProfiles,
   getUserProfile,
+  getUserProfileByUserId,
   deleteUserProfile,
   updateUserProfile,
 };

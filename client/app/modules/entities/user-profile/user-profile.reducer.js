@@ -7,16 +7,19 @@ import { parseHeaderForLinks } from '../../../shared/util/url-utils';
 
 const { Types, Creators } = createActions({
   userProfileRequest: ['userProfileId'],
+  userProfileByUserIdRequest: ['userId'],
   userProfileAllRequest: ['options'],
   userProfileUpdateRequest: ['userProfile'],
   userProfileDeleteRequest: ['userProfileId'],
 
   userProfileSuccess: ['userProfile'],
+  userProfileByUserIdSuccess: ['userProfile'],
   userProfileAllSuccess: ['userProfileList', 'headers'],
   userProfileUpdateSuccess: ['userProfile'],
   userProfileDeleteSuccess: [],
 
   userProfileFailure: ['error'],
+  userProfileByUserIdFailure: ['error'],
   userProfileAllFailure: ['error'],
   userProfileUpdateFailure: ['error'],
   userProfileDeleteFailure: ['error'],
@@ -48,7 +51,7 @@ export const INITIAL_STATE = Immutable({
 /* ------------- Reducers ------------- */
 
 // request the data from an api
-export const request = state =>
+export const request = (state) =>
   state.merge({
     fetchingOne: true,
     errorOne: false,
@@ -56,20 +59,20 @@ export const request = state =>
   });
 
 // request the data from an api
-export const allRequest = state =>
+export const allRequest = (state) =>
   state.merge({
     fetchingAll: true,
     errorAll: false,
   });
 
 // request to update from an api
-export const updateRequest = state =>
+export const updateRequest = (state) =>
   state.merge({
     updateSuccess: false,
     updating: true,
   });
 // request to delete from an api
-export const deleteRequest = state =>
+export const deleteRequest = (state) =>
   state.merge({
     deleting: true,
   });
@@ -106,7 +109,7 @@ export const updateSuccess = (state, action) => {
   });
 };
 // successful api delete
-export const deleteSuccess = state => {
+export const deleteSuccess = (state) => {
   return state.merge({
     deleting: false,
     errorDeleting: null,
@@ -152,22 +155,25 @@ export const deleteFailure = (state, action) => {
   });
 };
 
-export const reset = _state => INITIAL_STATE;
+export const reset = (_state) => INITIAL_STATE;
 
 /* ------------- Hookup Reducers To Types ------------- */
 
 export const reducer = createReducer(INITIAL_STATE, {
   [Types.USER_PROFILE_REQUEST]: request,
+  [Types.USER_PROFILE_BY_USER_ID_REQUEST]: request,
   [Types.USER_PROFILE_ALL_REQUEST]: allRequest,
   [Types.USER_PROFILE_UPDATE_REQUEST]: updateRequest,
   [Types.USER_PROFILE_DELETE_REQUEST]: deleteRequest,
 
   [Types.USER_PROFILE_SUCCESS]: success,
+  [Types.USER_PROFILE_BY_USER_ID_SUCCESS]: success,
   [Types.USER_PROFILE_ALL_SUCCESS]: allSuccess,
   [Types.USER_PROFILE_UPDATE_SUCCESS]: updateSuccess,
   [Types.USER_PROFILE_DELETE_SUCCESS]: deleteSuccess,
 
   [Types.USER_PROFILE_FAILURE]: failure,
+  [Types.USER_PROFILE_BY_USER_ID_FAILURE]: failure,
   [Types.USER_PROFILE_ALL_FAILURE]: allFailure,
   [Types.USER_PROFILE_UPDATE_FAILURE]: updateFailure,
   [Types.USER_PROFILE_DELETE_FAILURE]: deleteFailure,
