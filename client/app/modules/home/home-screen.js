@@ -1,12 +1,12 @@
 import React from 'react';
-import { ScrollView, Text, View, SafeAreaView } from 'react-native';
+import { ScrollView, Text, View, SafeAreaView, TouchableOpacity } from 'react-native';
 import { Card, Appbar, ProgressBar, useTheme } from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { connect } from 'react-redux';
 import styles from './home-screen.styles';
 
 function HomeScreen(props) {
-  const { account } = props;
+  const { account, navigation } = props;
   const theme = useTheme();
 
   // Component cho Header với Material Design
@@ -49,13 +49,75 @@ function HomeScreen(props) {
   // Component cho Categories với Material Design Icons
   const CategoriesSection = () => {
     const categories = [
-      { id: 1, name: 'Hiragana', icon: 'script-text', color: '#FF6B6B', lessons: 12 },
-      { id: 2, name: 'Katakana', icon: 'format-text', color: '#4ECDC4', lessons: 10 },
-      { id: 3, name: 'Kanji', icon: 'book-open-page-variant', color: '#45B7D1', lessons: 25 },
-      { id: 4, name: 'Ngữ pháp', icon: 'book-alphabet', color: '#96CEB4', lessons: 18 },
-      { id: 5, name: 'Từ vựng', icon: 'forum', color: '#FFEAA7', lessons: 30 },
-      { id: 6, name: 'Hội thoại', icon: 'account-group', color: '#DDA0DD', lessons: 15 },
+      {
+        id: 1,
+        name: 'Hiragana',
+        icon: 'script-text',
+        color: '#FF6B6B',
+        gradientColors: ['#FF6B6B', '#FF8E8E'],
+        lessons: 12,
+        category: 'hiragana',
+        description: 'Bảng chữ cái cơ bản',
+      },
+      {
+        id: 2,
+        name: 'Katakana',
+        icon: 'format-text',
+        color: '#4ECDC4',
+        gradientColors: ['#4ECDC4', '#6FE0D6'],
+        lessons: 10,
+        category: 'katakana',
+        description: 'Bảng chữ cái ngoại lai',
+      },
+      {
+        id: 3,
+        name: 'Kanji',
+        icon: 'book-open-page-variant',
+        color: '#45B7D1',
+        gradientColors: ['#45B7D1', '#6AC5E1'],
+        lessons: 25,
+        category: 'kanji',
+        description: 'Chữ Hán cơ bản',
+      },
+      {
+        id: 4,
+        name: 'Ngữ pháp',
+        icon: 'book-alphabet',
+        color: '#96CEB4',
+        gradientColors: ['#96CEB4', '#A8D8C4'],
+        lessons: 18,
+        category: 'grammar',
+        description: 'Cấu trúc câu',
+      },
+      {
+        id: 5,
+        name: 'Từ vựng',
+        icon: 'forum',
+        color: '#FFEAA7',
+        gradientColors: ['#FFEAA7', '#FFEFBB'],
+        lessons: 30,
+        category: 'vocabulary',
+        description: 'Từ vựng cơ bản',
+      },
+      {
+        id: 6,
+        name: 'Hội thoại',
+        icon: 'account-group',
+        color: '#DDA0DD',
+        gradientColors: ['#DDA0DD', '#E8B4E8'],
+        lessons: 15,
+        category: 'conversation',
+        description: 'Giao tiếp hàng ngày',
+      },
     ];
+
+    const handleCategoryPress = (category) => {
+      // Navigate to Japanese Learning Screen with specific category
+      navigation.navigate('JapaneseLearning', {
+        category: category.name,
+        categoryKey: category.category,
+      });
+    };
 
     return (
       <View style={styles.categoriesSection}>
@@ -64,19 +126,53 @@ function HomeScreen(props) {
         </Text>
         <View style={styles.categoriesGrid}>
           {categories.map((category) => (
-            <Card key={category.id} style={styles.categoryCard} elevation={2}>
-              <Card.Content style={{ alignItems: 'center', padding: 16 }}>
-                <View style={[styles.categoryIcon, { backgroundColor: category.color }]}>
-                  <MaterialCommunityIcons name={category.icon} size={32} color="white" />
-                </View>
-                <Text style={[styles.categoryName, { color: theme.colors.onSurface }]}>
-                  {category.name}
-                </Text>
-                <Text style={[styles.categoryLessons, { color: theme.colors.onSurfaceVariant }]}>
-                  {category.lessons} bài học
-                </Text>
-              </Card.Content>
-            </Card>
+            <TouchableOpacity
+              key={category.id}
+              onPress={() => handleCategoryPress(category)}
+              activeOpacity={0.8}
+              style={{
+                width: '48%',
+                marginHorizontal: 6,
+                marginBottom: 12,
+              }}
+            >
+              <Card
+                style={[styles.categoryCard, { backgroundColor: theme.colors.surface }]}
+                elevation={3}
+                mode="elevated"
+              >
+                <Card.Content style={{ alignItems: 'center', padding: 16 }}>
+                  <View style={[styles.categoryIcon, { backgroundColor: category.color }]}>
+                    <MaterialCommunityIcons name={category.icon} size={28} color="white" />
+                  </View>
+                  <Text style={[styles.categoryName, { color: theme.colors.onSurface }]}>
+                    {category.name}
+                  </Text>
+                  <Text style={[styles.categoryLessons, { color: theme.colors.onSurfaceVariant }]}>
+                    {category.description}
+                  </Text>
+                  <View
+                    style={{
+                      backgroundColor: theme.colors.primaryContainer,
+                      paddingHorizontal: 8,
+                      paddingVertical: 4,
+                      borderRadius: 12,
+                      marginTop: 6,
+                    }}
+                  >
+                    <Text
+                      style={{
+                        fontSize: 11,
+                        color: theme.colors.onPrimaryContainer,
+                        fontWeight: '600',
+                      }}
+                    >
+                      {category.lessons} bài học
+                    </Text>
+                  </View>
+                </Card.Content>
+              </Card>
+            </TouchableOpacity>
           ))}
         </View>
       </View>

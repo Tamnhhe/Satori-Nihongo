@@ -3,7 +3,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useTheme } from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import HomeScreen from '../modules/home/home-screen';
+import HomeStackNavigator from './home-stack';
 import ScheduleScreen from '../modules/schedule/schedule-screen';
 import MyLessonScreen from '../modules/my-lesson/my-lesson-screen';
 import ProfileStackNavigator from './profile-stack';
@@ -69,7 +69,7 @@ function MainTabNavigator() {
     >
       <Tab.Screen
         name="HomeTab"
-        component={HomeScreen}
+        component={HomeStackNavigator}
         options={{
           tabBarLabel: 'Home',
           title: 'Trang chủ',

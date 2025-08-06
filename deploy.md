@@ -1,6 +1,7 @@
 # Hướng dẫn triển khai Satori-Nihongo lên VPS Linux
 
 ## Tổng quan dự án
+
 - **Backend**: Spring Boot 3.4.5 + Java 21 + MySQL 9.2.0
 - **Frontend**: React Native/Expo
 - **Kiến trúc**: JHipster monolithic application
@@ -10,6 +11,7 @@
 ## 1. Yêu cầu hệ thống
 
 ### Minimum requirements:
+
 - **CPU**: 2 cores
 - **RAM**: 4GB (khuyến nghị 8GB)
 - **Storage**: 20GB free space
@@ -17,6 +19,7 @@
 - **Network**: Có kết nối internet
 
 ### Cổng cần mở:
+
 - **22**: SSH
 - **80**: HTTP
 - **443**: HTTPS
@@ -28,6 +31,7 @@
 ## 2. Cài đặt môi trường cơ bản
 
 ### 2.1. Cập nhật hệ thống
+
 ```bash
 # Ubuntu/Debian
 sudo apt update && sudo apt upgrade -y
@@ -37,6 +41,7 @@ sudo dnf update -y
 ```
 
 ### 2.2. Cài đặt các công cụ cơ bản
+
 ```bash
 # Ubuntu/Debian
 sudo apt install -y curl wget git unzip vim htop tree
@@ -46,6 +51,7 @@ sudo dnf install -y curl wget git unzip vim htop tree
 ```
 
 ### 2.3. Tạo user cho application (tùy chọn)
+
 ```bash
 sudo adduser satori
 sudo usermod -aG sudo satori
@@ -57,16 +63,19 @@ sudo su - satori
 ## 3. Cài đặt Java 21
 
 ### 3.1. Ubuntu/Debian
+
 ```bash
 sudo apt install openjdk-21-jdk -y
 ```
 
 ### 3.2. CentOS/RHEL/Rocky Linux
+
 ```bash
 sudo dnf install java-21-openjdk java-21-openjdk-devel -y
 ```
 
 ### 3.3. Kiểm tra cài đặt
+
 ```bash
 java -version
 javac -version
@@ -74,6 +83,7 @@ echo $JAVA_HOME
 ```
 
 ### 3.4. Cấu hình JAVA_HOME (nếu cần)
+
 ```bash
 echo 'export JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64' >> ~/.bashrc
 echo 'export PATH=$PATH:$JAVA_HOME/bin' >> ~/.bashrc
@@ -85,6 +95,7 @@ source ~/.bashrc
 ## 4. Cài đặt Maven
 
 ### 4.1. Cài đặt từ package manager
+
 ```bash
 # Ubuntu/Debian
 sudo apt install maven -y
@@ -94,6 +105,7 @@ sudo dnf install maven -y
 ```
 
 ### 4.2. Kiểm tra cài đặt
+
 ```bash
 mvn -version
 ```
@@ -103,6 +115,7 @@ mvn -version
 ## 5. Cài đặt Node.js & NPM
 
 ### 5.1. Cài đặt Node.js 22.x
+
 ```bash
 # Cài NodeSource repository
 curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash -
@@ -114,6 +127,7 @@ sudo dnf install -y nodejs
 ```
 
 ### 5.2. Sử dụng NVM (khuyến nghị)
+
 ```bash
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
 source ~/.bashrc
@@ -123,6 +137,7 @@ nvm alias default 22.15.0
 ```
 
 ### 5.3. Kiểm tra cài đặt
+
 ```bash
 node -v
 npm -v
@@ -133,6 +148,7 @@ npm -v
 ## 6. Cài đặt MySQL
 
 ### 6.1. Cài đặt MySQL Server
+
 ```bash
 # Ubuntu/Debian
 sudo apt install mysql-server -y
@@ -142,6 +158,7 @@ sudo dnf install mysql-server -y
 ```
 
 ### 6.2. Khởi động và enable MySQL
+
 ```bash
 sudo systemctl start mysqld
 sudo systemctl enable mysqld
@@ -152,11 +169,13 @@ sudo systemctl enable mysql
 ```
 
 ### 6.3. Bảo mật MySQL
+
 ```bash
 sudo mysql_secure_installation
 ```
 
 Trả lời các câu hỏi:
+
 - **Validate password plugin**: Y
 - **Password strength**: 2 (Strong)
 - **New root password**: Nhập password mạnh
@@ -166,6 +185,7 @@ Trả lời các câu hỏi:
 - **Reload privilege tables**: Y
 
 ### 6.4. Tạo database và user
+
 ```bash
 sudo mysql -u root -p
 ```
@@ -181,6 +201,7 @@ EXIT;
 ```
 
 ### 6.5. Test kết nối database
+
 ```bash
 mysql -u satoriuser -p onlinesatoriplatform
 ```
@@ -190,6 +211,7 @@ mysql -u satoriuser -p onlinesatoriplatform
 ## 7. Cài đặt Docker & Docker Compose (Tùy chọn)
 
 ### 7.1. Cài đặt Docker
+
 ```bash
 # Gỡ cài đặt cũ (nếu có)
 sudo apt remove docker docker-engine docker.io containerd runc
@@ -204,18 +226,21 @@ newgrp docker
 ```
 
 ### 7.2. Cài đặt Docker Compose
+
 ```bash
 sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 sudo chmod +x /usr/local/bin/docker-compose
 ```
 
 ### 7.3. Khởi động Docker
+
 ```bash
 sudo systemctl start docker
 sudo systemctl enable docker
 ```
 
 ### 7.4. Kiểm tra cài đặt
+
 ```bash
 docker --version
 docker-compose --version
@@ -227,6 +252,7 @@ docker run hello-world
 ## 8. Cài đặt Nginx
 
 ### 8.1. Cài đặt Nginx
+
 ```bash
 # Ubuntu/Debian
 sudo apt install nginx -y
@@ -236,6 +262,7 @@ sudo dnf install nginx -y
 ```
 
 ### 8.2. Khởi động Nginx
+
 ```bash
 sudo systemctl start nginx
 sudo systemctl enable nginx
@@ -243,6 +270,7 @@ sudo systemctl status nginx
 ```
 
 ### 8.3. Kiểm tra Nginx
+
 ```bash
 curl localhost
 # Hoặc mở browser: http://your-server-ip
@@ -253,6 +281,7 @@ curl localhost
 ## 9. Triển khai ứng dụng
 
 ### 9.1. Clone repository
+
 ```bash
 cd /opt
 sudo git clone https://github.com/yourusername/Satori-Nihongo.git
@@ -261,6 +290,7 @@ cd Satori-Nihongo
 ```
 
 ### 9.2. Cấu hình environment variables
+
 ```bash
 cd backend
 cp .env.example .env
@@ -268,6 +298,7 @@ nano .env
 ```
 
 Cập nhật file `.env`:
+
 ```bash
 # Database Configuration
 DB_PASSWORD=SatoriUser@2025!
@@ -288,6 +319,7 @@ SPRING_PROFILES_ACTIVE=prod
 ```
 
 ### 9.3. Cấu hình application-prod.yml
+
 ```bash
 nano src/main/resources/config/application-prod.yml
 ```
@@ -304,7 +336,7 @@ spring:
       connection-timeout: 30000
       idle-timeout: 600000
       max-lifetime: 1800000
-  
+
   jpa:
     hibernate:
       ddl-auto: update
@@ -313,13 +345,13 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
         format_sql: false
-  
+
   liquibase:
     change-log: classpath:config/liquibase/master.xml
-  
+
   profiles:
     active: prod
-  
+
   mail:
     host: smtp.gmail.com
     port: 587
@@ -371,12 +403,14 @@ jhipster:
 ```
 
 ### 9.4. Tạo thư mục logs
+
 ```bash
 sudo mkdir -p /opt/Satori-Nihongo/logs
 sudo chown -R $USER:$USER /opt/Satori-Nihongo/logs
 ```
 
 ### 9.5. Build ứng dụng
+
 ```bash
 cd /opt/Satori-Nihongo/backend
 
@@ -390,11 +424,13 @@ ls -la target/*.jar
 ```
 
 ### 9.6. Test chạy ứng dụng
+
 ```bash
 java -jar target/online-satori-platform-0.0.1-SNAPSHOT.jar --spring.profiles.active=prod
 ```
 
 Kiểm tra:
+
 - Application startup logs
 - Health check: `curl localhost:8080/management/health`
 - API: `curl localhost:8080/api/account`
@@ -406,6 +442,7 @@ Nhấn `Ctrl+C` để dừng.
 ## 10. Tạo systemd service
 
 ### 10.1. Tạo service file
+
 ```bash
 sudo nano /etc/systemd/system/satori-backend.service
 ```
@@ -444,6 +481,7 @@ WantedBy=multi-user.target
 ```
 
 ### 10.2. Enable và start service
+
 ```bash
 sudo systemctl daemon-reload
 sudo systemctl enable satori-backend
@@ -451,12 +489,14 @@ sudo systemctl start satori-backend
 ```
 
 ### 10.3. Kiểm tra status
+
 ```bash
 sudo systemctl status satori-backend
 sudo journalctl -u satori-backend -f
 ```
 
 ### 10.4. Các lệnh quản lý service
+
 ```bash
 # Dừng service
 sudo systemctl stop satori-backend
@@ -476,6 +516,7 @@ sudo journalctl -u satori-backend -f
 ## 11. Cấu hình Nginx Reverse Proxy
 
 ### 11.1. Tạo Nginx config
+
 ```bash
 sudo nano /etc/nginx/sites-available/satori-nihongo
 ```
@@ -488,7 +529,7 @@ upstream satori_backend {
 server {
     listen 80;
     server_name your-domain.com www.your-domain.com;
-    
+
     # Security headers
     add_header X-Frame-Options "SAMEORIGIN" always;
     add_header X-Content-Type-Options "nosniff" always;
@@ -512,12 +553,12 @@ server {
         proxy_set_header X-Forwarded-Proto $scheme;
         proxy_set_header X-Forwarded-Host $host;
         proxy_set_header X-Forwarded-Port $server_port;
-        
+
         # Timeout settings
         proxy_connect_timeout 60s;
         proxy_send_timeout 60s;
         proxy_read_timeout 60s;
-        
+
         # Buffer settings
         proxy_buffering on;
         proxy_buffer_size 128k;
@@ -575,6 +616,7 @@ server {
 ```
 
 ### 11.2. Enable site và test config
+
 ```bash
 # Enable site
 sudo ln -s /etc/nginx/sites-available/satori-nihongo /etc/nginx/sites-enabled/
@@ -590,6 +632,7 @@ sudo systemctl reload nginx
 ```
 
 ### 11.3. Kiểm tra
+
 ```bash
 curl -H "Host: your-domain.com" localhost
 curl your-domain.com/management/health
@@ -600,6 +643,7 @@ curl your-domain.com/management/health
 ## 12. Cài đặt SSL với Let's Encrypt
 
 ### 12.1. Cài đặt Certbot
+
 ```bash
 # Ubuntu/Debian
 sudo apt install certbot python3-certbot-nginx -y
@@ -609,27 +653,32 @@ sudo dnf install certbot python3-certbot-nginx -y
 ```
 
 ### 12.2. Tạo SSL certificate
+
 ```bash
 sudo certbot --nginx -d your-domain.com -d www.your-domain.com
 ```
 
 Trả lời các câu hỏi:
+
 - Email address: your-email@domain.com
 - Agree to terms: Y
 - Share email: N (tùy chọn)
 - Redirect HTTP to HTTPS: 2 (Yes)
 
 ### 12.3. Test SSL renewal
+
 ```bash
 sudo certbot renew --dry-run
 ```
 
 ### 12.4. Cấu hình auto-renewal
+
 ```bash
 sudo crontab -e
 ```
 
 Thêm dòng:
+
 ```bash
 0 12 * * * /usr/bin/certbot renew --quiet && systemctl reload nginx
 ```
@@ -639,6 +688,7 @@ Thêm dòng:
 ## 13. Cấu hình tường lửa (UFW)
 
 ### 13.1. Cài đặt và cấu hình UFW
+
 ```bash
 # Cài đặt UFW (nếu chưa có)
 sudo apt install ufw -y
@@ -670,6 +720,7 @@ sudo ufw status verbose
 ## 14. Monitoring và Logging
 
 ### 14.1. Cài đặt log rotation
+
 ```bash
 sudo nano /etc/logrotate.d/satori-backend
 ```
@@ -690,11 +741,13 @@ sudo nano /etc/logrotate.d/satori-backend
 ```
 
 ### 14.2. Cài đặt htop và netstat
+
 ```bash
 sudo apt install htop net-tools -y
 ```
 
 ### 14.3. Script monitoring
+
 ```bash
 sudo nano /opt/monitor-satori.sh
 ```
@@ -737,11 +790,13 @@ sudo chmod +x /opt/monitor-satori.sh
 ```
 
 ### 14.4. Crontab cho monitoring (tùy chọn)
+
 ```bash
 crontab -e
 ```
 
 Thêm:
+
 ```bash
 # Health check mỗi 5 phút
 */5 * * * * curl -s http://localhost:8080/management/health > /dev/null || echo "$(date): Health check failed" >> /opt/Satori-Nihongo/logs/health.log
@@ -752,6 +807,7 @@ Thêm:
 ## 15. Backup và khôi phục
 
 ### 15.1. Tạo script backup database
+
 ```bash
 sudo nano /opt/backup-database.sh
 ```
@@ -776,11 +832,11 @@ mysqldump -u $DB_USER -p$DB_PASS --single-transaction --routines --triggers $DB_
 
 if [ $? -eq 0 ]; then
     echo "Database backup completed: $BACKUP_FILE"
-    
+
     # Compress backup
     gzip $BACKUP_FILE
     echo "Backup compressed: $BACKUP_FILE.gz"
-    
+
     # Remove backups older than 7 days
     find $BACKUP_DIR -name "satori_db_backup_*.sql.gz" -mtime +7 -delete
     echo "Old backups cleaned up"
@@ -795,6 +851,7 @@ sudo chmod +x /opt/backup-database.sh
 ```
 
 ### 15.2. Tạo script backup application
+
 ```bash
 sudo nano /opt/backup-application.sh
 ```
@@ -821,7 +878,7 @@ tar -czf $BACKUP_FILE \
 
 if [ $? -eq 0 ]; then
     echo "Application backup completed: $BACKUP_FILE"
-    
+
     # Remove backups older than 3 days
     find $BACKUP_DIR -name "satori_app_backup_*.tar.gz" -mtime +3 -delete
     echo "Old application backups cleaned up"
@@ -836,6 +893,7 @@ sudo chmod +x /opt/backup-application.sh
 ```
 
 ### 15.3. Cấu hình crontab cho backup tự động
+
 ```bash
 sudo crontab -e
 ```
@@ -849,6 +907,7 @@ sudo crontab -e
 ```
 
 ### 15.4. Script khôi phục database
+
 ```bash
 sudo nano /opt/restore-database.sh
 ```
@@ -912,6 +971,7 @@ sudo chmod +x /opt/restore-database.sh
 ## 16. Triển khai với Docker (Tùy chọn)
 
 ### 16.1. Tạo Dockerfile cho backend
+
 ```bash
 cd /opt/Satori-Nihongo/backend
 nano Dockerfile
@@ -950,17 +1010,18 @@ ENTRYPOINT ["java", "-Xmx1024m", "-Xms512m", "-jar", "app.jar"]
 ```
 
 ### 16.2. Tạo docker-compose.prod.yml
+
 ```bash
 cd /opt/Satori-Nihongo
 nano docker-compose.prod.yml
 ```
 
 ```yaml
-version: '3.8'
+version: "3.8"
 
 services:
   app:
-    build: 
+    build:
       context: ./backend
       dockerfile: Dockerfile
     image: satori-nihongo:latest
@@ -1006,7 +1067,11 @@ services:
     networks:
       - satori-network
     healthcheck:
-      test: ["CMD-SHELL", "mysql -u$$MYSQL_USER -p$$MYSQL_PASSWORD -e 'SHOW DATABASES;' $$MYSQL_DATABASE"]
+      test:
+        [
+          "CMD-SHELL",
+          "mysql -u$$MYSQL_USER -p$$MYSQL_PASSWORD -e 'SHOW DATABASES;' $$MYSQL_DATABASE",
+        ]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -1043,6 +1108,7 @@ networks:
 ```
 
 ### 16.3. Cấu hình Nginx cho Docker
+
 ```bash
 mkdir -p nginx/conf.d
 nano nginx/conf.d/satori.conf
@@ -1056,7 +1122,7 @@ upstream satori_backend {
 server {
     listen 80;
     server_name your-domain.com www.your-domain.com;
-    
+
     location / {
         proxy_pass http://satori_backend;
         proxy_set_header Host $host;
@@ -1068,6 +1134,7 @@ server {
 ```
 
 ### 16.4. Deploy với Docker Compose
+
 ```bash
 # Build và start services
 docker-compose -f docker-compose.prod.yml up -d --build
@@ -1087,6 +1154,7 @@ docker-compose -f docker-compose.prod.yml down -v
 ## 17. Các lệnh hữu ích cho vận hành
 
 ### 17.1. Quản lý service
+
 ```bash
 # Xem status tất cả services
 sudo systemctl status satori-backend mysql nginx
@@ -1102,6 +1170,7 @@ sudo journalctl -u satori-backend --since "1 hour ago"
 ```
 
 ### 17.2. Database operations
+
 ```bash
 # Kết nối database
 mysql -u satoriuser -p onlinesatoriplatform
@@ -1117,6 +1186,7 @@ mysql -u satoriuser -p -e "SELECT table_schema AS 'Database', ROUND(SUM(data_len
 ```
 
 ### 17.3. Application operations
+
 ```bash
 # Check application health
 curl localhost:8080/management/health
@@ -1135,6 +1205,7 @@ sudo systemctl restart satori-backend
 ```
 
 ### 17.4. Nginx operations
+
 ```bash
 # Test nginx config
 sudo nginx -t
@@ -1151,6 +1222,7 @@ sudo tail -f /var/log/nginx/satori_error.log
 ```
 
 ### 17.5. SSL operations
+
 ```bash
 # Check SSL certificate
 sudo certbot certificates
@@ -1167,6 +1239,7 @@ sudo certbot renew --dry-run
 ## 18. Troubleshooting
 
 ### 18.1. Application không start
+
 ```bash
 # Check logs
 sudo journalctl -u satori-backend -n 50
@@ -1182,6 +1255,7 @@ mysql -u satoriuser -p onlinesatoriplatform
 ```
 
 ### 18.2. Database connection issues
+
 ```bash
 # Check MySQL status
 sudo systemctl status mysql
@@ -1197,6 +1271,7 @@ sudo cat /etc/mysql/mysql.conf.d/mysqld.cnf
 ```
 
 ### 18.3. Nginx issues
+
 ```bash
 # Check Nginx status
 sudo systemctl status nginx
@@ -1213,6 +1288,7 @@ sudo netstat -tlnp | grep :443
 ```
 
 ### 18.4. SSL issues
+
 ```bash
 # Check SSL certificate
 openssl s_client -connect your-domain.com:443 -servername your-domain.com
@@ -1225,6 +1301,7 @@ sudo certbot renew --force-renewal
 ```
 
 ### 18.5. Performance issues
+
 ```bash
 # Check system resources
 htop
@@ -1244,6 +1321,7 @@ mysql -u root -p -e "SHOW STATUS LIKE 'Threads_%';"
 ## 19. Bảo mật nâng cao
 
 ### 19.1. Fail2ban cho SSH
+
 ```bash
 sudo apt install fail2ban -y
 
@@ -1271,6 +1349,7 @@ sudo systemctl start fail2ban
 ```
 
 ### 19.2. Cấu hình SSH security
+
 ```bash
 sudo nano /etc/ssh/sshd_config
 ```
@@ -1298,6 +1377,7 @@ sudo systemctl restart ssh
 ```
 
 ### 19.3. Automatic security updates
+
 ```bash
 sudo apt install unattended-upgrades -y
 sudo dpkg-reconfigure -plow unattended-upgrades
@@ -1308,6 +1388,7 @@ sudo dpkg-reconfigure -plow unattended-upgrades
 ## 20. Checklist triển khai
 
 ### ✅ Pre-deployment checklist:
+
 - [ ] Server setup (Java, Maven, Node.js, MySQL, Nginx)
 - [ ] Database created và user configured
 - [ ] Application configuration files updated
@@ -1318,6 +1399,7 @@ sudo dpkg-reconfigure -plow unattended-upgrades
 - [ ] Monitoring setup
 
 ### ✅ Deployment checklist:
+
 - [ ] Code cloned từ repository
 - [ ] Application built successfully
 - [ ] Database schema created/updated
@@ -1328,6 +1410,7 @@ sudo dpkg-reconfigure -plow unattended-upgrades
 - [ ] Logs rotation configured
 
 ### ✅ Post-deployment checklist:
+
 - [ ] Application accessible via domain
 - [ ] API endpoints working
 - [ ] Database operations working
@@ -1342,6 +1425,7 @@ sudo dpkg-reconfigure -plow unattended-upgrades
 ## 21. Liên hệ và hỗ trợ
 
 ### Tài liệu tham khảo:
+
 - **Spring Boot**: https://spring.io/projects/spring-boot
 - **JHipster**: https://www.jhipster.tech/
 - **MySQL**: https://dev.mysql.com/doc/
@@ -1349,12 +1433,14 @@ sudo dpkg-reconfigure -plow unattended-upgrades
 - **Let's Encrypt**: https://letsencrypt.org/docs/
 
 ### Logs locations:
+
 - **Application**: `/opt/Satori-Nihongo/logs/application.log`
 - **System service**: `sudo journalctl -u satori-backend`
 - **Nginx**: `/var/log/nginx/satori_*.log`
 - **MySQL**: `/var/log/mysql/error.log`
 
 ### Important files:
+
 - **Service config**: `/etc/systemd/system/satori-backend.service`
 - **Nginx config**: `/etc/nginx/sites-available/satori-nihongo`
 - **Application config**: `/opt/Satori-Nihongo/backend/src/main/resources/config/application-prod.yml`

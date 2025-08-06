@@ -25,6 +25,9 @@ import NotFound from './not-found-screen';
 import { ModalScreen } from './modal-screen';
 import { DrawerButton } from './drawer/drawer-button';
 
+// Import notification helper
+import notificationNavigationHelper from '../shared/services/notification-navigation-helper';
+
 export const drawerScreens = [
   {
     name: 'Welcome',
@@ -192,6 +195,8 @@ function NavContainer(props) {
       ref={navigationRef}
       onReady={() => {
         isReadyRef.current = true;
+        // Setup navigation reference for notification helper
+        notificationNavigationHelper.setNavigationRef(navigationRef);
       }}
     >
       <Stack.Navigator>
