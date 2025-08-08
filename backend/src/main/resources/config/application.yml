@@ -227,3 +227,102 @@ jhipster:
 # ===================================================================
 
 # application:
+
+# ===================================================================
+# AI Service Configuration
+# ===================================================================
+app:
+  ai:
+    service:
+      url: ${AI_SERVICE_URL:}
+      api-key: ${AI_SERVICE_API_KEY:}
+      timeout: ${AI_SERVICE_TIMEOUT:30000}
+      enabled: ${AI_SERVICE_ENABLED:false}
+      model: ${AI_SERVICE_MODEL:gpt-3.5-turbo}
+      max-tokens: ${AI_SERVICE_MAX_TOKENS:2000}
+    practice-test:
+      default-question-count: ${AI_PRACTICE_TEST_DEFAULT_QUESTIONS:10}
+      max-question-count: ${AI_PRACTICE_TEST_MAX_QUESTIONS:50}
+      fallback-enabled: ${AI_PRACTICE_TEST_FALLBACK_ENABLED:true}
+  rag:
+    enabled: ${RAG_ENABLED:false}
+    vector-db:
+      type: postgresql # postgresql or pinecone
+      postgresql:
+        url: ${RAG_POSTGRES_URL:jdbc:postgresql://localhost:5432/satori_vectors}
+        username: ${RAG_POSTGRES_USERNAME:satori_user}
+        password: ${RAG_POSTGRES_PASSWORD:satori_pass}
+        table-name: ${RAG_POSTGRES_TABLE:content_embeddings}
+      pinecone:
+        url: ${RAG_PINECONE_URL:}
+        api-key: ${RAG_PINECONE_API_KEY:}
+        index-name: ${RAG_PINECONE_INDEX:satori-content}
+    embedding:
+      provider: gemini # gemini or openai
+      gemini:
+        api-key: ${GEMINI_API_KEY:}
+        model: ${GEMINI_EMBEDDING_MODEL:text-embedding-004}
+        dimensions: ${GEMINI_EMBEDDING_DIMENSIONS:768}
+        base-url: ${GEMINI_BASE_URL:https://generativelanguage.googleapis.com}
+      openai:
+        api-key: ${OPENAI_API_KEY:}
+        model: ${OPENAI_EMBEDDING_MODEL:text-embedding-ada-002}
+        dimensions: ${OPENAI_EMBEDDING_DIMENSIONS:1536}
+        base-url: ${OPENAI_BASE_URL:https://api.openai.com/v1}
+
+  # ===================================================================
+  # Application specific properties
+  # ===================================================================
+  oauth2:
+    enabled: ${OAUTH2_ENABLED:true}
+    redirect-base-url: ${OAUTH2_REDIRECT_BASE_URL:http://localhost:8080}
+    encryption:
+      key: ${OAUTH2_ENCRYPTION_KEY:}
+    token:
+      refresh-threshold-minutes: ${OAUTH2_TOKEN_REFRESH_THRESHOLD_MINUTES:5}
+      default-expiry-hours: ${OAUTH2_TOKEN_DEFAULT_EXPIRY_HOURS:1}
+      cleanup-days: ${OAUTH2_TOKEN_CLEANUP_DAYS:30}
+    cleanup:
+      enabled: ${OAUTH2_CLEANUP_ENABLED:true}
+      unused-account-days: ${OAUTH2_CLEANUP_UNUSED_ACCOUNT_DAYS:30}
+      batch-size: ${OAUTH2_CLEANUP_BATCH_SIZE:100}
+    providers:
+      google:
+        enabled: ${GOOGLE_OAUTH2_ENABLED:true}
+        client-id: ${GOOGLE_CLIENT_ID:}
+        client-secret: ${GOOGLE_CLIENT_SECRET:}
+        scope: openid,profile,email
+        additional-parameters:
+          access_type: offline
+          prompt: consent
+      facebook:
+        enabled: ${FACEBOOK_OAUTH2_ENABLED:true}
+        client-id: ${FACEBOOK_CLIENT_ID:}
+        client-secret: ${FACEBOOK_CLIENT_SECRET:}
+        scope: email,public_profile
+      github:
+        enabled: ${GITHUB_OAUTH2_ENABLED:true}
+        client-id: ${GITHUB_CLIENT_ID:}
+        client-secret: ${GITHUB_CLIENT_SECRET:}
+        scope: user:email,read:user
+  rate-limiting:
+    default-requests-per-minute: 60
+    auth-requests-per-minute: 5
+    file-upload-requests-per-minute: 10
+    api-requests-per-minute: 100
+    quiz-submission-requests-per-minute: 2
+    notification-requests-per-minute: 20
+    ban-duration-minutes: 15
+    max-failed-attempts: 5
+  file-storage:
+    path: uploads
+    max-file-size: 50MB
+  security:
+    audit-log:
+      enabled: true
+      retention-days: 90
+    input-validation:
+      enabled: true
+      sanitize-html: true
+    rate-limiting:
+      enabled: true

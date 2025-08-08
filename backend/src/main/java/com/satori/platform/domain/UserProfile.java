@@ -70,6 +70,20 @@ public class UserProfile implements Serializable {
     @JsonIgnoreProperties(value = { "quiz", "student" }, allowSetters = true)
     private Set<StudentQuiz> quizAttempts = new HashSet<>();
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "userProfile")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "userProfile" }, allowSetters = true)
+    private Set<NotificationPreference> notificationPreferences = new HashSet<>();
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "createdBy")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "course", "createdBy" }, allowSetters = true)
+    private Set<GiftCode> createdGiftCodes = new HashSet<>();
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "uploadedBy")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "lesson", "uploadedBy" }, allowSetters = true)
+    private Set<FileMetaData> uploadedFiles = new HashSet<>();
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public Long getId() {
@@ -248,6 +262,99 @@ public class UserProfile implements Serializable {
     public UserProfile removeQuizAttempts(StudentQuiz studentQuiz) {
         this.quizAttempts.remove(studentQuiz);
         studentQuiz.setStudent(null);
+        return this;
+    }
+
+    public Set<NotificationPreference> getNotificationPreferences() {
+        return this.notificationPreferences;
+    }
+
+    public void setNotificationPreferences(Set<NotificationPreference> notificationPreferences) {
+        if (this.notificationPreferences != null) {
+            this.notificationPreferences.forEach(i -> i.setUserProfile(null));
+        }
+        if (notificationPreferences != null) {
+            notificationPreferences.forEach(i -> i.setUserProfile(this));
+        }
+        this.notificationPreferences = notificationPreferences;
+    }
+
+    public UserProfile notificationPreferences(Set<NotificationPreference> notificationPreferences) {
+        this.setNotificationPreferences(notificationPreferences);
+        return this;
+    }
+
+    public UserProfile addNotificationPreferences(NotificationPreference notificationPreference) {
+        this.notificationPreferences.add(notificationPreference);
+        notificationPreference.setUserProfile(this);
+        return this;
+    }
+
+    public UserProfile removeNotificationPreferences(NotificationPreference notificationPreference) {
+        this.notificationPreferences.remove(notificationPreference);
+        notificationPreference.setUserProfile(null);
+        return this;
+    }
+
+    public Set<GiftCode> getCreatedGiftCodes() {
+        return this.createdGiftCodes;
+    }
+
+    public void setCreatedGiftCodes(Set<GiftCode> giftCodes) {
+        if (this.createdGiftCodes != null) {
+            this.createdGiftCodes.forEach(i -> i.setCreatedBy(null));
+        }
+        if (giftCodes != null) {
+            giftCodes.forEach(i -> i.setCreatedBy(this));
+        }
+        this.createdGiftCodes = giftCodes;
+    }
+
+    public UserProfile createdGiftCodes(Set<GiftCode> giftCodes) {
+        this.setCreatedGiftCodes(giftCodes);
+        return this;
+    }
+
+    public UserProfile addCreatedGiftCodes(GiftCode giftCode) {
+        this.createdGiftCodes.add(giftCode);
+        giftCode.setCreatedBy(this);
+        return this;
+    }
+
+    public UserProfile removeCreatedGiftCodes(GiftCode giftCode) {
+        this.createdGiftCodes.remove(giftCode);
+        giftCode.setCreatedBy(null);
+        return this;
+    }
+
+    public Set<FileMetaData> getUploadedFiles() {
+        return this.uploadedFiles;
+    }
+
+    public void setUploadedFiles(Set<FileMetaData> fileMetadatas) {
+        if (this.uploadedFiles != null) {
+            this.uploadedFiles.forEach(i -> i.setUploadedBy(null));
+        }
+        if (fileMetadatas != null) {
+            fileMetadatas.forEach(i -> i.setUploadedBy(this));
+        }
+        this.uploadedFiles = fileMetadatas;
+    }
+
+    public UserProfile uploadedFiles(Set<FileMetaData> fileMetadatas) {
+        this.setUploadedFiles(fileMetadatas);
+        return this;
+    }
+
+    public UserProfile addUploadedFiles(FileMetaData fileMetadata) {
+        this.uploadedFiles.add(fileMetadata);
+        fileMetadata.setUploadedBy(this);
+        return this;
+    }
+
+    public UserProfile removeUploadedFiles(FileMetaData fileMetadata) {
+        this.uploadedFiles.remove(fileMetadata);
+        fileMetadata.setUploadedBy(null);
         return this;
     }
 

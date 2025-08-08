@@ -54,6 +54,16 @@ public class Course implements Serializable {
     @JsonIgnoreProperties(value = { "questions", "assignedTos", "courses", "lessons" }, allowSetters = true)
     private Set<Quiz> quizzes = new HashSet<>();
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "course")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "course", "createdBy" }, allowSetters = true)
+    private Set<GiftCode> giftCodes = new HashSet<>();
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "course")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "student", "course" }, allowSetters = true)
+    private Set<StudentProgress> studentProgress = new HashSet<>();
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public Long getId() {
@@ -211,6 +221,67 @@ public class Course implements Serializable {
     public Course removeQuiz(Quiz quiz) {
         this.quizzes.remove(quiz);
         quiz.getCourses().remove(this);
+        return this;
+    }
+
+    public Set<GiftCode> getGiftCodes() {
+        return this.giftCodes;
+    }
+    public void setGiftCodes(Set<GiftCode> giftCodes) {
+        if (this.giftCodes != null) {
+            this.giftCodes.forEach(i -> i.setCourse(null));
+        }
+        if (giftCodes != null) {
+            giftCodes.forEach(i -> i.setCourse(this));
+        }
+        this.giftCodes = giftCodes;
+    }
+
+    public Course giftCodes(Set<GiftCode> giftCodes) {
+        this.setGiftCodes(giftCodes);
+        return this;
+    }
+
+    public Course addGiftCode(GiftCode giftCode) {
+        this.giftCodes.add(giftCode);
+        giftCode.setCourse(this);
+        return this;
+    }
+
+    public Course removeGiftCode(GiftCode giftCode) {
+        this.giftCodes.remove(giftCode);
+        giftCode.setCourse(null);
+        return this;
+    }
+
+    public Set<StudentProgress> getStudentProgress() {
+        return this.studentProgress;
+    }
+
+    public void setStudentProgress(Set<StudentProgress> studentProgress) {
+        if (this.studentProgress != null) {
+            this.studentProgress.forEach(i -> i.setCourse(null));
+        }
+        if (studentProgress != null) {
+            studentProgress.forEach(i -> i.setCourse(this));
+        }
+        this.studentProgress = studentProgress;
+    }
+
+    public Course studentProgress(Set<StudentProgress> studentProgress) {
+        this.setStudentProgress(studentProgress);
+        return this;
+    }
+
+    public Course addStudentProgress(StudentProgress studentProgress) {
+        this.studentProgress.add(studentProgress);
+        studentProgress.setCourse(this);
+        return this;
+    }
+
+    public Course removeStudentProgress(StudentProgress studentProgress) {
+        this.studentProgress.remove(studentProgress);
+        studentProgress.setCourse(null);
         return this;
     }
 

@@ -3,6 +3,7 @@ package com.satori.platform.service.dto;
 import com.satori.platform.domain.enumeration.QuizType;
 import jakarta.validation.constraints.*;
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -28,6 +29,18 @@ public class QuizDTO implements Serializable {
 
     @NotNull
     private QuizType quizType;
+
+    private Boolean isActive = false;
+
+    private Instant activationTime;
+
+    private Instant deactivationTime;
+
+    private Integer timeLimitMinutes;
+
+    private Boolean isTemplate = false;
+
+    private String templateName;
 
     private Set<CourseDTO> courses = new HashSet<>();
 
@@ -81,6 +94,54 @@ public class QuizDTO implements Serializable {
         this.quizType = quizType;
     }
 
+    public Boolean getIsActive() {
+        return isActive;
+    }
+
+    public void setIsActive(Boolean isActive) {
+        this.isActive = isActive;
+    }
+
+    public Instant getActivationTime() {
+        return activationTime;
+    }
+
+    public void setActivationTime(Instant activationTime) {
+        this.activationTime = activationTime;
+    }
+
+    public Instant getDeactivationTime() {
+        return deactivationTime;
+    }
+
+    public void setDeactivationTime(Instant deactivationTime) {
+        this.deactivationTime = deactivationTime;
+    }
+
+    public Integer getTimeLimitMinutes() {
+        return timeLimitMinutes;
+    }
+
+    public void setTimeLimitMinutes(Integer timeLimitMinutes) {
+        this.timeLimitMinutes = timeLimitMinutes;
+    }
+
+    public Boolean getIsTemplate() {
+        return isTemplate;
+    }
+
+    public void setIsTemplate(Boolean isTemplate) {
+        this.isTemplate = isTemplate;
+    }
+
+    public String getTemplateName() {
+        return templateName;
+    }
+
+    public void setTemplateName(String templateName) {
+        this.templateName = templateName;
+    }
+
     public Set<CourseDTO> getCourses() {
         return courses;
     }
@@ -122,14 +183,14 @@ public class QuizDTO implements Serializable {
     @Override
     public String toString() {
         return "QuizDTO{" +
-            "id=" + getId() +
-            ", title='" + getTitle() + "'" +
-            ", description='" + getDescription() + "'" +
-            ", isTest='" + getIsTest() + "'" +
-            ", isPractice='" + getIsPractice() + "'" +
-            ", quizType='" + getQuizType() + "'" +
-            ", courses=" + getCourses() +
-            ", lessons=" + getLessons() +
-            "}";
+                "id=" + getId() +
+                ", title='" + getTitle() + "'" +
+                ", description='" + getDescription() + "'" +
+                ", isTest='" + getIsTest() + "'" +
+                ", isPractice='" + getIsPractice() + "'" +
+                ", quizType='" + getQuizType() + "'" +
+                ", courses=" + getCourses() +
+                ", lessons=" + getLessons() +
+                "}";
     }
 }

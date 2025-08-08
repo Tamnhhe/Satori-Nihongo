@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <!-- NotificationDelivery table -->
+    <changeSet id="20250809000003-1" author="system">
+        <createTable tableName="notification_delivery">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="recipient_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="recipient_email" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="notification_type" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="delivery_channel" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="subject" type="varchar(500)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="content" type="longtext">
+                <constraints nullable="true"/>
+            </column>
+            <column name="scheduled_at" type="timestamp">
+                <constraints nullable="true"/>
+            </column>
+            <column name="sent_at" type="timestamp">
+                <constraints nullable="true"/>
+            </column>
+            <column name="delivered_at" type="timestamp">
+                <constraints nullable="true"/>
+            </column>
+            <column name="failed_at" type="timestamp">
+                <constraints nullable="true"/>
+            </column>
+            <column name="failure_reason" type="varchar(1000)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="retry_count" type="integer" defaultValueNumeric="0">
+                <constraints nullable="true"/>
+            </column>
+            <column name="max_retries" type="integer" defaultValueNumeric="3">
+                <constraints nullable="true"/>
+            </column>
+            <column name="next_retry_at" type="timestamp">
+                <constraints nullable="true"/>
+            </column>
+            <column name="external_id" type="varchar(50)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="metadata" type="longtext">
+                <constraints nullable="true"/>
+            </column>
+            <column name="created_at" type="timestamp">
+                <constraints nullable="true"/>
+            </column>
+            <column name="updated_at" type="timestamp">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <!-- NotificationPreference table -->
+    <changeSet id="20250809000003-2" author="system">
+        <createTable tableName="notification_preference">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="notification_type" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="enabled" type="boolean" defaultValueBoolean="true">
+                <constraints nullable="false"/>
+            </column>
+            <column name="preferred_time" type="time">
+                <constraints nullable="true"/>
+            </column>
+            <column name="user_profile_id" type="bigint">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+        
+        <addForeignKeyConstraint baseColumnNames="user_profile_id"
+                                 baseTableName="notification_preference"
+                                 constraintName="fk_notification_preference_user_profile_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="user_profile"/>
+    </changeSet>
+
+    <!-- FileMetaData table -->
+    <changeSet id="20250809000003-3" author="system">
+        <createTable tableName="file_metadata">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="file_name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="original_name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="file_path" type="varchar(500)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="file_type" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="file_size" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="mime_type" type="varchar(100)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="upload_date" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="version" type="integer" defaultValueNumeric="1">
+                <constraints nullable="false"/>
+            </column>
+            <column name="checksum" type="varchar(255)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="lesson_id" type="bigint">
+                <constraints nullable="true"/>
+            </column>
+            <column name="uploaded_by_id" type="bigint">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+        
+        <addForeignKeyConstraint baseColumnNames="lesson_id"
+                                 baseTableName="file_metadata"
+                                 constraintName="fk_file_metadata_lesson_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="lesson"/>
+                                 
+        <addForeignKeyConstraint baseColumnNames="uploaded_by_id"
+                                 baseTableName="file_metadata"
+                                 constraintName="fk_file_metadata_uploaded_by_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="user_profile"/>
+    </changeSet>
+
+    <!-- FlashcardSession table -->
+    <changeSet id="20250809000003-4" author="system">
+        <createTable tableName="flashcard_session">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="session_name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="start_time" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="end_time" type="timestamp">
+                <constraints nullable="true"/>
+            </column>
+            <column name="total_cards" type="integer">
+                <constraints nullable="false"/>
+            </column>
+            <column name="cards_completed" type="integer" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="correct_answers" type="integer" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="session_type" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_completed" type="boolean" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+            <column name="lesson_id" type="bigint">
+                <constraints nullable="true"/>
+            </column>
+            <column name="student_id" type="bigint">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+        
+        <addForeignKeyConstraint baseColumnNames="lesson_id"
+                                 baseTableName="flashcard_session"
+                                 constraintName="fk_flashcard_session_lesson_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="lesson"/>
+                                 
+        <addForeignKeyConstraint baseColumnNames="student_id"
+                                 baseTableName="flashcard_session"
+                                 constraintName="fk_flashcard_session_student_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="student_profile"/>
+    </changeSet>
+
+    <!-- StudentProgress table -->
+    <changeSet id="20250809000003-5" author="system">
+        <createTable tableName="student_progress">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="completion_percentage" type="double" defaultValueNumeric="0.0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="lessons_completed" type="integer" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="total_lessons" type="integer" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="quizzes_completed" type="integer" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="total_quizzes" type="integer" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="average_quiz_score" type="double">
+                <constraints nullable="true"/>
+            </column>
+            <column name="flashcards_mastered" type="integer" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="total_flashcards" type="integer" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="study_time_minutes" type="integer" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_activity_date" type="timestamp">
+                <constraints nullable="true"/>
+            </column>
+            <column name="created_date" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_date" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="student_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="course_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        
+        <addForeignKeyConstraint baseColumnNames="student_id"
+                                 baseTableName="student_progress"
+                                 constraintName="fk_student_progress_student_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="student_profile"/>
+                                 
+        <addForeignKeyConstraint baseColumnNames="course_id"
+                                 baseTableName="student_progress"
+                                 constraintName="fk_student_progress_course_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="course"/>
+    </changeSet>
+
+</databaseChangeLog>

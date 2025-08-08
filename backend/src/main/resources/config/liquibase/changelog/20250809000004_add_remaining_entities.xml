@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <!-- StudentQuizResponse table -->
+    <changeSet id="20250809000004-1" author="system">
+        <createTable tableName="student_quiz_response">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="selected_answer" type="varchar(1000)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="is_correct" type="boolean">
+                <constraints nullable="true"/>
+            </column>
+            <column name="points_earned" type="double" defaultValueNumeric="0.0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="time_spent_seconds" type="integer">
+                <constraints nullable="true"/>
+            </column>
+            <column name="answered_at" type="timestamp">
+                <constraints nullable="true"/>
+            </column>
+            <column name="student_quiz_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="quiz_question_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        
+        <addForeignKeyConstraint baseColumnNames="student_quiz_id"
+                                 baseTableName="student_quiz_response"
+                                 constraintName="fk_student_quiz_response_student_quiz_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="student_quiz"/>
+                                 
+        <addForeignKeyConstraint baseColumnNames="quiz_question_id"
+                                 baseTableName="student_quiz_response"
+                                 constraintName="fk_student_quiz_response_quiz_question_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="quiz_question"/>
+    </changeSet>
+
+    <!-- OAuth2Account table -->
+    <changeSet id="20250809000004-2" author="system">
+        <createTable tableName="oauth2_account">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="provider" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="provider_user_id" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="email" type="varchar(255)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="display_name" type="varchar(255)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="profile_picture_url" type="varchar(500)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="access_token" type="varchar(1000)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="refresh_token" type="varchar(1000)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="token_expires_at" type="timestamp">
+                <constraints nullable="true"/>
+            </column>
+            <column name="is_verified" type="boolean" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_date" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_login_date" type="timestamp">
+                <constraints nullable="true"/>
+            </column>
+            <column name="user_profile_id" type="bigint">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+        
+        <addForeignKeyConstraint baseColumnNames="user_profile_id"
+                                 baseTableName="oauth2_account"
+                                 constraintName="fk_oauth2_account_user_profile_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="user_profile"/>
+                                 
+        <addUniqueConstraint columnNames="provider, provider_user_id"
+                             tableName="oauth2_account"
+                             constraintName="uk_oauth2_account_provider_user"/>
+    </changeSet>
+
+    <!-- GiftCode table -->
+    <changeSet id="20250809000004-3" author="system">
+        <createTable tableName="giftcode">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="code" type="varchar(50)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="description" type="varchar(500)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="discount_percentage" type="double">
+                <constraints nullable="true"/>
+            </column>
+            <column name="discount_amount" type="decimal(10,2)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="max_uses" type="integer">
+                <constraints nullable="true"/>
+            </column>
+            <column name="current_uses" type="integer" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="valid_from" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="valid_until" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_active" type="boolean" defaultValueBoolean="true">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_date" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="course_id" type="bigint">
+                <constraints nullable="true"/>
+            </column>
+            <column name="created_by_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        
+        <addForeignKeyConstraint baseColumnNames="course_id"
+                                 baseTableName="giftcode"
+                                 constraintName="fk_giftcode_course_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="course"/>
+                                 
+        <addForeignKeyConstraint baseColumnNames="created_by_id"
+                                 baseTableName="giftcode"
+                                 constraintName="fk_giftcode_created_by_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="user_profile"/>
+    </changeSet>
+
+    <!-- AuthenticationAuditLog table -->
+    <changeSet id="20250809000004-4" author="system">
+        <createTable tableName="authentication_audit_log">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="username" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="event_type" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ip_address" type="varchar(45)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="user_agent" type="varchar(500)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="success" type="boolean">
+                <constraints nullable="false"/>
+            </column>
+            <column name="failure_reason" type="varchar(500)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="session_id" type="varchar(255)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="timestamp" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="additional_info" type="longtext">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+        
+        <createIndex indexName="idx_auth_audit_username" tableName="authentication_audit_log">
+            <column name="username"/>
+        </createIndex>
+        
+        <createIndex indexName="idx_auth_audit_timestamp" tableName="authentication_audit_log">
+            <column name="timestamp"/>
+        </createIndex>
+    </changeSet>
+
+    <!-- AuditLog table -->
+    <changeSet id="20250809000004-5" author="system">
+        <createTable tableName="audit_log">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="entity_name" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="entity_id" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="action" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="old_values" type="longtext">
+                <constraints nullable="true"/>
+            </column>
+            <column name="new_values" type="longtext">
+                <constraints nullable="true"/>
+            </column>
+            <column name="changed_fields" type="varchar(1000)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="user_id" type="bigint">
+                <constraints nullable="true"/>
+            </column>
+            <column name="username" type="varchar(255)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="ip_address" type="varchar(45)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="user_agent" type="varchar(500)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="timestamp" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="session_id" type="varchar(255)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="additional_context" type="longtext">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+        
+        <createIndex indexName="idx_audit_log_entity" tableName="audit_log">
+            <column name="entity_name"/>
+            <column name="entity_id"/>
+        </createIndex>
+        
+        <createIndex indexName="idx_audit_log_timestamp" tableName="audit_log">
+            <column name="timestamp"/>
+        </createIndex>
+        
+        <createIndex indexName="idx_audit_log_user" tableName="audit_log">
+            <column name="user_id"/>
+        </createIndex>
+    </changeSet>
+
+</databaseChangeLog>

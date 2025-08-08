@@ -81,6 +81,32 @@ public class User extends AbstractAuditingEntity<Long> implements Serializable {
     @Column(name = "reset_date")
     private Instant resetDate = null;
 
+    @Column(name = "last_login_date")
+    private Instant lastLoginDate;
+
+    @Column(name = "failed_login_attempts")
+    private Integer failedLoginAttempts = 0;
+
+    @Column(name = "account_locked_until")
+    private Instant accountLockedUntil;
+
+    @Column(name = "profile_completed")
+    private Boolean profileCompleted = false;
+
+    @Size(max = 50)
+    @Column(name = "timezone", length = 50)
+    private String timezone;
+
+    @Column(name = "oauth2_registration")
+    private Boolean oauth2Registration = false;
+
+    @Size(max = 500)
+    @Column(name = "profile_picture_url", length = 500)
+    private String profilePictureUrl;
+
+    @Column(name = "external_profile_synced_at")
+    private Instant externalProfileSyncedAt;
+
     @JsonIgnore
     @ManyToMany
     @JoinTable(
@@ -187,6 +213,70 @@ public class User extends AbstractAuditingEntity<Long> implements Serializable {
 
     public void setLangKey(String langKey) {
         this.langKey = langKey;
+    }
+
+    public Instant getLastLoginDate() {
+        return lastLoginDate;
+    }
+
+    public void setLastLoginDate(Instant lastLoginDate) {
+        this.lastLoginDate = lastLoginDate;
+    }
+
+    public Integer getFailedLoginAttempts() {
+        return failedLoginAttempts;
+    }
+
+    public void setFailedLoginAttempts(Integer failedLoginAttempts) {
+        this.failedLoginAttempts = failedLoginAttempts;
+    }
+
+    public Instant getAccountLockedUntil() {
+        return accountLockedUntil;
+    }
+
+    public void setAccountLockedUntil(Instant accountLockedUntil) {
+        this.accountLockedUntil = accountLockedUntil;
+    }
+
+    public Boolean getProfileCompleted() {
+        return profileCompleted;
+    }
+
+    public void setProfileCompleted(Boolean profileCompleted) {
+        this.profileCompleted = profileCompleted;
+    }
+
+    public String getTimezone() {
+        return timezone;
+    }
+
+    public void setTimezone(String timezone) {
+        this.timezone = timezone;
+    }
+
+    public Boolean getOauth2Registration() {
+        return oauth2Registration;
+    }
+
+    public void setOauth2Registration(Boolean oauth2Registration) {
+        this.oauth2Registration = oauth2Registration;
+    }
+
+    public String getProfilePictureUrl() {
+        return profilePictureUrl;
+    }
+
+    public void setProfilePictureUrl(String profilePictureUrl) {
+        this.profilePictureUrl = profilePictureUrl;
+    }
+
+    public Instant getExternalProfileSyncedAt() {
+        return externalProfileSyncedAt;
+    }
+
+    public void setExternalProfileSyncedAt(Instant externalProfileSyncedAt) {
+        this.externalProfileSyncedAt = externalProfileSyncedAt;
     }
 
     public Set<Authority> getAuthorities() {

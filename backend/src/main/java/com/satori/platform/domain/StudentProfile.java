@@ -41,6 +41,16 @@ public class StudentProfile implements Serializable {
     @JsonIgnoreProperties(value = { "course", "teacher", "students" }, allowSetters = true)
     private Set<CourseClass> classes = new HashSet<>();
 
+    @OneToMany(mappedBy = "student", fetch = FetchType.LAZY)
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "student", "lesson" }, allowSetters = true)
+    private Set<FlashcardSession> flashcardSessions = new HashSet<>();
+
+    @OneToMany(mappedBy = "student", fetch = FetchType.LAZY)
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "student", "course" }, allowSetters = true)
+    private Set<StudentProgress> studentProgress = new HashSet<>();
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public Long getId() {
@@ -129,6 +139,68 @@ public class StudentProfile implements Serializable {
     public StudentProfile removeClasses(CourseClass courseClass) {
         this.classes.remove(courseClass);
         courseClass.getStudents().remove(this);
+        return this;
+    }
+    
+    public Set<FlashcardSession> getFlashcardSessions() {
+        return this.flashcardSessions;
+    }
+
+    public void setFlashcardSessions(Set<FlashcardSession> flashcardSessions) {
+        if (this.flashcardSessions != null) {
+            this.flashcardSessions.forEach(i -> i.setStudent(null));
+        }
+        if (flashcardSessions != null) {
+            flashcardSessions.forEach(i -> i.setStudent(this));
+        }
+        this.flashcardSessions = flashcardSessions;
+    }
+
+    public StudentProfile flashcardSessions(Set<FlashcardSession> flashcardSessions) {
+        this.setFlashcardSessions(flashcardSessions);
+        return this;
+    }
+
+    public StudentProfile addFlashcardSessions(FlashcardSession flashcardSession) {
+        this.flashcardSessions.add(flashcardSession);
+        flashcardSession.setStudent(this);
+        return this;
+    }
+
+    public StudentProfile removeFlashcardSessions(FlashcardSession flashcardSession) {
+        this.flashcardSessions.remove(flashcardSession);
+        flashcardSession.setStudent(null);
+        return this;
+    }
+
+    public Set<StudentProgress> getStudentProgress() {
+        return this.studentProgress;
+    }
+
+    public void setStudentProgress(Set<StudentProgress> studentProgresses) {
+        if (this.studentProgress != null) {
+            this.studentProgress.forEach(i -> i.setStudent(null));
+        }
+        if (studentProgresses != null) {
+            studentProgresses.forEach(i -> i.setStudent(this));
+        }
+        this.studentProgress = studentProgresses;
+    }
+
+    public StudentProfile studentProgress(Set<StudentProgress> studentProgresses) {
+        this.setStudentProgress(studentProgresses);
+        return this;
+    }
+
+    public StudentProfile addStudentProgress(StudentProgress studentProgress) {
+        this.studentProgress.add(studentProgress);
+        studentProgress.setStudent(this);
+        return this;
+    }
+
+    public StudentProfile removeStudentProgress(StudentProgress studentProgress) {
+        this.studentProgress.remove(studentProgress);
+        studentProgress.setStudent(null);
         return this;
     }
 

@@ -53,6 +53,16 @@ public class Lesson implements Serializable {
     @JsonIgnoreProperties(value = { "questions", "assignedTos", "courses", "lessons" }, allowSetters = true)
     private Set<Quiz> quizzes = new HashSet<>();
 
+    @OneToMany(mappedBy = "lesson", fetch = FetchType.LAZY)
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "lesson", "uploadedBy" }, allowSetters = true)
+    private Set<FileMetaData> fileAttachments = new HashSet<>();
+
+    @OneToMany(mappedBy = "lesson", fetch = FetchType.LAZY)
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "student", "lesson" }, allowSetters = true)
+    private Set<FlashcardSession> flashcardSessions = new HashSet<>();
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public Long getId() {
@@ -192,6 +202,68 @@ public class Lesson implements Serializable {
     public Lesson removeQuiz(Quiz quiz) {
         this.quizzes.remove(quiz);
         quiz.getLessons().remove(this);
+        return this;
+    }
+
+    public Set<FileMetaData> getFileAttachments() {
+        return this.fileAttachments;
+    }
+
+    public void setFileAttachments(Set<FileMetaData> fileAttachments) {
+        if (this.fileAttachments != null) {
+            this.fileAttachments.forEach(i -> i.setLesson(null));
+        }
+        if (fileAttachments != null) {
+            fileAttachments.forEach(i -> i.setLesson(this));
+        }
+        this.fileAttachments = fileAttachments;
+    }
+
+    public Lesson fileAttachments(Set<FileMetaData> fileAttachments) {
+        this.setFileAttachments(fileAttachments);
+        return this;
+    }
+
+    public Lesson addFileAttachment(FileMetaData fileMetaData) {
+        this.fileAttachments.add(fileMetaData);
+        fileMetaData.setLesson(this);
+        return this;
+    }
+
+    public Lesson removeFileAttachment(FileMetaData fileMetaData) {
+        this.fileAttachments.remove(fileMetaData);
+        fileMetaData.setLesson(null);
+        return this;
+    }
+
+    public Set<FlashcardSession> getFlashcardSessions() {
+        return this.flashcardSessions;
+    }
+
+    public void setFlashcardSessions(Set<FlashcardSession> flashcardSessions) {
+        if (this.flashcardSessions != null) {
+            this.flashcardSessions.forEach(i -> i.setLesson(null));
+        }
+        if (flashcardSessions != null) {
+            flashcardSessions.forEach(i -> i.setLesson(this));
+        }
+        this.flashcardSessions = flashcardSessions;
+    }
+
+    public Lesson flashcardSessions(Set<FlashcardSession> flashcardSessions) {
+        this.setFlashcardSessions(flashcardSessions);
+        return this;
+    }
+
+    public Lesson addFlashcardSession(FlashcardSession flashcardSession) {
+        this.flashcardSessions.add(flashcardSession);
+        flashcardSession.setLesson(this);
+        return this;
+    }
+
+    public Lesson removeFlashcardSession(FlashcardSession flashcardSession) {
+        this.flashcardSessions.remove(flashcardSession);
+        flashcardSession.setLesson(null);
         return this;
     }
 

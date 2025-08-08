@@ -5,6 +5,7 @@ import com.satori.platform.domain.enumeration.QuizType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
 import org.hibernate.annotations.Cache;
@@ -45,6 +46,24 @@ public class Quiz implements Serializable {
     @Enumerated(EnumType.STRING)
     @Column(name = "quiz_type", nullable = false)
     private QuizType quizType;
+
+    @Column(name = "is_active")
+    private Boolean isActive;
+
+    @Column(name = "activation_time")
+    private Instant activationTime;
+
+    @Column(name = "deactivation_time")
+    private Instant deactivationTime;
+
+    @Column(name = "time_limit_minutes")
+    private Integer timeLimitMinutes;
+
+    @Column(name = "is_template")
+    private Boolean isTemplate = false;
+
+    @Column(name = "template_name")
+    private String templateName;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "quiz")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
@@ -146,6 +165,84 @@ public class Quiz implements Serializable {
 
     public void setQuizType(QuizType quizType) {
         this.quizType = quizType;
+    }
+
+    public Boolean getIsActive() {
+        return this.isActive;
+    }
+
+    public Quiz isActive(Boolean isActive) {
+        this.setIsActive(isActive);
+        return this;
+    }
+
+    public void setIsActive(Boolean isActive) {
+        this.isActive = isActive;
+    }
+
+    public Instant getActivationTime() {
+        return this.activationTime;
+    }
+
+    public Quiz activationTime(Instant activationTime) {
+        this.setActivationTime(activationTime);
+        return this;
+    }
+
+    public void setActivationTime(Instant activationTime) {
+        this.activationTime = activationTime;
+    }
+
+    public Instant getDeactivationTime() {
+        return this.deactivationTime;
+    }
+
+    public Quiz deactivationTime(Instant deactivationTime) {
+        this.setDeactivationTime(deactivationTime);
+        return this;
+    }
+
+    public void setDeactivationTime(Instant deactivationTime) {
+        this.deactivationTime = deactivationTime;
+    }
+
+    public Integer getTimeLimitMinutes() {
+        return this.timeLimitMinutes;
+    }
+
+    public Quiz timeLimitMinutes(Integer timeLimitMinutes) {
+        this.setTimeLimitMinutes(timeLimitMinutes);
+        return this;
+    }
+
+    public void setTimeLimitMinutes(Integer timeLimitMinutes) {
+        this.timeLimitMinutes = timeLimitMinutes;
+    }
+
+    public Boolean getIsTemplate() {
+        return this.isTemplate;
+    }
+
+    public Quiz isTemplate(Boolean isTemplate) {
+        this.setIsTemplate(isTemplate);
+        return this;
+    }
+
+    public void setIsTemplate(Boolean isTemplate) {
+        this.isTemplate = isTemplate;
+    }
+
+    public String getTemplateName() {
+        return this.templateName;
+    }
+
+    public Quiz templateName(String templateName) {
+        this.setTemplateName(templateName);
+        return this;
+    }
+
+    public void setTemplateName(String templateName) {
+        this.templateName = templateName;
     }
 
     public Set<QuizQuestion> getQuestions() {
@@ -285,6 +382,12 @@ public class Quiz implements Serializable {
             ", isTest='" + getIsTest() + "'" +
             ", isPractice='" + getIsPractice() + "'" +
             ", quizType='" + getQuizType() + "'" +
+            ", isActive='" + getIsActive() + "'" +
+            ", activationTime='" + getActivationTime() + "'" +
+            ", deactivationTime='" + getDeactivationTime() + "'" +
+            ", timeLimitMinutes=" + getTimeLimitMinutes() +
+            ", isTemplate='" + getIsTemplate() + "'" +
+            ", templateName='" + getTemplateName() + "'" +
             "}";
     }
 }
