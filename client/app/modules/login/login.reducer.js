@@ -10,6 +10,7 @@ const { Types, Creators } = createActions({
   logoutSuccess: null,
   loginLoad: [],
   loginLoadSuccess: [],
+  resetLogoutFlag: null,
 });
 
 export const LoginTypes = Types;
@@ -23,32 +24,47 @@ export const INITIAL_STATE = Immutable({
   error: null,
   fetching: false,
   loading: false,
+  hasLoggedOut: false,
+  logoutSuccess: false,
 });
 
 /* ------------- Reducers ------------- */
 
 // we're attempting to login
-export const request = state => state.merge({ fetching: true, error: null });
+export const request = (state) => state.merge({ fetching: true, error: null });
 
 // we've successfully logged in
 export const success = (state, data) => {
   const { authToken, idToken } = data;
-  return state.merge({ fetching: false, error: null, authToken, idToken });
+  return state.merge({
+    fetching: false,
+    error: null,
+    authToken,
+    idToken,
+    hasLoggedOut: false,
+    logoutSuccess: false,
+  });
 };
 
 // we've had a problem logging in
-export const failure = (state, { error }) => state.merge({ fetching: false, error, authToken: null });
+export const failure = (state, { error }) =>
+  state.merge({ fetching: false, error, authToken: null });
 
 // we're attempting to load token from startup sagas
-export const load = state => state.merge({ loading: true });
+export const load = (state) => state.merge({ loading: true });
 
-export const loadSuccess = state => state.merge({ loading: false });
+export const loadSuccess = (state) => state.merge({ loading: false });
 
 // we need to logout, meaning clear access tokens and account
-export const logoutRequest = state => state;
+export const logoutRequest = (state) => state.merge({ hasLoggedOut: true, logoutSuccess: false });
 
 // we've logged out
-export const logoutSuccess = _state => INITIAL_STATE;
+export const logoutSuccess = (_state) =>
+  INITIAL_STATE.merge({ hasLoggedOut: true, logoutSuccess: true });
+
+// reset logout flag
+export const resetLogoutFlag = (state) =>
+  state.merge({ hasLoggedOut: false, logoutSuccess: false });
 
 /* ------------- Hookup Reducers To Types ------------- */
 
@@ -60,6 +76,7 @@ export const reducer = createReducer(INITIAL_STATE, {
   [Types.LOGIN_LOAD_SUCCESS]: loadSuccess,
   [Types.LOGOUT_REQUEST]: logoutRequest,
   [Types.LOGOUT_SUCCESS]: logoutSuccess,
+  [Types.RESET_LOGOUT_FLAG]: resetLogoutFlag,
 });
 
 /* ------------- Selectors ------------- */

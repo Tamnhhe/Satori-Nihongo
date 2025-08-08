@@ -6,6 +6,8 @@ import AccountActions from '../reducers/account.reducer';
 // process STARTUP actions
 export function* startup(_action) {
   yield put(LoginActions.loginLoad());
-  yield put(AccountActions.accountRequest());
+  // Không tự động gọi AccountActions.accountRequest() để tránh auto-login
+  // User phải login thủ công qua Welcome screen
+  // yield put(AccountActions.accountRequest());
   yield put(AppStateActions.setRehydrationComplete());
 }

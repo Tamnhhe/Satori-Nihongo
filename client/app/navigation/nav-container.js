@@ -9,8 +9,9 @@ import { useReduxDevToolsExtension } from '@react-navigation/devtools';
 import { connect } from 'react-redux';
 
 // import screens
-import HomeScreen from '../modules/home/home-screen';
+import WelcomeScreen from '../modules/welcome/welcome-screen';
 import LoginScreen from '../modules/login/login-screen';
+import MainTabNavigator from './tab-navigator';
 import SettingsScreen from '../modules/account/settings/settings-screen';
 import RegisterScreen from '../modules/account/register/register-screen';
 import ForgotPasswordScreen from '../modules/account/password-reset/forgot-password-screen';
@@ -24,10 +25,18 @@ import NotFound from './not-found-screen';
 import { ModalScreen } from './modal-screen';
 import { DrawerButton } from './drawer/drawer-button';
 
+// Import notification helper
+import notificationNavigationHelper from '../shared/services/notification-navigation-helper';
+
 export const drawerScreens = [
   {
+    name: 'Welcome',
+    component: WelcomeScreen,
+    auth: false,
+  },
+  {
     name: 'Home',
-    component: HomeScreen,
+    component: MainTabNavigator,
     auth: null,
   },
   {
@@ -81,7 +90,7 @@ if (__DEV__) {
 }
 export const getDrawerRoutes = () => {
   const routes = {};
-  drawerScreens.forEach(screen => {
+  drawerScreens.forEach((screen) => {
     if (screen.route) {
       routes[screen.name] = screen.route;
     }
@@ -114,16 +123,34 @@ const linking = {
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 
-const getScreens = props => {
+const getScreens = (props) => {
   const isAuthed = props.account !== null;
-  return drawerScreens.map((screen, index) => {
-    if (screen.auth === null || screen.auth === undefined) {
-      return <Drawer.Screen name={screen.name} component={screen.component} options={screen.options} key={index} />;
-    } else if (screen.auth === isAuthed) {
-      return <Drawer.Screen name={screen.name} component={screen.component} options={screen.options} key={index} />;
-    }
-    return null;
-  });
+
+  // Luôn bao gồm các màn hình cần thiết dựa trên auth status
+  return drawerScreens
+    .map((screen, index) => {
+      if (screen.auth === null || screen.auth === undefined) {
+        return (
+          <Drawer.Screen
+            name={screen.name}
+            component={screen.component}
+            options={screen.options}
+            key={index}
+          />
+        );
+      } else if (screen.auth === isAuthed) {
+        return (
+          <Drawer.Screen
+            name={screen.name}
+            component={screen.component}
+            options={screen.options}
+            key={index}
+          />
+        );
+      }
+      return null;
+    })
+    .filter((screen) => screen !== null);
 };
 
 function NavContainer(props) {
@@ -143,7 +170,7 @@ function NavContainer(props) {
   }, [loaded]);
 
   React.useEffect(() => {
-    const handleChange = nextAppState => {
+    const handleChange = (nextAppState) => {
       if (lastAppState.match(/inactive|background/) && nextAppState === 'active') {
         getAccount();
       }
@@ -151,10 +178,13 @@ function NavContainer(props) {
     const sub = AppState.addEventListener('change', handleChange);
     return () => sub.remove();
   }, [getAccount]);
-
   useReduxDevToolsExtension(navigationRef);
-
   const dimensions = useWindowDimensions();
+  const isAuthed = props.account !== null;
+
+  // Luôn bắt đầu từ Welcome screen để user chọn Login/Register
+  const initialRouteName = 'Welcome';
+
   return !loaded ? (
     <View>
       <Text>Loading...</Text>
@@ -165,18 +195,65 @@ function NavContainer(props) {
       ref={navigationRef}
       onReady={() => {
         isReadyRef.current = true;
+        // Setup navigation reference for notification helper
+        notificationNavigationHelper.setNavigationRef(navigationRef);
       }}
     >
       <Stack.Navigator>
-        <Stack.Screen name="Home" options={{ headerShown: false }}>
+        {/* Luôn hiển thị Auth flow với Welcome screen làm điểm bắt đầu */}
+        <Stack.Screen name="Auth" options={{ headerShown: false }}>
           {() => (
             <Drawer.Navigator
-              drawerContent={p => <DrawerContent {...p} />}
-              initialRouteName={drawerScreens[0].name}
+              drawerContent={(p) => <DrawerContent {...p} />}
+              initialRouteName={initialRouteName}
               drawerType={dimensions.width >= 768 ? 'permanent' : 'front'}
-              screenOptions={{ headerShown: true, headerLeft: DrawerButton }}
+              screenOptions={{
+                headerShown: true,
+                headerLeft: DrawerButton,
+                headerStyle: { backgroundColor: '#1976D2' },
+                headerTintColor: '#ffffff',
+              }}
             >
-              {getScreens(props)}
+              <Drawer.Screen
+                name="Welcome"
+                component={WelcomeScreen}
+                options={{
+                  headerShown: false,
+                  title: 'Chào mừng',
+                }}
+              />
+              <Drawer.Screen
+                name="Login"
+                component={LoginScreen}
+                options={{
+                  title: 'Đăng nhập',
+                }}
+              />
+              <Drawer.Screen
+                name="Register"
+                component={RegisterScreen}
+                options={{
+                  title: 'Đăng ký',
+                }}
+              />
+              <Drawer.Screen
+                name="Forgot Password"
+                component={ForgotPasswordScreen}
+                options={{
+                  title: 'Quên mật khẩu',
+                }}
+              />
+              {/* Thêm Home screen vào drawer để có thể navigate sau khi login */}
+              {isAuthed && (
+                <Drawer.Screen
+                  name="Home"
+                  component={MainTabNavigator}
+                  options={{
+                    headerShown: false,
+                    title: 'Trang chủ',
+                  }}
+                />
+              )}
             </Drawer.Navigator>
           )}
         </Stack.Screen>
@@ -210,14 +287,14 @@ function NavContainer(props) {
   );
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     loaded: state.appState.rehydrationComplete,
     account: state.account.account,
   };
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
   return {
     getAccount: () => dispatch(AccountActions.accountRequest()),
   };
