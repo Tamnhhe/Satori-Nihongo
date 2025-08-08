@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <changeSet id="20250809000005-1" author="system">
+        <addColumn tableName="jhi_user">
+            <column name="last_login_date" type="timestamp">
+                <constraints nullable="true"/>
+            </column>
+            <column name="failed_login_attempts" type="integer" defaultValue="0">
+                <constraints nullable="true"/>
+            </column>
+            <column name="account_locked_until" type="timestamp">
+                <constraints nullable="true"/>
+            </column>
+            <column name="profile_completed" type="boolean" defaultValue="false">
+                <constraints nullable="true"/>
+            </column>
+            <column name="timezone" type="varchar(50)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="oauth2_registration" type="boolean" defaultValue="false">
+                <constraints nullable="true"/>
+            </column>
+            <column name="profile_picture_url" type="varchar(500)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="external_profile_synced_at" type="timestamp">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+</databaseChangeLog>
