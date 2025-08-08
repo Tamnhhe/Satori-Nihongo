@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <!--
+        Create UserSession table for tracking user login sessions.
+    -->
+    <changeSet id="20250809000002-1" author="system">
+        <createTable tableName="user_session">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="session_id" type="varchar(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="user_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_date" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_accessed_date" type="timestamp">
+                <constraints nullable="true"/>
+            </column>
+            <column name="expires_at" type="timestamp">
+                <constraints nullable="true"/>
+            </column>
+            <column name="ip_address" type="varchar(45)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="user_agent" type="varchar(500)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="active" type="boolean" defaultValueBoolean="true">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        
+        <!-- Add foreign key constraint -->
+        <addForeignKeyConstraint baseColumnNames="user_id"
+                                 baseTableName="user_session"
+                                 constraintName="fk_user_session_user_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="jhi_user"/>
+                                 
+        <!-- Add index for performance -->
+        <createIndex indexName="idx_user_session_session_id" tableName="user_session">
+            <column name="session_id"/>
+        </createIndex>
+        
+        <createIndex indexName="idx_user_session_user_id" tableName="user_session">
+            <column name="user_id"/>
+        </createIndex>
+        
+        <createIndex indexName="idx_user_session_expires_at" tableName="user_session">
+            <column name="expires_at"/>
+        </createIndex>
+    </changeSet>
+</databaseChangeLog>
