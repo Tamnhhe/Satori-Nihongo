@@ -4,82 +4,159 @@ import { Metrics, ApplicationStyles, Colors } from '../../shared/themes';
 
 export default StyleSheet.create({
   ...ApplicationStyles.screen,
-  mainContainer: {
-    backgroundColor: Colors.jhipsterBlue,
+  container: {
+    flex: 1,
+    backgroundColor: '#f8fafc',
   },
-  welcomeText: {
-    textAlign: 'center',
-    fontSize: 20,
-    color: Colors.white,
-    fontWeight: '600',
-  },
-  hairline: {
-    borderBottomColor: Colors.white,
+  // Header styles
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    paddingVertical: 15,
+    backgroundColor: 'white',
     borderBottomWidth: 1,
-    marginHorizontal: 20,
-    marginTop: 32,
+    borderBottomColor: '#e9ecef',
   },
-  logo: {
-    marginTop: Metrics.section,
-    height: Metrics.images.logo,
-    width: Metrics.images.logo,
-    resizeMode: 'contain',
+  greetingContainer: {
+    flex: 1,
   },
-  centered: {
+  greetingText: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#333',
+  },
+  headerIcons: {
+    flexDirection: 'row',
     alignItems: 'center',
   },
+  iconButton: {
+    padding: 8,
+    marginLeft: 10,
+  },
+
+  // Main content
   scrollView: {
-    paddingBottom: Metrics.baseMargin,
-    backgroundColor: Colors.lighter,
+    flex: 1,
   },
-  engine: {
-    position: 'absolute',
-    right: 0,
-  },
-  body: {
-    backgroundColor: Colors.transparent,
-  },
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+
+  // Progress section styles
+  progressSection: {
+    padding: 20,
+    marginBottom: 10,
   },
   sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-    color: Colors.white,
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-    color: Colors.white,
-  },
-  highlight: {
+    fontSize: 20,
     fontWeight: '700',
+    color: '#1e293b',
+    marginBottom: 16,
+    letterSpacing: -0.5,
   },
-  footer: {
-    color: Colors.white,
-    fontSize: 12,
-    fontWeight: '600',
-    padding: 4,
-    paddingRight: 12,
-    textAlign: 'right',
+  progressCard: {
+    backgroundColor: 'white',
+    padding: 20,
+    borderRadius: 12,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
-  authContainer: {
-    margin: 30,
-    padding: 5,
-    borderRadius: 5,
+  progressInfo: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 10,
   },
-  authContainerTrue: {
-    backgroundColor: '#02b875',
+  progressLabel: {
+    fontSize: 16,
+    color: '#666',
   },
-  authContainerFalse: {
-    backgroundColor: '#efbb6d',
+  progressValue: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#333',
   },
-  authText: {
+  progressBar: {
+    height: 8,
+    backgroundColor: '#e9ecef',
+    borderRadius: 4,
+    marginBottom: 8,
+  },
+  progressFill: {
+    height: '100%',
+    backgroundColor: Colors.jhipsterBlue,
+    borderRadius: 4,
+  },
+  progressPercent: {
+    fontSize: 14,
+    color: '#666',
     textAlign: 'center',
-    fontSize: 18,
-    color: Colors.white,
-    fontWeight: '600',
+  },
+
+  // Categories section styles
+  categoriesSection: {
+    padding: 20,
+    paddingTop: 0,
+  },
+  categoriesGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+    marginHorizontal: -6, // Để tạo khoảng cách giữa các item
+  },
+  categoryCard: {
+    width: '100%',
+    backgroundColor: 'white',
+    padding: 16,
+    borderRadius: 16,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.12,
+    shadowRadius: 6,
+    elevation: 8,
+    borderWidth: 1,
+    borderColor: 'rgba(0,0,0,0.05)',
+  },
+  categoryIcon: {
+    width: 64,
+    height: 64,
+    borderRadius: 32,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 12,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.15,
+    shadowRadius: 4,
+    elevation: 4,
+  },
+  categoryName: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: '#2c3e50',
+    marginBottom: 4,
+    textAlign: 'center',
+  },
+  categoryLessons: {
+    fontSize: 13,
+    color: '#7f8c8d',
+    fontWeight: '500',
+  },
+
+  // Bottom spacing for tab navigator
+  bottomSpacing: {
+    height: 100,
   },
 });

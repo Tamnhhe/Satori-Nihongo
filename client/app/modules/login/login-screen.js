@@ -1,5 +1,5 @@
 import React, { createRef } from 'react';
-import { Text } from 'react-native';
+import { Text, View, TouchableOpacity } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { connect } from 'react-redux';
 import * as Yup from 'yup';
@@ -16,9 +16,10 @@ function LoginScreen(props) {
   // setup error state for displaying error messages
   const [error, setError] = React.useState('');
 
-  // if the user is already logged in, send them home
-  React.useEffect(() => {
+  // Navigate to Home when login is successful
+  useDidUpdateEffect(() => {
     if (account !== null) {
+      // Login thành công, navigate đến Home
       navigation.navigate('Home');
     }
   }, [account, navigation]);
@@ -31,7 +32,7 @@ function LoginScreen(props) {
   }, [fetching]);
 
   // submit handler
-  const onSubmit = data => {
+  const onSubmit = (data) => {
     setError('');
     attemptLogin(data.login, data.password);
   };
@@ -42,8 +43,8 @@ function LoginScreen(props) {
 
   // set up validation schema for the form
   const validationSchema = Yup.object().shape({
-    login: Yup.string().required('Please enter your login').label('Login'),
-    password: Yup.string().required().label('Password'),
+    login: Yup.string().required('Vui lòng nhập tên đăng nhập').label('Tên đăng nhập'),
+    password: Yup.string().required('Vui lòng nhập mật khẩu').label('Mật khẩu'),
   });
 
   return (
@@ -58,12 +59,17 @@ function LoginScreen(props) {
           {error}
         </Text>
       )}
-      <Form initialValues={{ login: '', password: '' }} validationSchema={validationSchema} onSubmit={onSubmit} ref={formRef}>
+      <Form
+        initialValues={{ login: '', password: '' }}
+        validationSchema={validationSchema}
+        onSubmit={onSubmit}
+        ref={formRef}
+      >
         <FormField
           name="login"
           testID="loginScreenUsername"
-          label="Login"
-          placeholder="Enter login"
+          label="Tên đăng nhập"
+          placeholder="Nhập tên đăng nhập"
           onSubmitEditing={() => passwordRef?.current?.focus()}
           autoCapitalize="none"
           textContentType="username"
@@ -72,21 +78,34 @@ function LoginScreen(props) {
           ref={passwordRef}
           name="password"
           testID="loginScreenPassword"
-          label="Password"
-          placeholder="Enter password"
+          label="Mật khẩu"
+          placeholder="Nhập mật khẩu"
           autoCapitalize="none"
           autoCorrect={false}
           secureTextEntry={true}
           onSubmitEditing={() => formRef?.current?.submitForm()}
           textContentType="password"
         />
-        <FormButton testID="loginScreenLoginButton" title={'Login'} />
+        <FormButton testID="loginScreenLoginButton" title={'Đăng nhập'} />
       </Form>
+
+      {/* Nút quên mật khẩu */}
+      <TouchableOpacity
+        style={styles.forgotPasswordLink}
+        onPress={() => navigation.navigate('Forgot Password')}
+      >
+        <Text style={styles.forgotPasswordText}>Quên mật khẩu?</Text>
+      </TouchableOpacity>
+
+      {/* Nút đăng ký */}
+      <TouchableOpacity style={styles.registerLink} onPress={() => navigation.navigate('Register')}>
+        <Text style={styles.registerLinkText}>Chưa có tài khoản? Đăng ký ngay</Text>
+      </TouchableOpacity>
     </KeyboardAwareScrollView>
   );
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     account: state.account.account,
     fetching: state.login.fetching,
@@ -94,7 +113,7 @@ const mapStateToProps = state => {
   };
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
   return {
     attemptLogin: (username, password) => dispatch(LoginActions.loginRequest(username, password)),
   };

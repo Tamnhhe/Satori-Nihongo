@@ -70,24 +70,81 @@ export default function* root() {
     takeLatest(LoginTypes.LOGOUT_REQUEST, logout, api),
 
     takeLatest(UserProfileTypes.USER_PROFILE_REQUEST, UserProfileSagas.getUserProfile, api),
+    takeLatest(
+      UserProfileTypes.USER_PROFILE_BY_USER_ID_REQUEST,
+      UserProfileSagas.getUserProfileByUserId,
+      api
+    ),
     takeLatest(UserProfileTypes.USER_PROFILE_ALL_REQUEST, UserProfileSagas.getAllUserProfiles, api),
-    takeLatest(UserProfileTypes.USER_PROFILE_UPDATE_REQUEST, UserProfileSagas.updateUserProfile, api),
-    takeLatest(UserProfileTypes.USER_PROFILE_DELETE_REQUEST, UserProfileSagas.deleteUserProfile, api),
+    takeLatest(
+      UserProfileTypes.USER_PROFILE_UPDATE_REQUEST,
+      UserProfileSagas.updateUserProfile,
+      api
+    ),
+    takeLatest(
+      UserProfileTypes.USER_PROFILE_DELETE_REQUEST,
+      UserProfileSagas.deleteUserProfile,
+      api
+    ),
 
     takeLatest(SocialAccountTypes.SOCIAL_ACCOUNT_REQUEST, SocialAccountSagas.getSocialAccount, api),
-    takeLatest(SocialAccountTypes.SOCIAL_ACCOUNT_ALL_REQUEST, SocialAccountSagas.getAllSocialAccounts, api),
-    takeLatest(SocialAccountTypes.SOCIAL_ACCOUNT_UPDATE_REQUEST, SocialAccountSagas.updateSocialAccount, api),
-    takeLatest(SocialAccountTypes.SOCIAL_ACCOUNT_DELETE_REQUEST, SocialAccountSagas.deleteSocialAccount, api),
+    takeLatest(
+      SocialAccountTypes.SOCIAL_ACCOUNT_ALL_REQUEST,
+      SocialAccountSagas.getAllSocialAccounts,
+      api
+    ),
+    takeLatest(
+      SocialAccountTypes.SOCIAL_ACCOUNT_UPDATE_REQUEST,
+      SocialAccountSagas.updateSocialAccount,
+      api
+    ),
+    takeLatest(
+      SocialAccountTypes.SOCIAL_ACCOUNT_DELETE_REQUEST,
+      SocialAccountSagas.deleteSocialAccount,
+      api
+    ),
 
-    takeLatest(TeacherProfileTypes.TEACHER_PROFILE_REQUEST, TeacherProfileSagas.getTeacherProfile, api),
-    takeLatest(TeacherProfileTypes.TEACHER_PROFILE_ALL_REQUEST, TeacherProfileSagas.getAllTeacherProfiles, api),
-    takeLatest(TeacherProfileTypes.TEACHER_PROFILE_UPDATE_REQUEST, TeacherProfileSagas.updateTeacherProfile, api),
-    takeLatest(TeacherProfileTypes.TEACHER_PROFILE_DELETE_REQUEST, TeacherProfileSagas.deleteTeacherProfile, api),
+    takeLatest(
+      TeacherProfileTypes.TEACHER_PROFILE_REQUEST,
+      TeacherProfileSagas.getTeacherProfile,
+      api
+    ),
+    takeLatest(
+      TeacherProfileTypes.TEACHER_PROFILE_ALL_REQUEST,
+      TeacherProfileSagas.getAllTeacherProfiles,
+      api
+    ),
+    takeLatest(
+      TeacherProfileTypes.TEACHER_PROFILE_UPDATE_REQUEST,
+      TeacherProfileSagas.updateTeacherProfile,
+      api
+    ),
+    takeLatest(
+      TeacherProfileTypes.TEACHER_PROFILE_DELETE_REQUEST,
+      TeacherProfileSagas.deleteTeacherProfile,
+      api
+    ),
 
-    takeLatest(StudentProfileTypes.STUDENT_PROFILE_REQUEST, StudentProfileSagas.getStudentProfile, api),
-    takeLatest(StudentProfileTypes.STUDENT_PROFILE_ALL_REQUEST, StudentProfileSagas.getAllStudentProfiles, api),
-    takeLatest(StudentProfileTypes.STUDENT_PROFILE_UPDATE_REQUEST, StudentProfileSagas.updateStudentProfile, api),
-    takeLatest(StudentProfileTypes.STUDENT_PROFILE_DELETE_REQUEST, StudentProfileSagas.deleteStudentProfile, api),
+    takeLatest(
+      StudentProfileTypes.STUDENT_PROFILE_REQUEST,
+      StudentProfileSagas.getStudentProfile,
+      api
+    ),
+    takeLatest(
+      StudentProfileTypes.STUDENT_PROFILE_ALL_REQUEST,
+      StudentProfileSagas.getAllStudentProfiles,
+      api
+    ),
+    takeLatest(
+      StudentProfileTypes.STUDENT_PROFILE_UPDATE_REQUEST,
+      StudentProfileSagas.updateStudentProfile,
+      api
+    ),
+    takeLatest(
+      StudentProfileTypes.STUDENT_PROFILE_DELETE_REQUEST,
+      StudentProfileSagas.deleteStudentProfile,
+      api
+    ),
 
     takeLatest(CourseTypes.COURSE_REQUEST, CourseSagas.getCourse, api),
     takeLatest(CourseTypes.COURSE_ALL_REQUEST, CourseSagas.getAllCourses, api),
@@ -95,9 +152,21 @@ export default function* root() {
     takeLatest(CourseTypes.COURSE_DELETE_REQUEST, CourseSagas.deleteCourse, api),
 
     takeLatest(CourseClassTypes.COURSE_CLASS_REQUEST, CourseClassSagas.getCourseClass, api),
-    takeLatest(CourseClassTypes.COURSE_CLASS_ALL_REQUEST, CourseClassSagas.getAllCourseClasses, api),
-    takeLatest(CourseClassTypes.COURSE_CLASS_UPDATE_REQUEST, CourseClassSagas.updateCourseClass, api),
-    takeLatest(CourseClassTypes.COURSE_CLASS_DELETE_REQUEST, CourseClassSagas.deleteCourseClass, api),
+    takeLatest(
+      CourseClassTypes.COURSE_CLASS_ALL_REQUEST,
+      CourseClassSagas.getAllCourseClasses,
+      api
+    ),
+    takeLatest(
+      CourseClassTypes.COURSE_CLASS_UPDATE_REQUEST,
+      CourseClassSagas.updateCourseClass,
+      api
+    ),
+    takeLatest(
+      CourseClassTypes.COURSE_CLASS_DELETE_REQUEST,
+      CourseClassSagas.deleteCourseClass,
+      api
+    ),
 
     takeLatest(LessonTypes.LESSON_REQUEST, LessonSagas.getLesson, api),
     takeLatest(LessonTypes.LESSON_ALL_REQUEST, LessonSagas.getAllLessons, api),
@@ -120,14 +189,34 @@ export default function* root() {
     takeLatest(QuestionTypes.QUESTION_DELETE_REQUEST, QuestionSagas.deleteQuestion, api),
 
     takeLatest(QuizQuestionTypes.QUIZ_QUESTION_REQUEST, QuizQuestionSagas.getQuizQuestion, api),
-    takeLatest(QuizQuestionTypes.QUIZ_QUESTION_ALL_REQUEST, QuizQuestionSagas.getAllQuizQuestions, api),
-    takeLatest(QuizQuestionTypes.QUIZ_QUESTION_UPDATE_REQUEST, QuizQuestionSagas.updateQuizQuestion, api),
-    takeLatest(QuizQuestionTypes.QUIZ_QUESTION_DELETE_REQUEST, QuizQuestionSagas.deleteQuizQuestion, api),
+    takeLatest(
+      QuizQuestionTypes.QUIZ_QUESTION_ALL_REQUEST,
+      QuizQuestionSagas.getAllQuizQuestions,
+      api
+    ),
+    takeLatest(
+      QuizQuestionTypes.QUIZ_QUESTION_UPDATE_REQUEST,
+      QuizQuestionSagas.updateQuizQuestion,
+      api
+    ),
+    takeLatest(
+      QuizQuestionTypes.QUIZ_QUESTION_DELETE_REQUEST,
+      QuizQuestionSagas.deleteQuizQuestion,
+      api
+    ),
 
     takeLatest(StudentQuizTypes.STUDENT_QUIZ_REQUEST, StudentQuizSagas.getStudentQuiz, api),
     takeLatest(StudentQuizTypes.STUDENT_QUIZ_ALL_REQUEST, StudentQuizSagas.getAllStudentQuizs, api),
-    takeLatest(StudentQuizTypes.STUDENT_QUIZ_UPDATE_REQUEST, StudentQuizSagas.updateStudentQuiz, api),
-    takeLatest(StudentQuizTypes.STUDENT_QUIZ_DELETE_REQUEST, StudentQuizSagas.deleteStudentQuiz, api),
+    takeLatest(
+      StudentQuizTypes.STUDENT_QUIZ_UPDATE_REQUEST,
+      StudentQuizSagas.updateStudentQuiz,
+      api
+    ),
+    takeLatest(
+      StudentQuizTypes.STUDENT_QUIZ_DELETE_REQUEST,
+      StudentQuizSagas.deleteStudentQuiz,
+      api
+    ),
 
     takeLatest(FlashcardTypes.FLASHCARD_REQUEST, FlashcardSagas.getFlashcard, api),
     takeLatest(FlashcardTypes.FLASHCARD_ALL_REQUEST, FlashcardSagas.getAllFlashcards, api),
