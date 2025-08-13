@@ -1,0 +1,341 @@
+// Accessibility Demo Styles
+@import '../tokens/variables';
+
+.accessibility-demo {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: $spacing-6;
+
+  .demo-header {
+    margin-bottom: $spacing-8;
+
+    &__actions {
+      margin-top: $spacing-4;
+    }
+  }
+
+  .demo-settings {
+    margin-bottom: $spacing-6;
+    border: 2px solid $primary-200;
+    background-color: $primary-50;
+  }
+
+  .demo-section {
+    margin-bottom: $spacing-8;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    h2 {
+      margin-bottom: $spacing-4;
+    }
+
+    p {
+      margin-bottom: $spacing-6;
+      color: $gray-600;
+    }
+  }
+
+  .form-row {
+    margin-bottom: $spacing-6;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  .form-actions {
+    display: flex;
+    gap: $spacing-3;
+    margin-top: $spacing-6;
+    padding-top: $spacing-6;
+    border-top: 1px solid $gray-200;
+  }
+
+  .table-actions {
+    display: flex;
+    gap: $spacing-2;
+    justify-content: flex-end;
+  }
+
+  .keyboard-guide {
+    .keyboard-shortcuts {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: $spacing-3 $spacing-4;
+      margin: 0;
+
+      dt {
+        font-weight: $font-weight-medium;
+
+        kbd {
+          display: inline-block;
+          padding: $spacing-1 $spacing-2;
+          background-color: $gray-100;
+          border: 1px solid $gray-300;
+          border-radius: $radius-sm;
+          font-family: $font-family-mono;
+          font-size: $text-sm;
+          font-weight: $font-weight-normal;
+          color: $gray-800;
+          box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+
+          & + kbd {
+            margin-left: $spacing-1;
+          }
+        }
+      }
+
+      dd {
+        margin: 0;
+        color: $gray-600;
+        line-height: $leading-relaxed;
+      }
+    }
+  }
+}
+
+// Accessibility-specific styles
+.accessibility-settings {
+  &__title {
+    font-size: $text-lg;
+    font-weight: $font-weight-semibold;
+    margin-bottom: $spacing-4;
+    color: $gray-900;
+  }
+
+  &__group {
+    margin-bottom: $spacing-4;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  &__label {
+    display: block;
+    font-weight: $font-weight-medium;
+    color: $gray-700;
+    margin-bottom: $spacing-2;
+  }
+
+  &__select {
+    width: 100%;
+    padding: $spacing-2 $spacing-3;
+    border: 1px solid $gray-300;
+    border-radius: $radius-md;
+    background-color: white;
+    color: $gray-900;
+    font-size: $text-sm;
+
+    &:focus {
+      outline: 2px solid $primary-500;
+      outline-offset: 2px;
+      border-color: $primary-500;
+    }
+  }
+
+  &__checkbox-label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+
+    &:hover {
+      .accessibility-settings__checkbox-text {
+        color: $primary-700;
+      }
+    }
+  }
+
+  &__checkbox {
+    margin-right: $spacing-3;
+    width: 16px;
+    height: 16px;
+
+    &:focus {
+      outline: 2px solid $primary-500;
+      outline-offset: 2px;
+    }
+  }
+
+  &__checkbox-text {
+    font-weight: $font-weight-medium;
+    color: $gray-700;
+    transition: color $transition-fast;
+  }
+
+  &__help {
+    font-size: $text-sm;
+    color: $gray-500;
+    margin-top: $spacing-1;
+    line-height: $leading-relaxed;
+  }
+}
+
+// Enhanced focus styles for demo
+.accessibility-demo {
+  *:focus {
+    outline: 2px solid $primary-500 !important;
+    outline-offset: 2px !important;
+  }
+
+  // High contrast mode enhancements
+  @media (prefers-contrast: high) {
+    .demo-settings {
+      border-color: black;
+      background-color: white;
+    }
+
+    .keyboard-shortcuts kbd {
+      background-color: white;
+      border-color: black;
+      color: black;
+    }
+  }
+}
+
+// Skip links styling
+.skip-links {
+  position: relative;
+  z-index: $z-tooltip;
+
+  .skip-link {
+    position: absolute;
+    top: -40px;
+    left: 6px;
+    background: $primary-600;
+    color: white;
+    padding: $spacing-2 $spacing-3;
+    text-decoration: none;
+    border-radius: $radius-sm;
+    font-weight: $font-weight-medium;
+    font-size: $text-sm;
+    transition: top $transition-fast;
+
+    &:focus {
+      top: 6px;
+      outline: 2px solid white;
+      outline-offset: 2px;
+    }
+
+    &:hover {
+      background: $primary-700;
+    }
+  }
+}
+
+// Status indicators with accessibility enhancements
+.status-indicator {
+  display: inline-flex;
+  align-items: center;
+  padding: $spacing-1 $spacing-2;
+  border-radius: $radius-sm;
+  font-size: $text-sm;
+  font-weight: $font-weight-medium;
+
+  &::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    margin-right: $spacing-2;
+    background-color: currentColor;
+  }
+
+  &.status-success {
+    color: $success-700;
+    background-color: $success-50;
+
+    &::before {
+      content: '✓';
+      width: auto;
+      height: auto;
+      border-radius: 0;
+      font-weight: bold;
+      background: none;
+    }
+  }
+
+  &.status-warning {
+    color: $warning-700;
+    background-color: $warning-50;
+
+    &::before {
+      content: '⚠';
+      width: auto;
+      height: auto;
+      border-radius: 0;
+      font-weight: bold;
+      background: none;
+    }
+  }
+
+  &.status-error {
+    color: $error-700;
+    background-color: $error-50;
+
+    &::before {
+      content: '✗';
+      width: auto;
+      height: auto;
+      border-radius: 0;
+      font-weight: bold;
+      background: none;
+    }
+  }
+}
+
+// Responsive design for accessibility demo
+@media (max-width: $breakpoint-md) {
+  .accessibility-demo {
+    padding: $spacing-4;
+
+    .form-actions {
+      flex-direction: column;
+
+      .satori-button {
+        width: 100%;
+      }
+    }
+
+    .table-actions {
+      flex-direction: column;
+      align-items: stretch;
+
+      .satori-button {
+        width: 100%;
+        min-height: 44px;
+      }
+    }
+
+    .keyboard-shortcuts {
+      grid-template-columns: 1fr;
+      gap: $spacing-2;
+
+      dt {
+        margin-bottom: $spacing-1;
+      }
+
+      dd {
+        margin-bottom: $spacing-3;
+        padding-left: $spacing-4;
+      }
+    }
+  }
+}
+
+// Print styles for accessibility documentation
+@media print {
+  .accessibility-demo {
+    .demo-settings,
+    .form-actions,
+    .table-actions {
+      display: none;
+    }
+
+    .keyboard-shortcuts {
+      break-inside: avoid;
+    }
+  }
+}

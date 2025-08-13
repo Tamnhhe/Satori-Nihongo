@@ -61,15 +61,19 @@ public class StudentQuiz implements Serializable {
     @Column(name = "correct_answers")
     private Integer correctAnswers = 0;
 
+    @Column(name = "attempt_number")
+    private Integer attemptNumber;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties(value = { "questions", "assignedTos", "courses", "lessons" }, allowSetters = true)
     private Quiz quiz;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnoreProperties(value = { "teacherProfile", "studentProfile", "createdCourses", "quizAttempts" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "teacherProfile", "studentProfile", "createdCourses",
+            "quizAttempts" }, allowSetters = true)
     private UserProfile student;
 
-     @OneToMany(fetch = FetchType.LAZY, mappedBy = "studentQuiz")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "studentQuiz")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "studentQuiz", "quizQuestion" }, allowSetters = true)
     private Set<StudentQuizResponse> responses = new HashSet<>();
@@ -271,6 +275,19 @@ public class StudentQuiz implements Serializable {
         this.correctAnswers = correctAnswers;
     }
 
+    public Integer getAttemptNumber() {
+        return this.attemptNumber;
+    }
+
+    public StudentQuiz attemptNumber(Integer attemptNumber) {
+        this.setAttemptNumber(attemptNumber);
+        return this;
+    }
+
+    public void setAttemptNumber(Integer attemptNumber) {
+        this.attemptNumber = attemptNumber;
+    }
+
     public Set<StudentQuizResponse> getResponses() {
         return this.responses;
     }
@@ -302,7 +319,8 @@ public class StudentQuiz implements Serializable {
         return this;
     }
 
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
+    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and
+    // setters here
 
     @Override
     public boolean equals(Object o) {
@@ -317,7 +335,8 @@ public class StudentQuiz implements Serializable {
 
     @Override
     public int hashCode() {
-        // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
+        // see
+        // https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
         return getClass().hashCode();
     }
 
@@ -325,19 +344,19 @@ public class StudentQuiz implements Serializable {
     @Override
     public String toString() {
         return "StudentQuiz{" +
-            "id=" + getId() +
-            ", startTime='" + getStartTime() + "'" +
-            ", endTime='" + getEndTime() + "'" +
-            ", score=" + getScore() +
-            ", completed='" + getCompleted() + "'" +
-            ", paused='" + getPaused() + "'" +
-            ", pauseTime='" + getPauseTime() + "'" +
-            ", resumeTime='" + getResumeTime() + "'" +
-            ", totalPauseDurationSeconds=" + getTotalPauseDurationSeconds() +
-            ", submittedAutomatically='" + getSubmittedAutomatically() + "'" +
-            ", currentQuestionIndex=" + getCurrentQuestionIndex() +
-            ", totalQuestions=" + getTotalQuestions() +
-            ", correctAnswers=" + getCorrectAnswers() +
-            "}";
+                "id=" + getId() +
+                ", startTime='" + getStartTime() + "'" +
+                ", endTime='" + getEndTime() + "'" +
+                ", score=" + getScore() +
+                ", completed='" + getCompleted() + "'" +
+                ", paused='" + getPaused() + "'" +
+                ", pauseTime='" + getPauseTime() + "'" +
+                ", resumeTime='" + getResumeTime() + "'" +
+                ", totalPauseDurationSeconds=" + getTotalPauseDurationSeconds() +
+                ", submittedAutomatically='" + getSubmittedAutomatically() + "'" +
+                ", currentQuestionIndex=" + getCurrentQuestionIndex() +
+                ", totalQuestions=" + getTotalQuestions() +
+                ", correctAnswers=" + getCorrectAnswers() +
+                "}";
     }
 }

@@ -1,0 +1,259 @@
+@import '../../tokens/variables';
+
+.satori-modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: $z-modal-backdrop;
+  padding: $spacing-4;
+  animation: fadeIn $transition-fast ease-out;
+
+  @media (max-width: $breakpoint-sm) {
+    padding: $spacing-2;
+    align-items: flex-start;
+    padding-top: $spacing-8;
+  }
+}
+
+.satori-modal {
+  background: white;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-2xl;
+  position: relative;
+  max-height: calc(100vh - #{$spacing-8});
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  z-index: $z-modal;
+  animation: slideIn $transition-base ease-out;
+
+  &:focus {
+    outline: none;
+  }
+
+  // Size variants
+  &--sm {
+    width: 100%;
+    max-width: 400px;
+  }
+
+  &--md {
+    width: 100%;
+    max-width: 500px;
+  }
+
+  &--lg {
+    width: 100%;
+    max-width: 800px;
+  }
+
+  &--xl {
+    width: 100%;
+    max-width: 1200px;
+  }
+
+  &--full {
+    width: calc(100vw - #{$spacing-8});
+    height: calc(100vh - #{$spacing-8});
+    max-width: none;
+    max-height: none;
+
+    @media (max-width: $breakpoint-sm) {
+      width: calc(100vw - #{$spacing-4});
+      height: calc(100vh - #{$spacing-4});
+    }
+  }
+
+  // Close button
+  &__close {
+    position: absolute;
+    top: $spacing-4;
+    right: $spacing-4;
+    z-index: 1;
+  }
+
+  // Modal sections
+  &__header {
+    padding: $spacing-6 $spacing-6 $spacing-4 $spacing-6;
+    border-bottom: 1px solid $gray-200;
+    flex-shrink: 0;
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      margin: 0;
+      font-weight: $font-weight-semibold;
+      color: $gray-900;
+    }
+
+    h1 {
+      font-size: $text-2xl;
+    }
+    h2 {
+      font-size: $text-xl;
+    }
+    h3 {
+      font-size: $text-lg;
+    }
+    h4 {
+      font-size: $text-base;
+    }
+    h5 {
+      font-size: $text-sm;
+    }
+    h6 {
+      font-size: $text-xs;
+    }
+
+    p {
+      margin: $spacing-2 0 0 0;
+      color: $gray-600;
+      font-size: $text-sm;
+    }
+
+    // Adjust padding when close button is present
+    .satori-modal__close + & {
+      padding-right: calc(#{$spacing-6} + 32px + #{$spacing-2});
+    }
+  }
+
+  &__body {
+    padding: $spacing-6;
+    flex: 1;
+    overflow-y: auto;
+    color: $gray-700;
+    line-height: $leading-relaxed;
+
+    // When there's no header
+    &:first-child {
+      padding-top: calc(#{$spacing-6} + 32px + #{$spacing-2});
+    }
+
+    // When there's no footer
+    &:last-child {
+      padding-bottom: $spacing-6;
+    }
+
+    p {
+      margin: 0 0 $spacing-4 0;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  &__footer {
+    padding: $spacing-4 $spacing-6 $spacing-6 $spacing-6;
+    border-top: 1px solid $gray-200;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: $spacing-3;
+
+    &--left {
+      justify-content: flex-start;
+    }
+
+    &--center {
+      justify-content: center;
+    }
+
+    &--right {
+      justify-content: flex-end;
+    }
+
+    &--between {
+      justify-content: space-between;
+    }
+  }
+
+  // Responsive adjustments
+  @media (max-width: $breakpoint-sm) {
+    &--sm,
+    &--md,
+    &--lg,
+    &--xl {
+      width: 100%;
+      max-width: none;
+      margin: 0;
+      border-radius: $radius-lg $radius-lg 0 0;
+      max-height: calc(100vh - #{$spacing-4});
+    }
+
+    &__header,
+    &__body,
+    &__footer {
+      padding-left: $spacing-4;
+      padding-right: $spacing-4;
+    }
+
+    &__header {
+      padding-top: $spacing-4;
+      padding-bottom: $spacing-3;
+    }
+
+    &__body {
+      padding-top: $spacing-4;
+      padding-bottom: $spacing-4;
+    }
+
+    &__footer {
+      padding-top: $spacing-3;
+      padding-bottom: $spacing-4;
+    }
+  }
+}
+
+// Animations
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+// Scrollbar styling for modal body
+.satori-modal__body {
+  scrollbar-width: thin;
+  scrollbar-color: $gray-300 transparent;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: $gray-300;
+    border-radius: $radius-full;
+
+    &:hover {
+      background-color: $gray-400;
+    }
+  }
+}

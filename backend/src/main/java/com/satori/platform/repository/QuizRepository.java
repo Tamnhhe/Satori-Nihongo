@@ -55,4 +55,8 @@ public interface QuizRepository extends QuizRepositoryWithBagRelationships, JpaR
     List<Quiz> findActiveQuizzesWithDueDateBetween(
             @org.springframework.data.repository.query.Param("startDate") java.time.Instant startDate,
             @org.springframework.data.repository.query.Param("endDate") java.time.Instant endDate);
+
+    @Query("SELECT DISTINCT q FROM Quiz q JOIN q.courses c WHERE c.teacher.id = :teacherId")
+    Page<Quiz> findByTeacherId(@org.springframework.data.repository.query.Param("teacherId") Long teacherId,
+            Pageable pageable);
 }

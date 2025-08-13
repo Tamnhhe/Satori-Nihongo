@@ -1,0 +1,157 @@
+.schedule-calendar {
+  .schedule-day {
+    &.today {
+      background-color: #f8f9fa;
+      border-radius: 4px;
+    }
+
+    .day-schedules {
+      min-height: 200px;
+      border: 1px solid #dee2e6;
+      border-radius: 4px;
+      padding: 8px;
+      background-color: #fff;
+
+      .schedule-item {
+        background-color: #f8f9fa;
+        border: 1px solid #dee2e6;
+        border-radius: 4px;
+        padding: 8px;
+        margin-bottom: 8px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+
+        &:hover {
+          background-color: #e9ecef;
+          border-color: #adb5bd;
+          transform: translateY(-1px);
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+
+        .fw-bold {
+          font-size: 0.875rem;
+          color: #495057;
+        }
+
+        .text-muted {
+          font-size: 0.75rem;
+          color: #6c757d;
+
+          .fa-icon {
+            width: 12px;
+            margin-right: 4px;
+          }
+        }
+
+        .dropdown {
+          .btn {
+            border: none;
+            background: transparent;
+            padding: 2px 6px;
+            font-size: 0.75rem;
+
+            &:hover {
+              background-color: rgba(0, 0, 0, 0.1);
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .week-navigation {
+    .btn {
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+}
+
+.course-assignment-modal {
+  .react-select-container {
+    .react-select__control {
+      border-color: #ced4da;
+
+      &:hover {
+        border-color: #adb5bd;
+      }
+
+      &.react-select__control--is-focused {
+        border-color: #86b7fe;
+        box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+      }
+    }
+
+    .react-select__option {
+      &.react-select__option--is-selected {
+        background-color: #0d6efd;
+      }
+
+      &.react-select__option--is-focused {
+        background-color: #e7f1ff;
+      }
+    }
+  }
+}
+
+.schedule-management-modal {
+  .conflict-alert {
+    .badge {
+      font-size: 0.75rem;
+      margin-right: 8px;
+    }
+  }
+
+  .form-group {
+    margin-bottom: 1rem;
+
+    .form-label {
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+      color: #495057;
+
+      .text-danger {
+        margin-left: 4px;
+      }
+    }
+
+    .form-control {
+      &:focus {
+        border-color: #86b7fe;
+        box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .schedule-calendar {
+    .schedule-day {
+      .day-schedules {
+        min-height: 150px;
+        padding: 4px;
+
+        .schedule-item {
+          padding: 6px;
+          margin-bottom: 6px;
+
+          .fw-bold {
+            font-size: 0.8rem;
+          }
+
+          .text-muted {
+            font-size: 0.7rem;
+          }
+        }
+      }
+    }
+  }
+}

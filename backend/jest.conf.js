@@ -1,7 +1,7 @@
 const tsconfig = require('./tsconfig.test.json');
 
 module.exports = {
-  testEnvironment: 'jest-fixed-jsdom',
+  testEnvironment: 'jsdom',
   transform: {
     '^.+\\.tsx?$': [
       'ts-jest',
@@ -22,6 +22,8 @@ module.exports = {
   coveragePathIgnorePatterns: ['<rootDir>/src/test/javascript/'],
   moduleNameMapper: mapTypescriptAliasToJestAlias({
     '\\.(css|scss)$': 'identity-obj-proxy',
+    '^@reduxjs/toolkit$': '<rootDir>/node_modules/@reduxjs/toolkit/dist/cjs/index.js',
+    '^@reduxjs/toolkit/(.*)$': '<rootDir>/node_modules/@reduxjs/toolkit/dist/cjs/$1',
     sinon: require.resolve('sinon/pkg/sinon.js'),
   }),
   reporters: [
@@ -30,7 +32,9 @@ module.exports = {
     ['jest-sonar', { outputDirectory: './target/test-results/jest', outputName: 'TESTS-results-sonar.xml' }],
   ],
   testPathIgnorePatterns: ['<rootDir>/node_modules/'],
-  setupFiles: ['<rootDir>/src/main/webapp/app/setup-tests.ts'],
+  setupFilesAfterEnv: ['<rootDir>/src/main/webapp/app/setup-tests.ts'],
+  transformIgnorePatterns: ['node_modules/(?!(@reduxjs/toolkit|react-router|react-router-dom|react-redux|@reduxjs|redux)/)'],
+  extensionsToTreatAsEsm: ['.ts', '.tsx'],
   globals: {
     I18N_HASH: 'generated_hash',
     ...require('./webpack/environment'),
@@ -55,7 +59,7 @@ function mapTypescriptAliasToJestAlias(alias = {}) {
       const regexToReplace = /(.*)\/\*$/;
       const aliasKey = key.replace(regexToReplace, '$1/(.*)');
       const aliasValue = value[0].replace(regexToReplace, '$1/$$1');
-      return [aliasKey, `<rootDir>/${aliasValue}`];
+      return ['^' + aliasKey, `<rootDir>/${aliasValue}`];
     })
     .reduce((aliases, [key, value]) => {
       aliases[key] = value;

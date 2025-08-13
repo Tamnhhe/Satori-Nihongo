@@ -35,8 +35,13 @@ public interface LessonRepository extends JpaRepository<Lesson, Long> {
     long countByCourseId(Long courseId);
 
     /**
-     * Find lessons by title containing text (case insensitive).
+     * Find lessons by title (case-insensitive).
      */
     @Query("SELECT l FROM Lesson l WHERE l.course.id = :courseId AND LOWER(l.title) LIKE LOWER(CONCAT('%', :title, '%'))")
     List<Lesson> findByCourseIdAndTitleContainingIgnoreCase(@Param("courseId") Long courseId, @Param("title") String title);
+
+    /**
+     * Find lessons by multiple course IDs.
+     */
+    List<Lesson> findByCourseIdIn(List<Long> courseIds);
 }

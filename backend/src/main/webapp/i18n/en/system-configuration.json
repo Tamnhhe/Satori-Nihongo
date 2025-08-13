@@ -1,0 +1,47 @@
+{
+  "systemConfiguration": {
+    "title": "System Configuration",
+    "description": "Manage system settings, security configurations, and feature toggles",
+    "noData": "No configuration data available",
+    "validate": "Validate",
+    "backup": "Create Backup",
+    "restore": "Restore",
+    "backupId": "Backup ID",
+    "enterBackupId": "Enter backup ID to restore",
+    "updateSuccess": "Configuration updated successfully",
+    "validationErrors": "Validation Errors",
+    "backupCreated": "Backup created with ID:",
+    "tabs": {
+      "security": "Security",
+      "oauth2": "OAuth2",
+      "features": "Feature Toggles",
+      "parameters": "System Parameters"
+    },
+    "security": {
+      "title": "Security Settings",
+      "csp": "Content Security Policy",
+      "sessionTimeout": "Session Timeout (minutes)",
+      "maxLoginAttempts": "Maximum Login Attempts",
+      "lockoutDuration": "Account Lockout Duration (minutes)",
+      "requireHttps": "Require HTTPS",
+      "enableCsrf": "Enable CSRF Protection"
+    },
+    "oauth2": {
+      "title": "OAuth2 Configuration",
+      "enabled": "Enable OAuth2 Authentication",
+      "redirectBaseUrl": "Redirect Base URL",
+      "providers": "OAuth2 Providers",
+      "clientId": "Client ID",
+      "clientSecret": "Client Secret",
+      "scope": "Scope"
+    },
+    "features": {
+      "title": "Feature Toggles",
+      "description": "Enable or disable system features"
+    },
+    "parameters": {
+      "title": "System Parameters",
+      "description": "Configure system-wide parameters"
+    }
+  }
+}

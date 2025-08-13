@@ -1,0 +1,24 @@
+{
+  "adminDashboard": {
+    "title": "Bảng điều khiển Quản trị",
+    "refresh": "Làm mới",
+    "loading": "Đang tải...",
+    "noData": "Không có dữ liệu",
+    "userStatistics": "Thống kê Người dùng",
+    "totalUsers": "Tổng số Người dùng",
+    "activeUsers": "Người dùng Hoạt động",
+    "newRegistrations": "Đăng ký Mới tháng này",
+    "roleDistribution": "Phân bố Vai trò",
+    "systemHealth": "Tình trạng Hệ thống",
+    "overallStatus": "Trạng thái Tổng thể",
+    "components": "Thành phần",
+    "systemMetrics": "Chỉ số Hệ thống",
+    "jvmMemory": "Bộ nhớ JVM",
+    "httpRequests": "Yêu cầu HTTP",
+    "uptime": "Thời gian hoạt động",
+    "systemAlerts": "Cảnh báo Hệ thống",
+    "noAlerts": "Không có cảnh báo hệ thống",
+    "recentActivity": "Hoạt động Gần đây",
+    "noActivity": "Không có hoạt động gần đây"
+  }
+}

@@ -1,0 +1,160 @@
+{
+  "classManagement": {
+    "home": {
+      "title": "Class Management",
+      "createLabel": "Create new Class"
+    },
+    "created": "A new class \"{{name}}\" has been created",
+    "updated": "Class \"{{name}}\" has been updated",
+    "deleted": "Class \"{{name}}\" has been deleted",
+    "delete": {
+      "question": "Are you sure you want to delete class \"{{name}}\"?"
+    },
+    "detail": {
+      "title": "Class Details"
+    },
+    "edit": {
+      "title": "Edit Class"
+    },
+    "create": {
+      "title": "Create Class"
+    },
+    "code": "Class Code",
+    "name": "Class Name",
+    "description": "Description",
+    "course": "Course",
+    "teacher": "Teacher",
+    "startDate": "Start Date",
+    "endDate": "End Date",
+    "dateRange": "Date Range",
+    "capacity": "Capacity",
+    "currentEnrollment": "Current Enrollment",
+    "availableSpots": "Available Spots",
+    "enrollmentPercentage": "Enrollment %",
+    "status": {
+      "upcoming": "Upcoming",
+      "active": "Active",
+      "completed": "Completed",
+      "cancelled": "Cancelled"
+    },
+    "stats": {
+      "totalClasses": "Total Classes",
+      "activeClasses": "Active Classes",
+      "totalEnrollment": "Total Enrollment",
+      "fullyEnrolled": "Fully Enrolled"
+    },
+    "search": {
+      "placeholder": "Search classes by code, name, or course..."
+    },
+    "filter": {
+      "status": "Filter by Status",
+      "enrollment": "Filter by Enrollment",
+      "availableSpots": "Available Spots",
+      "fullyEnrolled": "Fully Enrolled",
+      "overCapacity": "Over Capacity"
+    },
+    "fullyEnrolled": "Full",
+    "manageEnrollment": "Manage Enrollment",
+    "enrollment": {
+      "title": "Manage Enrollment",
+      "currentEnrollment": "Current Enrollment",
+      "capacity": "Capacity",
+      "availableSpots": "Available Spots",
+      "percentage": "Enrollment %",
+      "enrolledStudents": "Enrolled Students",
+      "availableStudents": "Available Students",
+      "noEnrolledStudents": "No students enrolled in this class",
+      "noAvailableStudents": "No available students found",
+      "noSearchResults": "No students found matching your search",
+      "searchPlaceholder": "Search students by ID or name...",
+      "studentId": "Student ID",
+      "studentName": "Student Name",
+      "email": "Email",
+      "add": "Add",
+      "remove": "Remove",
+      "addSelected": "Add Selected",
+      "confirmRemove": "Are you sure you want to remove this student from the class?",
+      "studentAdded": "Student added to class successfully",
+      "studentRemoved": "Student removed from class successfully",
+      "studentsAdded": "{{count}} students added to class successfully",
+      "addError": "Failed to add student to class",
+      "removeError": "Failed to remove student from class",
+      "bulkAddError": "Failed to add students to class",
+      "loadError": "Failed to load available students",
+      "selectStudents": "Please select students to add",
+      "capacityReached": "This class has reached its capacity. No more students can be enrolled.",
+      "waitlist": "Waitlist",
+      "allowWaitlist": "Allow Waitlist",
+      "addToWaitlist": "Add to Waitlist",
+      "enableWaitlistHint": "Enable waitlist to allow enrollment beyond capacity.",
+      "waitlistMode": "Waitlist mode enabled. New enrollments will be added to the waitlist.",
+      "capacityFull": "Full",
+      "bulkEnrollmentResult": "Enrollment Results:",
+      "studentsEnrolled": "{{count}} students enrolled successfully",
+      "studentsWaitlisted": "{{count}} students added to waitlist",
+      "studentsRejected": "{{count}} students rejected (capacity exceeded)",
+      "studentsAlreadyEnrolled": "{{count}} students were already enrolled",
+      "overCapacity": "Over Capacity"
+    },
+    "placeholder": {
+      "code": "Enter class code (e.g., LOVE101-01)",
+      "name": "Enter class name (e.g., Love 101 - Morning Class)",
+      "description": "Enter class description...",
+      "course": "Select a course",
+      "teacher": "Select a teacher",
+      "startDate": "Start Date",
+      "endDate": "End Date",
+      "capacity": "Maximum number of students"
+    },
+    "schedule": {
+      "manage": "Schedule",
+      "title": "Class Schedule",
+      "pageTitle": "Class Schedule Management",
+      "createTitle": "Create Class Schedule",
+      "editTitle": "Edit Class Schedule",
+      "createSchedule": "Create Schedule",
+      "date": "Date",
+      "startTime": "Start Time",
+      "endTime": "End Time",
+      "location": "Location",
+      "locationPlaceholder": "Enter location (optional)",
+      "description": "Description",
+      "descriptionPlaceholder": "Enter schedule description (optional)",
+      "class": "Class",
+      "weekView": "Week",
+      "monthView": "Month",
+      "today": "Today",
+      "noSchedules": "No schedules",
+      "totalSchedules": "Total Schedules",
+      "thisWeek": "This Week",
+      "upcomingConflicts": "Conflicts",
+      "hasConflicts": "Conflicts",
+      "conflictsDetected": "Schedule Conflicts Detected",
+      "checkConflicts": "Check Conflicts",
+      "isRecurring": "Make this a recurring schedule",
+      "recurring": "Recurring",
+      "recurringTypeLabel": "Recurring Type",
+      "recurringEndDate": "End Date",
+      "recurringDays": "Recurring Days",
+      "maxOccurrences": "Max Occurrences",
+      "maxOccurrencesPlaceholder": "Enter maximum number of occurrences",
+      "maxOccurrencesHelp": "Leave empty to use end date only",
+      "editSeries": "Edit Series",
+      "print": "Print Schedule",
+      "export": "Export Schedule",
+      "quickActions": "Quick Actions",
+      "recurringType": {
+        "weekly": "Weekly",
+        "biweekly": "Bi-weekly",
+        "monthly": "Monthly"
+      },
+      "validation": {
+        "endTimeAfterStart": "End time must be after start time",
+        "recurringEndRequired": "Either end date or max occurrences is required for recurring schedules",
+        "recurringDaysRequired": "At least one day must be selected for weekly recurring schedules",
+        "recurringEndAfterStart": "Recurring end date must be after start date",
+        "maxOccurrencesRange": "Max occurrences must be between 1 and 100"
+      }
+    }
+  }
+}

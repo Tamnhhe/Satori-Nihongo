@@ -9,4 +9,17 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface QuestionRepository extends JpaRepository<Question, Long> {}
+public interface QuestionRepository extends JpaRepository<Question, Long> {
+
+    // Find questions by content containing search term (case insensitive)
+    org.springframework.data.domain.Page<Question> findByContentContainingIgnoreCase(String content,
+            org.springframework.data.domain.Pageable pageable);
+
+    // Find questions by type
+    org.springframework.data.domain.Page<Question> findByType(String type,
+            org.springframework.data.domain.Pageable pageable);
+
+    // Find questions by content and type
+    org.springframework.data.domain.Page<Question> findByContentContainingIgnoreCaseAndType(String content, String type,
+            org.springframework.data.domain.Pageable pageable);
+}

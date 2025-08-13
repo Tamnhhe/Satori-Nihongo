@@ -30,6 +30,10 @@
     <include file="config/liquibase/changelog/20250809000003_add_missing_entities.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20250809000004_add_remaining_entities.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20250809000005_add_missing_user_columns.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20250811000001_add_file_metadata_table.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20250813000001_add_notification_preference_columns.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20250813000003_add_missing_giftcode_columns.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20250813000004_add_missing_oauth2_audit_columns.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="config/liquibase/changelog/20250720033206_added_entity_constraints_UserProfile.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20250720033306_added_entity_constraints_SocialAccount.xml" relativeToChangelogFile="false"/>
@@ -41,6 +45,10 @@
     <include file="config/liquibase/changelog/20250720034206_added_entity_constraints_QuizQuestion.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20250720034306_added_entity_constraints_StudentQuiz.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20250720034406_added_entity_constraints_Flashcard.xml" relativeToChangelogFile="false"/>
+    <!-- jhipster-needle-liquibase-add-entity-changelog - JHipster will add liquibase entity changelogs here -->
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
+    <include file="config/liquibase/changelog/20250810013000_add_quiz_template_name_only.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20250813000001_add_missing_student_quiz_columns.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20250813000002_add_missing_student_progress_columns.xml" relativeToChangelogFile="false"/>
 </databaseChangeLog>

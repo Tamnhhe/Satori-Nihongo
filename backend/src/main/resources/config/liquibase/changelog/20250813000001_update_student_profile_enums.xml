@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <!--
+        Update StudentProfile table to use enum values for level and grade_level columns
+    -->
+    <changeSet id="20250813000001-1" author="system">
+        <comment>Update level column to use StudentLevel enum values</comment>
+        
+        <!-- Update existing data to match enum values -->
+        <sql>
+            UPDATE student_profile SET level = 'N5' WHERE level IN ('beginner', 'Beginner', 'BEGINNER');
+            UPDATE student_profile SET level = 'N4' WHERE level IN ('elementary', 'Elementary', 'ELEMENTARY');
+            UPDATE student_profile SET level = 'N3' WHERE level IN ('intermediate', 'Intermediate', 'INTERMEDIATE');
+            UPDATE student_profile SET level = 'N2' WHERE level IN ('upper_intermediate', 'Upper Intermediate', 'UPPER_INTERMEDIATE');
+            UPDATE student_profile SET level = 'N1' WHERE level IN ('advanced', 'Advanced', 'ADVANCED');
+            UPDATE student_profile SET level = 'NATIVE' WHERE level IN ('native', 'Native', 'NATIVE');
+        </sql>
+        
+        <!-- Add check constraint for level enum -->
+        <addCheckConstraint tableName="student_profile" 
+                           columnNames="level" 
+                           constraintName="ck_student_profile_level"
+                           checkCondition="level IN ('N5', 'N4', 'N3', 'N2', 'N1', 'NATIVE')"/>
+    </changeSet>
+
+    <changeSet id="20250813000001-2" author="system">
+        <comment>Update grade_level column to use GradeLevel enum values</comment>
+        
+        <!-- Update existing data to match enum values -->
+        <sql>
+            UPDATE student_profile SET grade_level = 'ELEMENTARY' WHERE grade_level IN ('elementary', 'Elementary', 'ELEMENTARY');
+            UPDATE student_profile SET grade_level = 'MIDDLE_SCHOOL' WHERE grade_level IN ('middle_school', 'Middle School', 'MIDDLE_SCHOOL');
+            UPDATE student_profile SET grade_level = 'HIGH_SCHOOL' WHERE grade_level IN ('high_school', 'High School', 'HIGH_SCHOOL');
+            UPDATE student_profile SET grade_level = 'UNIVERSITY' WHERE grade_level IN ('university', 'University', 'UNIVERSITY');
+            UPDATE student_profile SET grade_level = 'GRADUATE' WHERE grade_level IN ('graduate', 'Graduate', 'GRADUATE');
+            UPDATE student_profile SET grade_level = 'ADULT_LEARNER' WHERE grade_level IN ('adult_learner', 'Adult Learner', 'ADULT_LEARNER');
+        </sql>
+        
+        <!-- Add check constraint for grade_level enum -->
+        <addCheckConstraint tableName="student_profile" 
+                           columnNames="grade_level" 
+                           constraintName="ck_student_profile_grade_level"
+                           checkCondition="grade_level IN ('ELEMENTARY', 'MIDDLE_SCHOOL', 'HIGH_SCHOOL', 'UNIVERSITY', 'GRADUATE', 'ADULT_LEARNER')"/>
+    </changeSet>
+
+    <changeSet id="20250813000001-3" author="system">
+        <comment>Add GPA validation constraint</comment>
+        
+        <!-- Add check constraint for GPA range -->
+        <addCheckConstraint tableName="student_profile" 
+                           columnNames="gpa" 
+                           constraintName="ck_student_profile_gpa_range"
+                           checkCondition="gpa >= 0.0 AND gpa <= 4.0"/>
+    </changeSet>
+
+</databaseChangeLog>

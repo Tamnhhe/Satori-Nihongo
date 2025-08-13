@@ -1,0 +1,24 @@
+{
+  "adminDashboard": {
+    "title": "Admin Dashboard",
+    "refresh": "Refresh",
+    "loading": "Loading...",
+    "noData": "No data available",
+    "userStatistics": "User Statistics",
+    "totalUsers": "Total Users",
+    "activeUsers": "Active Users",
+    "newRegistrations": "New This Month",
+    "roleDistribution": "Role Distribution",
+    "systemHealth": "System Health",
+    "overallStatus": "Overall Status",
+    "components": "Components",
+    "systemMetrics": "System Metrics",
+    "jvmMemory": "JVM Memory",
+    "httpRequests": "HTTP Requests",
+    "uptime": "Uptime",
+    "systemAlerts": "System Alerts",
+    "noAlerts": "No system alerts",
+    "recentActivity": "Recent Activity",
+    "noActivity": "No recent activity"
+  }
+}

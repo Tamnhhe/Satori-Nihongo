@@ -1,0 +1,9 @@
+{
+  "teacher": {
+    "dashboard": {
+      "title": "Teacher Dashboard",
+      "welcome": "Welcome to Teacher Dashboard",
+      "description": "This is the teacher dashboard where you can manage your courses, classes, and student progress."
+    }
+  }
+}

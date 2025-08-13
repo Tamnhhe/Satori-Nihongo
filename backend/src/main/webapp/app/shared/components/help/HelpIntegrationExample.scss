@@ -1,0 +1,219 @@
+@import '../../../shared/design-system/tokens/variables.scss';
+
+.help-integration-example {
+  max-width: 800px;
+  margin: 0 auto;
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-lg);
+    padding-bottom: var(--spacing-md);
+    border-bottom: 1px solid var(--color-border-subtle);
+
+    h3 {
+      margin: 0;
+      color: var(--color-text-primary);
+    }
+  }
+
+  &__help-actions {
+    display: flex;
+    gap: var(--spacing-sm);
+  }
+
+  &__toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-lg);
+    gap: var(--spacing-md);
+  }
+
+  &__filters {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+  }
+
+  &__search {
+    padding: var(--spacing-sm) var(--spacing-md);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--border-radius-md);
+    font-size: var(--font-size-sm);
+    background: var(--color-surface);
+    color: var(--color-text-primary);
+    min-width: 200px;
+
+    &:focus {
+      outline: 2px solid var(--color-primary);
+      outline-offset: -2px;
+      border-color: var(--color-primary);
+    }
+
+    &::placeholder {
+      color: var(--color-text-secondary);
+    }
+  }
+
+  &__actions {
+    display: flex;
+    gap: var(--spacing-sm);
+  }
+
+  &__table {
+    margin-bottom: var(--spacing-lg);
+  }
+
+  &__data-table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--border-radius-md);
+    overflow: hidden;
+
+    th,
+    td {
+      padding: var(--spacing-md);
+      text-align: left;
+      border-bottom: 1px solid var(--color-border-subtle);
+    }
+
+    th {
+      background: var(--color-surface-secondary);
+      font-weight: var(--font-weight-semibold);
+      color: var(--color-text-primary);
+      font-size: var(--font-size-sm);
+
+      span {
+        cursor: help;
+        border-bottom: 1px dotted var(--color-text-secondary);
+      }
+    }
+
+    td {
+      background: var(--color-surface);
+      color: var(--color-text-primary);
+      font-size: var(--font-size-sm);
+    }
+
+    tbody tr:hover {
+      background: var(--color-surface-hover);
+    }
+
+    tbody tr:last-child {
+      td {
+        border-bottom: none;
+      }
+    }
+  }
+
+  &__footer {
+    padding-top: var(--spacing-md);
+    border-top: 1px solid var(--color-border-subtle);
+  }
+
+  &__help-text {
+    margin: 0;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    font-style: italic;
+    text-align: center;
+  }
+}
+
+.status-badge {
+  display: inline-block;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--border-radius-full);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+
+  &--active {
+    background: var(--color-success-surface);
+    color: var(--color-success-text);
+  }
+
+  &--inactive {
+    background: var(--color-error-surface);
+    color: var(--color-error-text);
+  }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .help-integration-example {
+    &__toolbar {
+      flex-direction: column;
+      align-items: stretch;
+      gap: var(--spacing-md);
+    }
+
+    &__filters {
+      justify-content: space-between;
+    }
+
+    &__search {
+      min-width: auto;
+      flex: 1;
+    }
+
+    &__actions {
+      justify-content: center;
+    }
+
+    &__data-table {
+      font-size: var(--font-size-xs);
+
+      th,
+      td {
+        padding: var(--spacing-sm);
+      }
+    }
+  }
+}
+
+// Dark theme support
+[data-theme='dark'] {
+  .help-integration-example {
+    &__header h3 {
+      color: var(--color-text-primary-dark);
+    }
+
+    &__search {
+      border-color: var(--color-border-subtle-dark);
+      background: var(--color-surface-dark);
+      color: var(--color-text-primary-dark);
+
+      &::placeholder {
+        color: var(--color-text-secondary-dark);
+      }
+    }
+
+    &__data-table {
+      border-color: var(--color-border-subtle-dark);
+
+      th {
+        background: var(--color-surface-secondary-dark);
+        color: var(--color-text-primary-dark);
+      }
+
+      td {
+        background: var(--color-surface-dark);
+        color: var(--color-text-primary-dark);
+        border-color: var(--color-border-subtle-dark);
+      }
+
+      tbody tr:hover {
+        background: var(--color-surface-hover-dark);
+      }
+    }
+
+    &__help-text {
+      color: var(--color-text-secondary-dark);
+    }
+  }
+}

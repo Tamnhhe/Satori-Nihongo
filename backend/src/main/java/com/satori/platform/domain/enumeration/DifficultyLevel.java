@@ -1,10 +1,31 @@
 package com.satori.platform.domain.enumeration;
 
 /**
- * Enumeration for difficulty levels
+ * The DifficultyLevel enumeration.
  */
 public enum DifficultyLevel {
-    EASY,
-    MEDIUM,
-    HARD
+    BEGINNER("Beginner"),
+    ELEMENTARY("Elementary"),
+    INTERMEDIATE("Intermediate"),
+    UPPER_INTERMEDIATE("Upper Intermediate"),
+    ADVANCED("Advanced"),
+    PROFICIENT("Proficient"),
+    EASY("Easy"),
+    MEDIUM("Medium"),
+    HARD("Hard");
+
+    private final String displayName;
+
+    DifficultyLevel(String displayName) {
+        this.displayName = displayName;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    @Override
+    public String toString() {
+        return displayName;
+    }
 }

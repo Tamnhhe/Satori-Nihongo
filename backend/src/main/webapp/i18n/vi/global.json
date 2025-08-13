@@ -33,7 +33,20 @@
       },
       "admin": {
         "main": "Quản trị",
+        "dashboard": "Bảng điều khiển",
         "userManagement": "Quản lý tài khoản",
+        "enhancedUserManagement": "Quản lý tài khoản nâng cao",
+        "courseManagement": "Quản lý khóa học",
+        "classManagement": "Quản lý lớp học",
+        "quizManagement": "Quản lý bài kiểm tra",
+        "fileManagement": "Quản lý tệp tin",
+        "studentAnalytics": "Phân tích học sinh",
+        "comprehensiveAnalytics": "Phân tích toàn diện",
+        "reporting": "Báo cáo",
+        "notificationManagement": "Quản lý Thông báo",
+        "systemConfiguration": "Cấu hình Hệ thống",
+        "systemMonitoring": "Giám sát Hệ thống",
+        "helpDemo": "Demo hệ thống trợ giúp",
         "tracker": "Theo dõi người dùng",
         "metrics": "Số liệu",
         "health": "Tình trạng",
@@ -42,6 +55,10 @@
         "apidocs": "API",
         "database": "Cơ sở dữ liệu",
         "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"
+      },
+      "teacher": {
+        "main": "Giáo viên",
+        "dashboard": "Bảng điều khiển"
       },
       "language": "Ngôn ngữ"
     },
