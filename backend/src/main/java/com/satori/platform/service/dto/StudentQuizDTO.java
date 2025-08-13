@@ -43,10 +43,6 @@ public class StudentQuizDTO implements Serializable {
 
     private List<StudentQuizResponseDTO> responses;
 
-    private Long quizId;
-
-    private Long studentId;
-
     public Long getId() {
         return id;
     }
@@ -175,22 +171,6 @@ public class StudentQuizDTO implements Serializable {
         this.responses = responses;
     }
 
-    public Long getQuizId() {
-        return quizId;
-    }
-
-    public void setQuizId(Long quizId) {
-        this.quizId = quizId;
-    }
-
-    public Long getStudentId() {
-        return studentId;
-    }
-
-    public void setStudentId(Long studentId) {
-        this.studentId = studentId;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -216,13 +196,13 @@ public class StudentQuizDTO implements Serializable {
     @Override
     public String toString() {
         return "StudentQuizDTO{" +
-                "id=" + getId() +
-                ", startTime='" + getStartTime() + "'" +
-                ", endTime='" + getEndTime() + "'" +
-                ", score=" + getScore() +
-                ", completed='" + getCompleted() + "'" +
-                ", quiz=" + getQuiz() +
-                ", student=" + getStudent() +
-                "}";
+            "id=" + getId() +
+            ", startTime='" + getStartTime() + "'" +
+            ", endTime='" + getEndTime() + "'" +
+            ", score=" + getScore() +
+            ", completed='" + getCompleted() + "'" +
+            ", quiz=" + getQuiz() +
+            ", student=" + getStudent() +
+            "}";
     }
 }

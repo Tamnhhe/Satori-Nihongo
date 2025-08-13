@@ -1,21 +1,11 @@
 id;username;password_hash;email;full_name;gender;role
-1;yamada_hiroshi;$2a$10$VEjxo0jq2YG9Rbk2HmX9S.k1uZBGYUHdUcid3g/vfiEl7lwWgOH/K;yamada@satori-nihongo.com;Yamada Hiroshi;true;GIANG_VIEN
-2;tanaka_yuki;$2a$10$VEjxo0jq2YG9Rbk2HmX9S.k1uZBGYUHdUcid3g/vfiEl7lwWgOH/K;tanaka@satori-nihongo.com;Tanaka Yuki;false;GIANG_VIEN
-3;nguyen_linh;$2a$10$VEjxo0jq2YG9Rbk2HmX9S.k1uZBGYUHdUcid3g/vfiEl7lwWgOH/K;linh.nguyen@gmail.com;Nguyen Thi Linh;false;HOC_VIEN
-4;tran_minh;$2a$10$VEjxo0jq2YG9Rbk2HmX9S.k1uZBGYUHdUcid3g/vfiEl7lwWgOH/K;minh.tran@gmail.com;Tran Van Minh;true;HOC_VIEN
-5;le_hai;$2a$10$VEjxo0jq2YG9Rbk2HmX9S.k1uZBGYUHdUcid3g/vfiEl7lwWgOH/K;hai.le@gmail.com;Le Duc Hai;true;HOC_VIEN
-6;satori_admin;$2a$10$gSAhZrxMllrbgj/kkK9UceBPpChGWJA7SYIb1Mqo.n5aNLq1/oRrC;admin@satori-nihongo.com;Satori Admin;true;ADMIN
-7;pham_thu;$2a$10$VEjxo0jq2YG9Rbk2HmX9S.k1uZBGYUHdUcid3g/vfiEl7lwWgOH/K;thu.pham@gmail.com;Pham Thi Thu;false;HOC_VIEN
-8;vo_duc;$2a$10$VEjxo0jq2YG9Rbk2HmX9S.k1uZBGYUHdUcid3g/vfiEl7lwWgOH/K;duc.vo@gmail.com;Vo Duc Anh;true;HOC_VIEN
-9;suzuki_sensei;$2a$10$VEjxo0jq2YG9Rbk2HmX9S.k1uZBGYUHdUcid3g/vfiEl7lwWgOH/K;suzuki@satori-nihongo.com;Suzuki Kenji;true;GIANG_VIEN
-10;watanabe_sensei;$2a$10$VEjxo0jq2YG9Rbk2HmX9S.k1uZBGYUHdUcid3g/vfiEl7lwWgOH/K;watanabe@satori-nihongo.com;Watanabe Mei;false;GIANG_VIEN
-11;sato_sensei;$2a$10$VEjxo0jq2YG9Rbk2HmX9S.k1uZBGYUHdUcid3g/vfiEl7lwWgOH/K;sato@satori-nihongo.com;Sato Takeshi;true;GIANG_VIEN
-12;nakamura_sensei;$2a$10$VEjxo0jq2YG9Rbk2HmX9S.k1uZBGYUHdUcid3g/vfiEl7lwWgOH/K;nakamura@satori-nihongo.com;Nakamura Akiko;false;GIANG_VIEN
-13;ito_sensei;$2a$10$VEjxo0jq2YG9Rbk2HmX9S.k1uZBGYUHdUcid3g/vfiEl7lwWgOH/K;ito@satori-nihongo.com;Ito Daisuke;true;GIANG_VIEN
-14;nguyen_teacher;$2a$10$VEjxo0jq2YG9Rbk2HmX9S.k1uZBGYUHdUcid3g/vfiEl7lwWgOH/K;thuy.nguyen@satori-nihongo.com;Nguyen Thi Thuy;false;GIANG_VIEN
-15;tran_teacher;$2a$10$VEjxo0jq2YG9Rbk2HmX9S.k1uZBGYUHdUcid3g/vfiEl7lwWgOH/K;duc.tran@satori-nihongo.com;Tran Van Duc;true;GIANG_VIEN
-16;kobayashi_sensei;$2a$10$VEjxo0jq2YG9Rbk2HmX9S.k1uZBGYUHdUcid3g/vfiEl7lwWgOH/K;kobayashi@satori-nihongo.com;Kobayashi Ryota;true;GIANG_VIEN
-17;kimura_sensei;$2a$10$VEjxo0jq2YG9Rbk2HmX9S.k1uZBGYUHdUcid3g/vfiEl7lwWgOH/K;kimura@satori-nihongo.com;Kimura Yui;false;GIANG_VIEN
-18;pham_long;$2a$10$VEjxo0jq2YG9Rbk2HmX9S.k1uZBGYUHdUcid3g/vfiEl7lwWgOH/K;long.pham@gmail.com;Pham Van Long;true;HOC_VIEN
-19;nguyen_mai;$2a$10$VEjxo0jq2YG9Rbk2HmX9S.k1uZBGYUHdUcid3g/vfiEl7lwWgOH/K;mai.nguyen@gmail.com;Nguyen Thi Mai;false;HOC_VIEN
-20;le_quan;$2a$10$VEjxo0jq2YG9Rbk2HmX9S.k1uZBGYUHdUcid3g/vfiEl7lwWgOH/K;quan.le@gmail.com;Le Van Quan;true;HOC_VIEN
+1;fellow;arid miserably;LanTruc.Le@gmail.com;definite;true;GIANG_VIEN
+2;since violently;ick urban aw;DieuNuong_7kang@hotmail.com;excluding drat;true;GIANG_VIEN
+3;defendant honored;furthermore aw properly;ThienTam.Le@yahoo.com;wherever;true;HOC_VIEN
+4;excluding given scarcely;flint terribly mmm;ThanhHuyen_Truong70@gmail.com;nor failing;false;GIANG_VIEN
+5;qua ah failing;majestically woot violently;MongTuyen_To@yahoo.com;inasmuch;true;HOC_VIEN
+6;uh-huh;per;XuanNam16@gmail.com;if pish scorn;false;ADMIN
+7;along;refer lest;CamLy97@yahoo.com;founder well-lit;true;ADMIN
+8;carefully yahoo;airbus;UyenMy_Tran66@hotmail.com;outrun forswear bah;false;HOC_VIEN
+9;homeschool;off excitedly seal;NguyenHong.Duong45@gmail.com;yahoo;false;GIANG_VIEN
+10;swing fiercely lest;decouple;GiangTien_Ngo26@hotmail.com;favorite unless;true;GIANG_VIEN

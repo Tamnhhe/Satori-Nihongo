@@ -33,20 +33,7 @@
       },
       "admin": {
         "main": "Administration",
-        "dashboard": "Dashboard",
         "userManagement": "User management",
-        "enhancedUserManagement": "Enhanced User Management",
-        "courseManagement": "Course Management",
-        "classManagement": "Class Management",
-        "quizManagement": "Quiz Management",
-        "fileManagement": "File Management",
-        "studentAnalytics": "Student Analytics",
-        "comprehensiveAnalytics": "Comprehensive Analytics",
-        "reporting": "Reporting",
-        "notificationManagement": "Notification Management",
-        "systemConfiguration": "System Configuration",
-        "systemMonitoring": "System Monitoring",
-        "helpDemo": "Help System Demo",
         "tracker": "User tracker",
         "metrics": "Metrics",
         "health": "Health",
@@ -55,10 +42,6 @@
         "apidocs": "API",
         "database": "Database",
         "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"
-      },
-      "teacher": {
-        "main": "Teacher",
-        "dashboard": "Dashboard"
       },
       "language": "Language"
     },

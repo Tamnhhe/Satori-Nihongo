@@ -7,13 +7,12 @@ import LoadingBar from 'react-redux-loading-bar';
 
 import { useAppDispatch } from 'app/config/store';
 import { setLocale } from 'app/shared/reducers/locale';
-import { AccountMenu, AdminMenu, TeacherMenu, EntitiesMenu, LocaleMenu } from '../menus';
+import { AccountMenu, AdminMenu, EntitiesMenu, LocaleMenu } from '../menus';
 import { Brand, Home } from './header-components';
 
 export interface IHeaderProps {
   isAuthenticated: boolean;
   isAdmin: boolean;
-  isTeacher: boolean;
   ribbonEnv: string;
   isInProduction: boolean;
   isOpenAPIEnabled: boolean;
@@ -56,7 +55,6 @@ const Header = (props: IHeaderProps) => {
             <Home />
             {props.isAuthenticated && <EntitiesMenu />}
             {props.isAuthenticated && props.isAdmin && <AdminMenu showOpenAPI={props.isOpenAPIEnabled} />}
-            {props.isAuthenticated && props.isTeacher && <TeacherMenu />}
             <LocaleMenu currentLocale={props.currentLocale} onClick={handleLocaleChange} />
             <AccountMenu isAuthenticated={props.isAuthenticated} />
           </Nav>

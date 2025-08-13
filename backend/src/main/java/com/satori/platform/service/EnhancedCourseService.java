@@ -11,7 +11,6 @@ import com.satori.platform.repository.StudentProgressRepository;
 import com.satori.platform.repository.UserProfileRepository;
 import com.satori.platform.service.dto.CourseDTO;
 import com.satori.platform.service.dto.CourseEnrollmentDTO;
-import com.satori.platform.service.dto.CourseWithStatsDTO;
 import com.satori.platform.service.exception.InsufficientPermissionException;
 import com.satori.platform.service.mapper.CourseMapper;
 import jakarta.persistence.EntityNotFoundException;
@@ -157,18 +156,6 @@ public class EnhancedCourseService {
     public Page<CourseDTO> findAllCourses(Pageable pageable) {
         LOG.debug("Request to get all Courses");
         return courseRepository.findAll(pageable).map(courseMapper::toDto);
-    }
-
-    /**
-     * Get all courses with statistics for admin management.
-     *
-     * @param pageable pagination information
-     * @return page of courses with statistics
-     */
-    @Transactional(readOnly = true)
-    public Page<CourseWithStatsDTO> findAllCoursesWithStats(Pageable pageable) {
-        LOG.debug("Request to get all Courses with statistics");
-        return courseRepository.findAll(pageable).map(this::mapCourseToStatsDTO);
     }
 
     /**
@@ -331,37 +318,5 @@ public class EnhancedCourseService {
                 LOG.warn("Failed to send course update notification to student: {}", student.getId(), e);
             }
         });
-    }
-
-    private CourseWithStatsDTO mapCourseToStatsDTO(Course course) {
-        CourseDTO courseDTO = courseMapper.toDto(course);
-        CourseWithStatsDTO statsDTO = new CourseWithStatsDTO(courseDTO);
-
-        // Calculate statistics
-        int enrollmentCount = studentProgressRepository.countByCourseId(course.getId());
-        int lessonsCount = course.getLessons().size();
-        int quizzesCount = course.getQuizzes().size();
-
-        // Calculate completion rate (average of all enrolled students)
-        Double completionRate = studentProgressRepository.getAverageCompletionRateByCourseId(course.getId());
-
-        // Calculate average score from quiz attempts
-        Double averageScore = studentProgressRepository.getAverageScoreByCourseId(course.getId());
-
-        // Count active students (students with activity in last 30 days)
-        int activeStudents = studentProgressRepository.countActiveStudentsByCourseId(course.getId());
-
-        // Count total classes for this course
-        int totalClasses = courseRepository.countClassesByCourseId(course.getId());
-
-        statsDTO.setEnrollmentCount(enrollmentCount);
-        statsDTO.setLessonsCount(lessonsCount);
-        statsDTO.setQuizzesCount(quizzesCount);
-        statsDTO.setCompletionRate(completionRate != null ? completionRate : 0.0);
-        statsDTO.setAverageScore(averageScore != null ? averageScore : 0.0);
-        statsDTO.setActiveStudents(activeStudents);
-        statsDTO.setTotalClasses(totalClasses);
-
-        return statsDTO;
     }
 }

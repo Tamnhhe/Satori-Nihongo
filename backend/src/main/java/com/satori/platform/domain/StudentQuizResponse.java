@@ -29,9 +29,6 @@ public class StudentQuizResponse implements Serializable {
     @Column(name = "student_answer", nullable = false)
     private String studentAnswer;
 
-    @Column(name = "selected_answer")
-    private String selectedAnswer;
-
     @Column(name = "is_correct")
     private Boolean isCorrect;
 
@@ -77,19 +74,6 @@ public class StudentQuizResponse implements Serializable {
 
     public void setStudentAnswer(String studentAnswer) {
         this.studentAnswer = studentAnswer;
-    }
-
-    public String getSelectedAnswer() {
-        return this.selectedAnswer;
-    }
-
-    public StudentQuizResponse selectedAnswer(String selectedAnswer) {
-        this.setSelectedAnswer(selectedAnswer);
-        return this;
-    }
-
-    public void setSelectedAnswer(String selectedAnswer) {
-        this.selectedAnswer = selectedAnswer;
     }
 
     public Boolean getIsCorrect() {

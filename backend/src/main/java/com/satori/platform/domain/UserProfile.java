@@ -5,7 +5,6 @@ import com.satori.platform.domain.enumeration.Role;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import java.io.Serializable;
-import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
 import org.hibernate.annotations.Cache;
@@ -50,25 +49,6 @@ public class UserProfile implements Serializable {
     @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false)
     private Role role;
-
-    @Column(name = "phone_number")
-    private String phoneNumber;
-
-    @Column(name = "date_of_birth")
-    private Instant dateOfBirth;
-
-    @Column(name = "address")
-    private String address;
-
-    @Column(name = "city")
-    private String city;
-
-    @Column(name = "country")
-    private String country;
-
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(unique = true)
-    private User user;
 
     @JsonIgnoreProperties(value = { "userProfile" }, allowSetters = true)
     @OneToOne(fetch = FetchType.LAZY)
@@ -195,84 +175,6 @@ public class UserProfile implements Serializable {
 
     public void setRole(Role role) {
         this.role = role;
-    }
-
-    public String getPhoneNumber() {
-        return this.phoneNumber;
-    }
-
-    public UserProfile phoneNumber(String phoneNumber) {
-        this.setPhoneNumber(phoneNumber);
-        return this;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
-    public Instant getDateOfBirth() {
-        return this.dateOfBirth;
-    }
-
-    public UserProfile dateOfBirth(Instant dateOfBirth) {
-        this.setDateOfBirth(dateOfBirth);
-        return this;
-    }
-
-    public void setDateOfBirth(Instant dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
-    }
-
-    public String getAddress() {
-        return this.address;
-    }
-
-    public UserProfile address(String address) {
-        this.setAddress(address);
-        return this;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getCity() {
-        return this.city;
-    }
-
-    public UserProfile city(String city) {
-        this.setCity(city);
-        return this;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getCountry() {
-        return this.country;
-    }
-
-    public UserProfile country(String country) {
-        this.setCountry(country);
-        return this;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
-    public User getUser() {
-        return this.user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public UserProfile user(User user) {
-        this.setUser(user);
-        return this;
     }
 
     public TeacherProfile getTeacherProfile() {
@@ -456,8 +358,7 @@ public class UserProfile implements Serializable {
         return this;
     }
 
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and
-    // setters here
+    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
     public boolean equals(Object o) {
@@ -472,8 +373,7 @@ public class UserProfile implements Serializable {
 
     @Override
     public int hashCode() {
-        // see
-        // https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
+        // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
         return getClass().hashCode();
     }
 
@@ -481,13 +381,13 @@ public class UserProfile implements Serializable {
     @Override
     public String toString() {
         return "UserProfile{" +
-                "id=" + getId() +
-                ", username='" + getUsername() + "'" +
-                ", passwordHash='" + getPasswordHash() + "'" +
-                ", email='" + getEmail() + "'" +
-                ", fullName='" + getFullName() + "'" +
-                ", gender='" + getGender() + "'" +
-                ", role='" + getRole() + "'" +
-                "}";
+            "id=" + getId() +
+            ", username='" + getUsername() + "'" +
+            ", passwordHash='" + getPasswordHash() + "'" +
+            ", email='" + getEmail() + "'" +
+            ", fullName='" + getFullName() + "'" +
+            ", gender='" + getGender() + "'" +
+            ", role='" + getRole() + "'" +
+            "}";
     }
 }

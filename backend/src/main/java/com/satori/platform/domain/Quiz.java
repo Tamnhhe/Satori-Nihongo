@@ -65,9 +65,6 @@ public class Quiz implements Serializable {
     @Column(name = "template_name")
     private String templateName;
 
-    @Column(name = "created_date")
-    private Instant createdDate;
-
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "quiz")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "quiz", "question" }, allowSetters = true)
@@ -248,19 +245,6 @@ public class Quiz implements Serializable {
         this.templateName = templateName;
     }
 
-    public Instant getCreatedDate() {
-        return this.createdDate;
-    }
-
-    public Quiz createdDate(Instant createdDate) {
-        this.setCreatedDate(createdDate);
-        return this;
-    }
-
-    public void setCreatedDate(Instant createdDate) {
-        this.createdDate = createdDate;
-    }
-
     public Set<QuizQuestion> getQuestions() {
         return this.questions;
     }
@@ -369,8 +353,7 @@ public class Quiz implements Serializable {
         return this;
     }
 
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and
-    // setters here
+    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
     public boolean equals(Object o) {
@@ -385,8 +368,7 @@ public class Quiz implements Serializable {
 
     @Override
     public int hashCode() {
-        // see
-        // https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
+        // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
         return getClass().hashCode();
     }
 
@@ -394,18 +376,18 @@ public class Quiz implements Serializable {
     @Override
     public String toString() {
         return "Quiz{" +
-                "id=" + getId() +
-                ", title='" + getTitle() + "'" +
-                ", description='" + getDescription() + "'" +
-                ", isTest='" + getIsTest() + "'" +
-                ", isPractice='" + getIsPractice() + "'" +
-                ", quizType='" + getQuizType() + "'" +
-                ", isActive='" + getIsActive() + "'" +
-                ", activationTime='" + getActivationTime() + "'" +
-                ", deactivationTime='" + getDeactivationTime() + "'" +
-                ", timeLimitMinutes=" + getTimeLimitMinutes() +
-                ", isTemplate='" + getIsTemplate() + "'" +
-                ", templateName='" + getTemplateName() + "'" +
-                "}";
+            "id=" + getId() +
+            ", title='" + getTitle() + "'" +
+            ", description='" + getDescription() + "'" +
+            ", isTest='" + getIsTest() + "'" +
+            ", isPractice='" + getIsPractice() + "'" +
+            ", quizType='" + getQuizType() + "'" +
+            ", isActive='" + getIsActive() + "'" +
+            ", activationTime='" + getActivationTime() + "'" +
+            ", deactivationTime='" + getDeactivationTime() + "'" +
+            ", timeLimitMinutes=" + getTimeLimitMinutes() +
+            ", isTemplate='" + getIsTemplate() + "'" +
+            ", templateName='" + getTemplateName() + "'" +
+            "}";
     }
 }

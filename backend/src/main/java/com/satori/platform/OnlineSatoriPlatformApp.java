@@ -21,11 +21,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import tech.jhipster.config.DefaultProfileUtil;
 import tech.jhipster.config.JHipsterConstants;
 
-@SpringBootApplication(exclude = {
-    org.springframework.boot.autoconfigure.cassandra.CassandraAutoConfiguration.class,
-    org.springframework.boot.actuate.autoconfigure.cassandra.CassandraHealthContributorAutoConfiguration.class,
-    org.springframework.boot.actuate.autoconfigure.cassandra.CassandraReactiveHealthContributorAutoConfiguration.class
-})
+@SpringBootApplication
 @EnableConfigurationProperties({ LiquibaseProperties.class, ApplicationProperties.class, OAuth2Properties.class })
 @EnableScheduling
 public class OnlineSatoriPlatformApp {

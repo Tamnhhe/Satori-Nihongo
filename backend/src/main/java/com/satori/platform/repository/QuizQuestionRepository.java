@@ -26,10 +26,4 @@ public interface QuizQuestionRepository extends JpaRepository<QuizQuestion, Long
     // Find questions by quiz ID and position greater than or equal to specified
     // position
     List<QuizQuestion> findByQuizIdAndPositionGreaterThanEqual(Long quizId, Integer position);
-
-    // Find specific quiz question by quiz ID and question ID
-    Optional<QuizQuestion> findByQuizIdAndQuestionId(Long quizId, Long questionId);
-
-    // Delete all questions for a quiz
-    void deleteByQuizId(Long quizId);
 }

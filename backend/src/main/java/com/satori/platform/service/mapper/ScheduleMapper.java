@@ -11,12 +11,11 @@ import org.mapstruct.*;
  */
 @Mapper(componentModel = "spring")
 public interface ScheduleMapper extends EntityMapper<ScheduleDTO, Schedule> {
-    @Mapping(target = "courseId", source = "course.id")
-    @Mapping(target = "courseTitle", source = "course.title")
-    @Mapping(target = "teacherId", source = "course.teacher.id")
-    @Mapping(target = "teacherName", source = "course.teacher.fullName")
+    @Mapping(target = "course", source = "course", qualifiedByName = "courseId")
     ScheduleDTO toDto(Schedule s);
 
-    @Mapping(target = "course", ignore = true)
-    Schedule toEntity(ScheduleDTO dto);
+    @Named("courseId")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    CourseDTO toDtoCourseId(Course course);
 }

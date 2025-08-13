@@ -6,8 +6,6 @@ import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 /**
@@ -69,17 +67,8 @@ public class AuditAspect {
     public void logCreateOperation(JoinPoint joinPoint) {
         try {
             String resourceType = extractResourceType(joinPoint);
-            String username = getCurrentUsername();
-            auditLogService.logAuditEvent(
-                    getCurrentUserId(),
-                    username,
-                    AuditAction.CREATE.toString(),
-                    resourceType,
-                    null,
-                    "SUCCESS",
-                    "Created " + resourceType + " via " + joinPoint.getSignature().getName(),
-                    getClientIpAddress(),
-                    null);
+            auditLogService.logAuditEvent(AuditAction.CREATE, resourceType, null,
+                    "Created " + resourceType + " via " + joinPoint.getSignature().getName());
         } catch (Exception e) {
             log.error("Failed to log create operation", e);
         }
@@ -91,18 +80,9 @@ public class AuditAspect {
             String resourceType = extractResourceType(joinPoint);
             Object[] args = joinPoint.getArgs();
             Long resourceId = extractResourceId(args);
-            String username = getCurrentUsername();
 
-            auditLogService.logAuditEvent(
-                    getCurrentUserId(),
-                    username,
-                    AuditAction.UPDATE.toString(),
-                    resourceType,
-                    resourceId != null ? resourceId.toString() : null,
-                    "SUCCESS",
-                    "Updated " + resourceType + " via " + joinPoint.getSignature().getName(),
-                    getClientIpAddress(),
-                    null);
+            auditLogService.logAuditEvent(AuditAction.UPDATE, resourceType, resourceId,
+                    "Updated " + resourceType + " via " + joinPoint.getSignature().getName());
         } catch (Exception e) {
             log.error("Failed to log update operation", e);
         }
@@ -114,18 +94,9 @@ public class AuditAspect {
             String resourceType = extractResourceType(joinPoint);
             Object[] args = joinPoint.getArgs();
             Long resourceId = extractResourceId(args);
-            String username = getCurrentUsername();
 
-            auditLogService.logAuditEvent(
-                    getCurrentUserId(),
-                    username,
-                    AuditAction.DELETE.toString(),
-                    resourceType,
-                    resourceId != null ? resourceId.toString() : null,
-                    "SUCCESS",
-                    "Deleted " + resourceType + " via " + joinPoint.getSignature().getName(),
-                    getClientIpAddress(),
-                    null);
+            auditLogService.logAuditEvent(AuditAction.DELETE, resourceType, resourceId,
+                    "Deleted " + resourceType + " via " + joinPoint.getSignature().getName());
         } catch (Exception e) {
             log.error("Failed to log delete operation", e);
         }
@@ -134,17 +105,8 @@ public class AuditAspect {
     @AfterReturning("fileUploadOperations()")
     public void logFileUpload(JoinPoint joinPoint) {
         try {
-            String username = getCurrentUsername();
-            auditLogService.logAuditEvent(
-                    getCurrentUserId(),
-                    username,
-                    AuditAction.FILE_UPLOAD.toString(),
-                    "FILE",
-                    null,
-                    "SUCCESS",
-                    "File uploaded via " + joinPoint.getSignature().getName(),
-                    getClientIpAddress(),
-                    null);
+            auditLogService.logAuditEvent(AuditAction.FILE_UPLOAD, "FILE", null,
+                    "File uploaded via " + joinPoint.getSignature().getName());
         } catch (Exception e) {
             log.error("Failed to log file upload", e);
         }
@@ -155,18 +117,9 @@ public class AuditAspect {
         try {
             Object[] args = joinPoint.getArgs();
             Long fileId = extractResourceId(args);
-            String username = getCurrentUsername();
 
-            auditLogService.logAuditEvent(
-                    getCurrentUserId(),
-                    username,
-                    AuditAction.FILE_DELETE.toString(),
-                    "FILE",
-                    fileId != null ? fileId.toString() : null,
-                    "SUCCESS",
-                    "File deleted via " + joinPoint.getSignature().getName(),
-                    getClientIpAddress(),
-                    null);
+            auditLogService.logAuditEvent(AuditAction.FILE_DELETE, "FILE", fileId,
+                    "File deleted via " + joinPoint.getSignature().getName());
         } catch (Exception e) {
             log.error("Failed to log file delete", e);
         }
@@ -175,17 +128,8 @@ public class AuditAspect {
     @AfterReturning("giftCodeGenerationOperations()")
     public void logGiftCodeGeneration(JoinPoint joinPoint) {
         try {
-            String username = getCurrentUsername();
-            auditLogService.logAuditEvent(
-                    getCurrentUserId(),
-                    username,
-                    AuditAction.GIFT_CODE_GENERATE.toString(),
-                    "GIFT_CODE",
-                    null,
-                    "SUCCESS",
-                    "Gift code generated via " + joinPoint.getSignature().getName(),
-                    getClientIpAddress(),
-                    null);
+            auditLogService.logAuditEvent(AuditAction.GIFT_CODE_GENERATE, "GIFT_CODE", null,
+                    "Gift code generated via " + joinPoint.getSignature().getName());
         } catch (Exception e) {
             log.error("Failed to log gift code generation", e);
         }
@@ -194,17 +138,8 @@ public class AuditAspect {
     @AfterReturning("giftCodeRedemptionOperations()")
     public void logGiftCodeRedemption(JoinPoint joinPoint) {
         try {
-            String username = getCurrentUsername();
-            auditLogService.logAuditEvent(
-                    getCurrentUserId(),
-                    username,
-                    AuditAction.GIFT_CODE_REDEEM.toString(),
-                    "GIFT_CODE",
-                    null,
-                    "SUCCESS",
-                    "Gift code redeemed via " + joinPoint.getSignature().getName(),
-                    getClientIpAddress(),
-                    null);
+            auditLogService.logAuditEvent(AuditAction.GIFT_CODE_REDEEM, "GIFT_CODE", null,
+                    "Gift code redeemed via " + joinPoint.getSignature().getName());
         } catch (Exception e) {
             log.error("Failed to log gift code redemption", e);
         }
@@ -215,7 +150,7 @@ public class AuditAspect {
         try {
             auditLogService.logSecurityViolation(
                     "Unauthorized access attempt to admin-only method: " + joinPoint.getSignature().getName(),
-                    getClientIpAddress());
+                    ex.getMessage());
         } catch (Exception e) {
             log.error("Failed to log security violation", e);
         }
@@ -243,34 +178,5 @@ public class AuditAspect {
             }
         }
         return null;
-    }
-
-    /**
-     * Get current user ID from security context.
-     */
-    private String getCurrentUserId() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && authentication.isAuthenticated()) {
-            return authentication.getName();
-        }
-        return "SYSTEM";
-    }
-
-    /**
-     * Get current username from security context.
-     */
-    private String getCurrentUsername() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && authentication.isAuthenticated()) {
-            return authentication.getName();
-        }
-        return "SYSTEM";
-    }
-
-    /**
-     * Get client IP address (placeholder implementation).
-     */
-    private String getClientIpAddress() {
-        return "127.0.0.1";
     }
 }

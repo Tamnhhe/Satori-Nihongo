@@ -1,14 +1,4 @@
 id;provider;provider_user_id;access_token;refresh_token;token_expiry
-1;GOOGLE;nguyen.linh.student@gmail.com;ya29.a0ARr0xxxxxxxxxx;1//0xxxxxxxxxx;2025-09-13T14:08:34
-2;FACEBOOK;minh.tran.1990;EAABwzLixn8xxxxxxxxxx;refresh_token_fb;2025-09-13T17:20:50
-3;LOCAL;local_user_001;local_access_token;local_refresh;2025-09-13T23:05:43
-4;GOOGLE;hai.le.jp.student@gmail.com;ya29.a0ARr1xxxxxxxxxx;1//1xxxxxxxxxx;2025-09-13T08:03:13
-5;GOOGLE;thu.pham.nihongo@gmail.com;ya29.a0ARr2xxxxxxxxxx;1//2xxxxxxxxxx;2025-09-13T20:19:05
-6;FACEBOOK;duc.vo.japanese;EAABwzLixn9xxxxxxxxxx;refresh_token_fb2;2025-09-13T14:29:43
-7;GOOGLE;yamada.hiroshi.sensei@gmail.com;ya29.a0ARr3xxxxxxxxxx;1//3xxxxxxxxxx;2025-09-14T00:43:48
-8;LOCAL;local_teacher_001;teacher_access_token;teacher_refresh;2025-09-13T04:51:40
-9;GOOGLE;tanaka.yuki.sensei@gmail.com;ya29.a0ARr4xxxxxxxxxx;1//4xxxxxxxxxx;2025-09-13T21:46:16
-10;FACEBOOK;suzuki.kenji.sensei;EAABwzLiyn0xxxxxxxxxx;refresh_token_fb3;2025-09-13T21:18:31;provider_user_id;access_token;refresh_token;token_expiry
 1;GITHUB;urban militate;hard-to-find certainly while;intermesh foretell;2025-07-19T14:08:34
 2;FACEBOOK;indeed slip;satirize athwart;wisely;2025-07-19T17:20:50
 3;LOCAL;youthful commandeer unbearably;behind;discrete;2025-07-19T23:05:43
