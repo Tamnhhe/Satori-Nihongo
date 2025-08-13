@@ -1,0 +1,5 @@
+id;username;password_hash;email;full_name;gender;role;teacher_profile_id;student_profile_id
+201;teacher;{bcrypt}$2a$10$N9qo8uLOickgx2ZMRZo5i.7j7CwzYORd1N1rBnAqZt5WN0G8V4G5e;teacher@satori.vn;Thầy Sato;true;GIANG_VIEN;1;
+202;student1;{bcrypt}$2a$10$N9qo8uLOickgx2ZMRZo5i.7j7CwzYORd1N1rBnAqZt5WN0G8V4G5e;student1@satori.vn;Nguyễn An;false;HOC_VIEN;;101
+203;student2;{bcrypt}$2a$10$N9qo8uLOickgx2ZMRZo5i.7j7CwzYORd1N1rBnAqZt5WN0G8V4G5e;student2@satori.vn;Trần Bình;true;HOC_VIEN;;102
+204;student3;{bcrypt}$2a$10$N9qo8uLOickgx2ZMRZo5i.7j7CwzYORd1N1rBnAqZt5WN0G8V4G5e;student3@satori.vn;Lê Chi;false;HOC_VIEN;;103
