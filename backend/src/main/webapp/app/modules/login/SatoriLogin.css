@@ -1,0 +1,556 @@
+/* Satori Nihongo Login Page Styles */
+/* Following Refactoring UI principles for visual hierarchy, simplicity, and clarity */
+
+.satori-login {
+    min-height: 100vh;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    padding: 1.5rem;
+}
+
+/* Background Pattern */
+.satori-login__background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.satori-login__pattern {
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    right: -50%;
+    bottom: -50%;
+    background-image:
+        radial-gradient(circle at 25% 25%, rgba(59, 130, 246, 0.03) 0%, transparent 40%),
+        radial-gradient(circle at 75% 75%, rgba(243, 170, 28, 0.03) 0%, transparent 40%);
+    background-size: 200px 200px, 300px 300px;
+    animation: patternFloat 20s ease-in-out infinite;
+}
+
+@keyframes patternFloat {
+
+    0%,
+    100% {
+        transform: translateX(0) translateY(0) rotate(0deg);
+    }
+
+    50% {
+        transform: translateX(20px) translateY(-20px) rotate(1deg);
+    }
+}
+
+/* Main Container */
+.satori-login__container {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: 480px;
+    margin: 0 auto;
+}
+
+/* Brand Header */
+.satori-login__header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.satori-login__logo {
+    margin-bottom: 1rem;
+}
+
+.satori-login__brand {
+    font-size: 2.5rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #3D5CFF 0%, #243AA7 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin: 0;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+}
+
+.satori-login__tagline {
+    color: #64748b;
+    font-size: 1rem;
+    margin: 0.5rem 0 0 0;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+}
+
+/* Login Card */
+.satori-login__card {
+    background: white;
+    border-radius: 16px;
+    box-shadow:
+        0 4px 6px -1px rgba(0, 0, 0, 0.1),
+        0 2px 4px -1px rgba(0, 0, 0, 0.06),
+        0 0 0 1px rgba(0, 0, 0, 0.05);
+    padding: 2.5rem;
+    transition: all 0.2s ease;
+}
+
+.satori-login__card:hover {
+    box-shadow:
+        0 10px 15px -3px rgba(0, 0, 0, 0.1),
+        0 4px 6px -2px rgba(0, 0, 0, 0.05),
+        0 0 0 1px rgba(0, 0, 0, 0.05);
+}
+
+.satori-login__card-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.satori-login__title {
+    font-size: 1.875rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin: 0 0 0.5rem 0;
+    letter-spacing: -0.01em;
+}
+
+.satori-login__subtitle {
+    color: #64748b;
+    font-size: 0.875rem;
+    margin: 0;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    background: #f1f5f9;
+    border-radius: 8px;
+    display: inline-block;
+}
+
+/* Error Alert */
+.satori-login__error {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: #dc2626;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.satori-login__error-icon {
+    font-size: 1.25rem;
+    flex-shrink: 0;
+}
+
+/* Form */
+.satori-login__form {
+    margin-bottom: 1.5rem;
+}
+
+.satori-login__field {
+    margin-bottom: 1.5rem;
+}
+
+.satori-login__label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.01em;
+}
+
+.satori-login__input {
+    width: 100%;
+    padding: 0.875rem 1rem;
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #1f2937;
+    background: white;
+    transition: all 0.15s ease;
+    box-sizing: border-box;
+}
+
+.satori-login__input:focus {
+    outline: none;
+    border-color: #3D5CFF;
+    box-shadow: 0 0 0 3px rgba(61, 92, 255, 0.1);
+}
+
+.satori-login__input--error {
+    border-color: #ef4444;
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+.satori-login__input::placeholder {
+    color: #9ca3af;
+    font-weight: 400;
+}
+
+/* Password Field */
+.satori-login__password-wrapper {
+    position: relative;
+}
+
+.satori-login__password-toggle {
+    position: absolute;
+    right: 0.875rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.25rem;
+    color: #6b7280;
+    padding: 0.25rem;
+    border-radius: 4px;
+    transition: all 0.15s ease;
+}
+
+.satori-login__password-toggle:hover {
+    color: #374151;
+    background: #f3f4f6;
+}
+
+.satori-login__password-toggle:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(61, 92, 255, 0.2);
+}
+
+/* Field Error */
+.satori-login__field-error {
+    display: block;
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+    color: #ef4444;
+    font-weight: 500;
+}
+
+/* Checkbox */
+.satori-login__checkbox {
+    margin-bottom: 1.5rem;
+}
+
+.satori-login__checkbox-label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #374151;
+}
+
+.satori-login__checkbox-input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.satori-login__checkbox-custom {
+    width: 1.25rem;
+    height: 1.25rem;
+    border: 2px solid #d1d5db;
+    border-radius: 4px;
+    margin-right: 0.75rem;
+    position: relative;
+    transition: all 0.15s ease;
+    flex-shrink: 0;
+}
+
+.satori-login__checkbox-input:checked+.satori-login__checkbox-custom {
+    background: #3D5CFF;
+    border-color: #3D5CFF;
+}
+
+.satori-login__checkbox-input:checked+.satori-login__checkbox-custom::after {
+    content: '✓';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 0.875rem;
+    font-weight: bold;
+}
+
+.satori-login__checkbox-input:focus+.satori-login__checkbox-custom {
+    box-shadow: 0 0 0 3px rgba(61, 92, 255, 0.1);
+}
+
+/* Buttons */
+.satori-login__button {
+    width: 100%;
+    padding: 1rem 1.5rem;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    text-align: center;
+    border: none;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    letter-spacing: 0.01em;
+    position: relative;
+    overflow: hidden;
+}
+
+.satori-login__button:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+/* Primary Button */
+.satori-login__button--primary {
+    background: #3D5CFF;
+    color: white;
+    margin-bottom: 1rem;
+}
+
+.satori-login__button--primary:hover:not(:disabled) {
+    background: #243AA7;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(61, 92, 255, 0.3);
+}
+
+.satori-login__button--primary:active:not(:disabled) {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(61, 92, 255, 0.3);
+}
+
+/* Google Button */
+.satori-login__button--google {
+    background: white;
+    color: #374151;
+    border: 2px solid #e5e7eb;
+    margin-bottom: 1.5rem;
+}
+
+.satori-login__button--google:hover:not(:disabled) {
+    background: #f9fafb;
+    border-color: #d1d5db;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.satori-login__google-icon {
+    width: 1.25rem;
+    height: 1.25rem;
+    flex-shrink: 0;
+}
+
+/* Spinner */
+.satori-login__spinner {
+    width: 1rem;
+    height: 1rem;
+    border: 2px solid transparent;
+    border-top: 2px solid currentColor;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Divider */
+.satori-login__divider {
+    position: relative;
+    text-align: center;
+    margin: 1.5rem 0;
+}
+
+.satori-login__divider::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: #e5e7eb;
+}
+
+.satori-login__divider-text {
+    background: white;
+    color: #6b7280;
+    font-size: 0.875rem;
+    font-weight: 500;
+    padding: 0 1rem;
+    position: relative;
+}
+
+/* Links */
+.satori-login__links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    align-items: center;
+}
+
+.satori-login__link {
+    background: none;
+    border: none;
+    color: #3D5CFF;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 4px;
+    transition: all 0.15s ease;
+    text-decoration: none;
+}
+
+.satori-login__link:hover {
+    color: #243AA7;
+    background: rgba(61, 92, 255, 0.05);
+}
+
+.satori-login__link:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(61, 92, 255, 0.2);
+}
+
+/* Footer */
+.satori-login__footer {
+    text-align: center;
+    margin-top: 2rem;
+}
+
+.satori-login__footer-text {
+    color: #9ca3af;
+    font-size: 0.875rem;
+    margin: 0;
+}
+
+/* Responsive Design */
+@media (max-width: 640px) {
+    .satori-login {
+        padding: 1rem;
+    }
+
+    .satori-login__card {
+        padding: 2rem 1.5rem;
+    }
+
+    .satori-login__brand {
+        font-size: 2rem;
+    }
+
+    .satori-login__title {
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .satori-login__card {
+        padding: 1.5rem 1rem;
+    }
+
+    .satori-login__links {
+        gap: 1rem;
+    }
+}
+
+/* Dark Mode Support (optional) */
+@media (prefers-color-scheme: dark) {
+    .satori-login {
+        background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    }
+
+    .satori-login__card {
+        background: #1e293b;
+        border: 1px solid #334155;
+    }
+
+    .satori-login__title {
+        color: #f8fafc;
+    }
+
+    .satori-login__subtitle {
+        background: #334155;
+        color: #cbd5e1;
+    }
+
+    .satori-login__tagline {
+        color: #94a3b8;
+    }
+
+    .satori-login__input {
+        background: #334155;
+        border-color: #475569;
+        color: #f8fafc;
+    }
+
+    .satori-login__input:focus {
+        border-color: #3D5CFF;
+    }
+
+    .satori-login__label {
+        color: #e2e8f0;
+    }
+
+    .satori-login__button--google {
+        background: #334155;
+        border-color: #475569;
+        color: #f8fafc;
+    }
+
+    .satori-login__divider::before {
+        background: #475569;
+    }
+
+    .satori-login__divider-text {
+        background: #1e293b;
+        color: #94a3b8;
+    }
+}
+
+/* Accessibility Improvements */
+.satori-login__input:focus-visible,
+.satori-login__button:focus-visible,
+.satori-login__link:focus-visible {
+    outline: 2px solid #3D5CFF;
+    outline-offset: 2px;
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+    .satori-login__pattern {
+        animation: none;
+    }
+
+    .satori-login__button,
+    .satori-login__input,
+    .satori-login__card {
+        transition: none;
+    }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    .satori-login__card {
+        border: 2px solid #000;
+    }
+
+    .satori-login__input {
+        border-width: 2px;
+    }
+
+    .satori-login__button--primary {
+        border: 2px solid #000;
+    }
+}

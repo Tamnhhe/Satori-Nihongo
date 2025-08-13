@@ -8,7 +8,7 @@ import java.util.Map;
 /**
  * Configuration properties for OAuth2 providers.
  */
-@ConfigurationProperties(prefix = "application.oauth2")
+@ConfigurationProperties(prefix = "oauth2")
 public class OAuth2Properties {
 
     private Map<String, ProviderConfig> providers = new HashMap<>();

@@ -1,5 +1,7 @@
 package com.satori.platform.config;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -29,10 +31,14 @@ import java.util.Map;
 @EnableConfigurationProperties(OAuth2Properties.class)
 public class OAuth2Configuration {
 
+    private static final Logger log = LoggerFactory.getLogger(OAuth2Configuration.class);
+
     private final OAuth2Properties oAuth2Properties;
 
     public OAuth2Configuration(OAuth2Properties oAuth2Properties) {
         this.oAuth2Properties = oAuth2Properties;
+        log.debug("OAuth2Configuration initialized. Enabled: {}, Providers: {}", 
+            oAuth2Properties.isEnabled(), oAuth2Properties.getProviders().keySet());
     }
 
     /**
@@ -40,16 +46,27 @@ public class OAuth2Configuration {
      */
     @Bean
     public ClientRegistrationRepository clientRegistrationRepository() {
+        log.debug("Creating ClientRegistrationRepository with {} providers", oAuth2Properties.getProviders().size());
+        
         List<ClientRegistration> registrations = new ArrayList<>();
 
         for (Map.Entry<String, OAuth2Properties.ProviderConfig> entry : oAuth2Properties.getProviders().entrySet()) {
             String providerId = entry.getKey();
             OAuth2Properties.ProviderConfig config = entry.getValue();
 
+            log.debug("Processing provider '{}': enabled={}, clientId={}", 
+                providerId, config.isEnabled(), config.getClientId());
+
             if (config.isEnabled() && StringUtils.hasText(config.getClientId())
                     && StringUtils.hasText(config.getClientSecret())) {
                 ClientRegistration registration = createClientRegistration(providerId, config);
                 registrations.add(registration);
+                log.debug("Added ClientRegistration for provider '{}'", providerId);
+            } else {
+                log.debug("Skipping provider '{}': enabled={}, hasClientId={}, hasClientSecret={}", 
+                    providerId, config.isEnabled(), 
+                    StringUtils.hasText(config.getClientId()), 
+                    StringUtils.hasText(config.getClientSecret()));
             }
         }
 

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="20250813000001" author="system">
+        <comment>Add missing columns to notification_preference table</comment>
+        
+        <addColumn tableName="notification_preference">
+            <column name="advance_hours" type="integer">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+        
+        <addColumn tableName="notification_preference">
+            <column name="timezone" type="varchar(255)">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+        
+    </changeSet>
+
+</databaseChangeLog>
