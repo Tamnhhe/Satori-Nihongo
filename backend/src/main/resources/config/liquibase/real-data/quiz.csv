@@ -1,0 +1,4 @@
+id;title;description;is_test;is_practice;quiz_type
+701;Bài kiểm tra Chào hỏi;Trắc nghiệm chủ đề chào hỏi;true;false;LESSON
+702;Quiz Số đếm;Ôn luyện số đếm;false;true;LESSON
+703;Đánh giá giữa khóa;Bài test giữa khóa;true;false;COURSE

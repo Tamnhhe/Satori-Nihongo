@@ -1,0 +1,4 @@
+id;content;image_url;suggestion;answer_explanation;correct_answer;type
+801;"'こんにちは' nghĩa là gì?";;;Lời chào buổi ngày;A;SINGLE_CHOICE
+802;Chọn số đúng cho 'よん';;;bốn;B;SINGLE_CHOICE
+803;"Điền tiếp: いち, に, さん, __";;;bốn;C;SINGLE_CHOICE
