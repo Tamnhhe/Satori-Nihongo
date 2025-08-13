@@ -1,20 +1,13 @@
 package com.satori.platform.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.satori.platform.domain.enumeration.CourseLanguage;
-import com.satori.platform.domain.enumeration.DifficultyLevel;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import java.io.Serializable;
-import java.math.BigDecimal;
-import java.time.Instant;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 /**
  * A Course.
@@ -33,54 +26,14 @@ public class Course implements Serializable {
     private Long id;
 
     @NotNull
-    @Size(min = 1, max = 255)
-    @Column(name = "title", nullable = false, length = 255)
+    @Column(name = "title", nullable = false)
     private String title;
 
-    @Size(max = 2000)
-    @Column(name = "description", length = 2000)
+    @Column(name = "description")
     private String description;
 
-    @Size(max = 20)
-    @Column(name = "course_code", unique = true, length = 20)
+    @Column(name = "course_code")
     private String courseCode;
-
-    @Size(max = 50)
-    @Column(name = "level", length = 50)
-    private String level;
-
-    @Min(value = 1)
-    @Max(value = 10000)
-    @Column(name = "duration")
-    private Integer duration;
-
-    @DecimalMin(value = "0.0")
-    @Column(name = "price", precision = 10, scale = 2)
-    private BigDecimal price;
-
-    @Column(name = "is_active")
-    private Boolean isActive = Boolean.TRUE;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "difficulty_level", length = 30)
-    private DifficultyLevel difficultyLevel;
-
-    @Min(value = 1)
-    @Max(value = 10000)
-    @Column(name = "estimated_duration")
-    private Integer estimatedDuration;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "language", length = 20)
-    private CourseLanguage language;
-
-    @CreationTimestamp
-    @Column(name = "created_date", nullable = false, updatable = false)
-    private Instant createdDate;
-
-    @UpdateTimestamp
-    @Column(name = "last_modified_date")
-    private Instant lastModifiedDate;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "course")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
@@ -93,8 +46,7 @@ public class Course implements Serializable {
     private Set<Schedule> schedules = new HashSet<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnoreProperties(value = { "teacherProfile", "studentProfile", "createdCourses",
-            "quizAttempts" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "teacherProfile", "studentProfile", "createdCourses", "quizAttempts" }, allowSetters = true)
     private UserProfile teacher;
 
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "courses")
@@ -164,123 +116,6 @@ public class Course implements Serializable {
 
     public void setCourseCode(String courseCode) {
         this.courseCode = courseCode;
-    }
-
-    public String getLevel() {
-        return this.level;
-    }
-
-    public Course level(String level) {
-        this.setLevel(level);
-        return this;
-    }
-
-    public void setLevel(String level) {
-        this.level = level;
-    }
-
-    public Integer getDuration() {
-        return this.duration;
-    }
-
-    public Course duration(Integer duration) {
-        this.setDuration(duration);
-        return this;
-    }
-
-    public void setDuration(Integer duration) {
-        this.duration = duration;
-    }
-
-    public BigDecimal getPrice() {
-        return this.price;
-    }
-
-    public Course price(BigDecimal price) {
-        this.setPrice(price);
-        return this;
-    }
-
-    public void setPrice(BigDecimal price) {
-        this.price = price;
-    }
-
-    public Boolean getIsActive() {
-        return this.isActive;
-    }
-
-    public Course isActive(Boolean isActive) {
-        this.setIsActive(isActive);
-        return this;
-    }
-
-    public void setIsActive(Boolean isActive) {
-        this.isActive = isActive;
-    }
-
-    public DifficultyLevel getDifficultyLevel() {
-        return this.difficultyLevel;
-    }
-
-    public Course difficultyLevel(DifficultyLevel difficultyLevel) {
-        this.setDifficultyLevel(difficultyLevel);
-        return this;
-    }
-
-    public void setDifficultyLevel(DifficultyLevel difficultyLevel) {
-        this.difficultyLevel = difficultyLevel;
-    }
-
-    public Integer getEstimatedDuration() {
-        return this.estimatedDuration;
-    }
-
-    public Course estimatedDuration(Integer estimatedDuration) {
-        this.setEstimatedDuration(estimatedDuration);
-        return this;
-    }
-
-    public void setEstimatedDuration(Integer estimatedDuration) {
-        this.estimatedDuration = estimatedDuration;
-    }
-
-    public CourseLanguage getLanguage() {
-        return this.language;
-    }
-
-    public Course language(CourseLanguage language) {
-        this.setLanguage(language);
-        return this;
-    }
-
-    public void setLanguage(CourseLanguage language) {
-        this.language = language;
-    }
-
-    public Instant getCreatedDate() {
-        return this.createdDate;
-    }
-
-    public Course createdDate(Instant createdDate) {
-        this.setCreatedDate(createdDate);
-        return this;
-    }
-
-    public void setCreatedDate(Instant createdDate) {
-        this.createdDate = createdDate;
-    }
-
-    public Instant getLastModifiedDate() {
-        return this.lastModifiedDate;
-    }
-
-    public Course lastModifiedDate(Instant lastModifiedDate) {
-        this.setLastModifiedDate(lastModifiedDate);
-        return this;
-    }
-
-    public void setLastModifiedDate(Instant lastModifiedDate) {
-        this.lastModifiedDate = lastModifiedDate;
     }
 
     public Set<Lesson> getLessons() {
@@ -392,7 +227,6 @@ public class Course implements Serializable {
     public Set<GiftCode> getGiftCodes() {
         return this.giftCodes;
     }
-
     public void setGiftCodes(Set<GiftCode> giftCodes) {
         if (this.giftCodes != null) {
             this.giftCodes.forEach(i -> i.setCourse(null));
@@ -451,117 +285,33 @@ public class Course implements Serializable {
         return this;
     }
 
-    // Business logic methods
-
-    /**
-     * Check if the course is currently active
-     */
-    public boolean isCurrentlyActive() {
-        return Boolean.TRUE.equals(this.isActive);
-    }
-
-    /**
-     * Get the total number of lessons in this course
-     */
-    public int getLessonCount() {
-        return this.lessons != null ? this.lessons.size() : 0;
-    }
-
-    /**
-     * Get the total number of quizzes in this course
-     */
-    public int getQuizCount() {
-        return this.quizzes != null ? this.quizzes.size() : 0;
-    }
-
-    /**
-     * Get the total number of enrolled students
-     */
-    public int getEnrolledStudentCount() {
-        return this.studentProgress != null ? this.studentProgress.size() : 0;
-    }
-
-    /**
-     * Check if the course has a price (is paid)
-     */
-    public boolean isPaidCourse() {
-        return this.price != null && this.price.compareTo(BigDecimal.ZERO) > 0;
-    }
-
-    /**
-     * Get formatted price string
-     */
-    public String getFormattedPrice() {
-        if (this.price == null || this.price.compareTo(BigDecimal.ZERO) == 0) {
-            return "Free";
-        }
-        return "$" + this.price.toString();
-    }
-
-    /**
-     * Activate the course
-     */
-    public void activate() {
-        this.isActive = Boolean.TRUE;
-    }
-
-    /**
-     * Deactivate the course
-     */
-    public void deactivate() {
-        this.isActive = Boolean.FALSE;
-    }
-
-    // JPA Lifecycle callbacks
-
-    @PrePersist
-    protected void onCreate() {
-        if (this.isActive == null) {
-            this.isActive = Boolean.TRUE;
-        }
-        if (this.createdDate == null) {
-            this.createdDate = Instant.now();
-        }
-        this.lastModifiedDate = Instant.now();
-    }
-
-    @PreUpdate
-    protected void onUpdate() {
-        this.lastModifiedDate = Instant.now();
-    }
-
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and
-    // setters here
+    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof Course course)) {
+        if (!(o instanceof Course)) {
             return false;
         }
-        return getId() != null && Objects.equals(getId(), course.getId());
+        return getId() != null && getId().equals(((Course) o).getId());
     }
 
     @Override
     public int hashCode() {
-        // see
-        // https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
+        // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
         return getClass().hashCode();
     }
 
+    // prettier-ignore
     @Override
     public String toString() {
         return "Course{" +
-                "id=" + getId() +
-                ", title='" + getTitle() + "'" +
-                ", courseCode='" + getCourseCode() + "'" +
-                ", difficultyLevel=" + getDifficultyLevel() +
-                ", language=" + getLanguage() +
-                ", isActive=" + getIsActive() +
-                ", price=" + getPrice() +
-                ", lessonCount=" + getLessonCount() +
-                "}";
+            "id=" + getId() +
+            ", title='" + getTitle() + "'" +
+            ", description='" + getDescription() + "'" +
+            ", courseCode='" + getCourseCode() + "'" +
+            "}";
     }
 }

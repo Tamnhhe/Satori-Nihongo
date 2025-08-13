@@ -293,40 +293,25 @@ public class OAuth2AuthenticationSuccessHandler implements AuthenticationSuccess
         if (authResult.isNewUser()) {
             description = String.format("New user account created via %s OAuth2 authentication", provider.name());
             auditLogService.logAuditEvent(
-                    user.getId().toString(),
-                    user.getLogin(),
-                    AuditAction.CREATE.toString(),
+                    AuditAction.CREATE,
                     "USER",
-                    user.getId().toString(),
-                    "SUCCESS",
-                    description,
-                    getClientIpAddress(),
-                    null);
+                    user.getId(),
+                    description);
         } else if (authResult.isAccountLinked()) {
             description = String.format("%s OAuth2 account linked to existing user", provider.name());
             auditLogService.logAuditEvent(
-                    user.getId().toString(),
-                    user.getLogin(),
-                    AuditAction.UPDATE.toString(),
+                    AuditAction.UPDATE,
                     "OAUTH2_ACCOUNT",
-                    authResult.getOauth2Account().getId().toString(),
-                    "SUCCESS",
-                    description,
-                    getClientIpAddress(),
-                    null);
+                    authResult.getOauth2Account().getId(),
+                    description);
         }
 
         // Log successful login
         auditLogService.logAuditEvent(
-                user.getId().toString(),
-                user.getLogin(),
-                AuditAction.LOGIN.toString(),
+                AuditAction.LOGIN,
                 "OAUTH2_AUTH",
-                user.getId().toString(),
-                "SUCCESS",
-                String.format("Successful OAuth2 authentication via %s", provider.name()),
-                getClientIpAddress(),
-                null);
+                user.getId(),
+                String.format("Successful OAuth2 authentication via %s", provider.name()));
     }
 
     /**
@@ -339,14 +324,5 @@ public class OAuth2AuthenticationSuccessHandler implements AuthenticationSuccess
             case "github" -> String.valueOf(attributes.get("id"));
             default -> throw new IllegalArgumentException("Unsupported OAuth2 provider: " + registrationId);
         };
-    }
-
-    /**
-     * Get client IP address from request context.
-     */
-    private String getClientIpAddress() {
-        // In a real implementation, you would extract this from the HttpServletRequest
-        // For now, return a placeholder
-        return "127.0.0.1";
     }
 }

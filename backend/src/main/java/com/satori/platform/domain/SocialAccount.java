@@ -46,21 +46,8 @@ public class SocialAccount implements Serializable {
     @Column(name = "token_expiry")
     private Instant tokenExpiry;
 
-    @Column(name = "provider_id")
-    private String providerId;
-
-    @Column(name = "display_name")
-    private String displayName;
-
-    @Column(name = "profile_url")
-    private String profileUrl;
-
-    @Column(name = "image_url")
-    private String imageUrl;
-
     @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnoreProperties(value = { "teacherProfile", "studentProfile", "createdCourses",
-            "quizAttempts" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "teacherProfile", "studentProfile", "createdCourses", "quizAttempts" }, allowSetters = true)
     private UserProfile userProfile;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
@@ -143,58 +130,6 @@ public class SocialAccount implements Serializable {
         this.tokenExpiry = tokenExpiry;
     }
 
-    public String getProviderId() {
-        return this.providerId;
-    }
-
-    public SocialAccount providerId(String providerId) {
-        this.setProviderId(providerId);
-        return this;
-    }
-
-    public void setProviderId(String providerId) {
-        this.providerId = providerId;
-    }
-
-    public String getDisplayName() {
-        return this.displayName;
-    }
-
-    public SocialAccount displayName(String displayName) {
-        this.setDisplayName(displayName);
-        return this;
-    }
-
-    public void setDisplayName(String displayName) {
-        this.displayName = displayName;
-    }
-
-    public String getProfileUrl() {
-        return this.profileUrl;
-    }
-
-    public SocialAccount profileUrl(String profileUrl) {
-        this.setProfileUrl(profileUrl);
-        return this;
-    }
-
-    public void setProfileUrl(String profileUrl) {
-        this.profileUrl = profileUrl;
-    }
-
-    public String getImageUrl() {
-        return this.imageUrl;
-    }
-
-    public SocialAccount imageUrl(String imageUrl) {
-        this.setImageUrl(imageUrl);
-        return this;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
-
     public UserProfile getUserProfile() {
         return this.userProfile;
     }
@@ -208,8 +143,7 @@ public class SocialAccount implements Serializable {
         return this;
     }
 
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and
-    // setters here
+    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
     public boolean equals(Object o) {
@@ -224,8 +158,7 @@ public class SocialAccount implements Serializable {
 
     @Override
     public int hashCode() {
-        // see
-        // https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
+        // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
         return getClass().hashCode();
     }
 
@@ -233,12 +166,12 @@ public class SocialAccount implements Serializable {
     @Override
     public String toString() {
         return "SocialAccount{" +
-                "id=" + getId() +
-                ", provider='" + getProvider() + "'" +
-                ", providerUserId='" + getProviderUserId() + "'" +
-                ", accessToken='" + getAccessToken() + "'" +
-                ", refreshToken='" + getRefreshToken() + "'" +
-                ", tokenExpiry='" + getTokenExpiry() + "'" +
-                "}";
+            "id=" + getId() +
+            ", provider='" + getProvider() + "'" +
+            ", providerUserId='" + getProviderUserId() + "'" +
+            ", accessToken='" + getAccessToken() + "'" +
+            ", refreshToken='" + getRefreshToken() + "'" +
+            ", tokenExpiry='" + getTokenExpiry() + "'" +
+            "}";
     }
 }

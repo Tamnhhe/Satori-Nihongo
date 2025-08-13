@@ -163,7 +163,7 @@ public class EnhancedLessonService {
         FileMetaDataDTO fileMetaDataDTO = fileManagementService.uploadLessonFile(file, lessonId, teacherId);
 
         // Get the actual FileMetaData entity for return
-        FileMetaData fileMetaData = fileMetaDataRepository.findById(Long.parseLong(fileMetaDataDTO.getId()))
+        FileMetaData fileMetaData = fileMetaDataRepository.findById(fileMetaDataDTO.getId())
                 .orElseThrow(() -> new EntityNotFoundException("File metadata not found after upload"));
 
         LOG.info("Added file attachment {} to lesson: {}", fileMetaData.getFileName(), lessonId);

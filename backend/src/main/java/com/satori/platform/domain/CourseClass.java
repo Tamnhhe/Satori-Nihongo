@@ -48,18 +48,6 @@ public class CourseClass implements Serializable {
     @Column(name = "capacity")
     private Integer capacity;
 
-    @Column(name = "class_name")
-    private String className;
-
-    @Column(name = "max_students")
-    private Integer maxStudents;
-
-    @Column(name = "current_students")
-    private Integer currentStudents;
-
-    @Column(name = "active")
-    private Boolean active;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties(value = { "lessons", "schedules", "teacher", "quizzes" }, allowSetters = true)
     private Course course;
@@ -69,7 +57,11 @@ public class CourseClass implements Serializable {
     private TeacherProfile teacher;
 
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "rel_course_class__students", joinColumns = @JoinColumn(name = "course_class_id"), inverseJoinColumns = @JoinColumn(name = "students_id"))
+    @JoinTable(
+        name = "rel_course_class__students",
+        joinColumns = @JoinColumn(name = "course_class_id"),
+        inverseJoinColumns = @JoinColumn(name = "students_id")
+    )
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "userProfile", "classes" }, allowSetters = true)
     private Set<StudentProfile> students = new HashSet<>();
@@ -167,58 +159,6 @@ public class CourseClass implements Serializable {
         this.capacity = capacity;
     }
 
-    public String getClassName() {
-        return this.className;
-    }
-
-    public CourseClass className(String className) {
-        this.setClassName(className);
-        return this;
-    }
-
-    public void setClassName(String className) {
-        this.className = className;
-    }
-
-    public Integer getMaxStudents() {
-        return this.maxStudents;
-    }
-
-    public CourseClass maxStudents(Integer maxStudents) {
-        this.setMaxStudents(maxStudents);
-        return this;
-    }
-
-    public void setMaxStudents(Integer maxStudents) {
-        this.maxStudents = maxStudents;
-    }
-
-    public Integer getCurrentStudents() {
-        return this.currentStudents;
-    }
-
-    public CourseClass currentStudents(Integer currentStudents) {
-        this.setCurrentStudents(currentStudents);
-        return this;
-    }
-
-    public void setCurrentStudents(Integer currentStudents) {
-        this.currentStudents = currentStudents;
-    }
-
-    public Boolean getActive() {
-        return this.active;
-    }
-
-    public CourseClass active(Boolean active) {
-        this.setActive(active);
-        return this;
-    }
-
-    public void setActive(Boolean active) {
-        this.active = active;
-    }
-
     public Course getCourse() {
         return this.course;
     }
@@ -268,8 +208,7 @@ public class CourseClass implements Serializable {
         return this;
     }
 
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and
-    // setters here
+    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
     public boolean equals(Object o) {
@@ -284,8 +223,7 @@ public class CourseClass implements Serializable {
 
     @Override
     public int hashCode() {
-        // see
-        // https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
+        // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
         return getClass().hashCode();
     }
 
@@ -293,13 +231,13 @@ public class CourseClass implements Serializable {
     @Override
     public String toString() {
         return "CourseClass{" +
-                "id=" + getId() +
-                ", code='" + getCode() + "'" +
-                ", name='" + getName() + "'" +
-                ", description='" + getDescription() + "'" +
-                ", startDate='" + getStartDate() + "'" +
-                ", endDate='" + getEndDate() + "'" +
-                ", capacity=" + getCapacity() +
-                "}";
+            "id=" + getId() +
+            ", code='" + getCode() + "'" +
+            ", name='" + getName() + "'" +
+            ", description='" + getDescription() + "'" +
+            ", startDate='" + getStartDate() + "'" +
+            ", endDate='" + getEndDate() + "'" +
+            ", capacity=" + getCapacity() +
+            "}";
     }
 }

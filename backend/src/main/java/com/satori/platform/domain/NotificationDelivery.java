@@ -98,10 +98,6 @@ public class NotificationDelivery implements Serializable {
     @Column(name = "updated_at")
     private Instant updatedAt;
 
-    @Size(max = 1000)
-    @Column(name = "error_message", length = 1000)
-    private String errorMessage;
-
     // Constructors
     public NotificationDelivery() {
         this.createdAt = Instant.now();
@@ -379,19 +375,6 @@ public class NotificationDelivery implements Serializable {
 
     public NotificationDelivery updatedAt(Instant updatedAt) {
         this.setUpdatedAt(updatedAt);
-        return this;
-    }
-
-    public String getErrorMessage() {
-        return errorMessage;
-    }
-
-    public void setErrorMessage(String errorMessage) {
-        this.errorMessage = errorMessage;
-    }
-
-    public NotificationDelivery errorMessage(String errorMessage) {
-        this.setErrorMessage(errorMessage);
         return this;
     }
 

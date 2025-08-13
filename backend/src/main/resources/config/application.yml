@@ -163,35 +163,6 @@ spring:
         size: 2
   thymeleaf:
     mode: HTML
-  # ===================================================================
-  # Spring AI Configuration
-  # ===================================================================
-  ai:
-    # OpenAI Configuration
-    openai:
-      api-key: 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
-      chat:
-        options:
-          model: ${SPRING_AI_OPENAI_MODEL:gpt-4o-mini}
-          temperature: ${SPRING_AI_OPENAI_TEMPERATURE:0.7}
-          max-tokens: ${SPRING_AI_OPENAI_MAX_TOKENS:2000}
-
-    # Ollama Configuration
-    ollama:
-      base-url: ${SPRING_AI_OLLAMA_BASE_URL:http://localhost:11434}
-      chat:
-        options:
-          model: ${SPRING_AI_OLLAMA_MODEL:llama3.1:8b}
-          temperature: ${SPRING_AI_OLLAMA_TEMPERATURE:0.7}
-
-    # Vector Store Configuration
-    vectorstore:
-      pinecone:
-        api-key: pcsk_3oXyjD_3jT5c1edezEQGjTGCBeJKoJcWPPvWEZPaeYUbyQfykeDHfdkeh4YJHW5LVL7jJV
-        environment: us-east1-gcp
-        project-id: b0601883-f4dd-44a9-ad66-06de3d9c11e1
-        index-name: satori-spring-ai
-
   output:
     ansi:
       console-available: true
@@ -262,101 +233,6 @@ jhipster:
 # ===================================================================
 app:
   ai:
-    # LangChain4J Enhanced AI Configuration
-    langchain4j:
-      enabled: ${LANGCHAIN4J_ENABLED:false} # Temporarily disable during Spring AI migration
-    # Primary AI Provider - FREE Gemini
-    gemini:
-      enabled: ${GEMINI_ENABLED:true}
-      api-key: ${GEMINI_API_KEY:}
-      model: ${GEMINI_MODEL:gemini-1.5-flash}
-      temperature: ${GEMINI_TEMPERATURE:0.7}
-      timeout: ${GEMINI_TIMEOUT_SECONDS:60}
-    # Local AI - Ollama (100% FREE)
-    ollama:
-      enabled: ${OLLAMA_ENABLED:false}
-      base-url: ${OLLAMA_BASE_URL:http://localhost:11434}
-      model: ${OLLAMA_MODEL:llama3.1:8b}
-      temperature: ${OLLAMA_TEMPERATURE:0.7}
-      timeout: ${OLLAMA_TIMEOUT_SECONDS:60}
-    # Fast AI - Groq (FREE tier available)
-    groq:
-      enabled: ${GROQ_ENABLED:false}
-      api-key: ${GROQ_API_KEY:}
-      model: ${GROQ_MODEL:llama-3.1-8b-instant}
-      temperature: ${GROQ_TEMPERATURE:0.7}
-      timeout: ${GROQ_TIMEOUT_SECONDS:30}
-
-    # DataStax Astra DB Vector Store Configuration
-    astra:
-      enabled: ${ASTRA_ENABLED:true}
-      token: ${ASTRA_TOKEN:}
-      database-id: ${ASTRA_DATABASE_ID:}
-      database-region: ${ASTRA_DATABASE_REGION:us-east1}
-      keyspace: ${ASTRA_KEYSPACE:default_keyspace}
-      table: ${ASTRA_TABLE:japanese_learning_embeddings}
-      dimension: ${ASTRA_DIMENSION:768} # For Gemini embeddings
-
-    # ===================================================================
-    # Spring AI Configuration (NEW - Migration from LangChain4J)
-    # ===================================================================
-    spring-ai:
-      enabled: ${SPRING_AI_ENABLED:true}
-      provider: ${SPRING_AI_PROVIDER:openai} # Choose 'openai' or 'ollama'
-      # OpenAI Support (replaces langchain4j-open-ai)
-      openai:
-        enabled: ${SPRING_AI_OPENAI_ENABLED:true} # Enable OpenAI by default for Spring AI
-        api-key: ${OPENAI_API_KEY:}
-        chat:
-          options:
-            model: ${SPRING_AI_OPENAI_MODEL:gpt-4o-mini}
-            temperature: ${SPRING_AI_OPENAI_TEMPERATURE:0.7}
-            max-tokens: ${SPRING_AI_OPENAI_MAX_TOKENS:2000}
-        embedding:
-          enabled: ${SPRING_AI_OPENAI_EMBEDDING_ENABLED:true} # Enable OpenAI embeddings
-          options:
-            model: ${SPRING_AI_OPENAI_EMBEDDING_MODEL:text-embedding-3-small}
-
-      # Ollama Support (replaces langchain4j-ollama)
-      ollama:
-        enabled: ${SPRING_AI_OLLAMA_ENABLED:false}
-        base-url: ${SPRING_AI_OLLAMA_BASE_URL:http://localhost:11434}
-        chat:
-          enabled: ${SPRING_AI_OLLAMA_CHAT_ENABLED:false}
-          options:
-            model: ${SPRING_AI_OLLAMA_MODEL:llama3.1:8b}
-            temperature: ${SPRING_AI_OLLAMA_TEMPERATURE:0.7}
-        embedding:
-          enabled: false # Disable Ollama embeddings to avoid conflicts
-
-      # Vector Store Configuration
-      vectorstore:
-        pinecone:
-          enabled: ${SPRING_AI_PINECONE_ENABLED:true}
-          api-key: ${PINECONE_API_KEY:}
-          environment: ${PINECONE_ENVIRONMENT:us-east1-gcp}
-          project-id: ${PINECONE_PROJECT_ID:}
-          index-name: ${SPRING_AI_PINECONE_INDEX:satori-spring-ai}
-
-      # RAG Configuration for Spring AI
-      rag:
-        enabled: ${SPRING_AI_RAG_ENABLED:true}
-        similarity-threshold: ${SPRING_AI_RAG_SIMILARITY_THRESHOLD:0.7}
-        top-k: ${SPRING_AI_RAG_TOP_K:5}
-        retrieval:
-          enabled: ${SPRING_AI_RAG_RETRIEVAL_ENABLED:true}
-        augmentation:
-          enabled: ${SPRING_AI_RAG_AUGMENTATION_ENABLED:true}
-
-    # Enhanced RAG Configuration for LangChain4J
-    rag:
-      max-results: ${RAG_MAX_RESULTS:5}
-      min-score: ${RAG_MIN_SCORE:0.6}
-      chunk-size: ${RAG_CHUNK_SIZE:500}
-      chunk-overlap: ${RAG_CHUNK_OVERLAP:50}
-      similarity-threshold: ${LANGCHAIN4J_SIMILARITY_THRESHOLD:0.7}
-      retrieval-enabled: ${LANGCHAIN4J_RETRIEVAL_ENABLED:true}
-
     service:
       url: ${AI_SERVICE_URL:}
       api-key: ${AI_SERVICE_API_KEY:}
@@ -378,9 +254,9 @@ app:
         password: ${RAG_POSTGRES_PASSWORD:satori_pass}
         table-name: ${RAG_POSTGRES_TABLE:content_embeddings}
       pinecone:
-        url: ${RAG_PINECONE_URL:https://satori-spring-ai-vcm2km1.svc.aped-4627-b74a.pinecone.io}
-        api-key: ${RAG_PINECONE_API_KEY:pcsk_3oXyjD_3jT5c1edezEQGjTGCBeJKoJcWPPvWEZPaeYUbyQfykeDHfdkeh4YJHW5LVL7jJV}
-        index-name: ${RAG_PINECONE_INDEX:satori-spring-ai}
+        url: ${RAG_PINECONE_URL:}
+        api-key: ${RAG_PINECONE_API_KEY:}
+        index-name: ${RAG_PINECONE_INDEX:satori-content}
     embedding:
       provider: gemini # gemini or openai
       gemini:
@@ -389,10 +265,10 @@ app:
         dimensions: ${GEMINI_EMBEDDING_DIMENSIONS:768}
         base-url: ${GEMINI_BASE_URL:https://generativelanguage.googleapis.com}
       openai:
-        api-key: ${OPENAI_API_KEY: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}
+        api-key: ${OPENAI_API_KEY:}
         model: ${OPENAI_EMBEDDING_MODEL:text-embedding-ada-002}
         dimensions: ${OPENAI_EMBEDDING_DIMENSIONS:1536}
-        base-url: https://openrouter.ai/api/v1
+        base-url: ${OPENAI_BASE_URL:https://api.openai.com/v1}
 
   # ===================================================================
   # Application specific properties

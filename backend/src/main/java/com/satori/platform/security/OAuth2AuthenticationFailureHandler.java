@@ -224,16 +224,17 @@ public class OAuth2AuthenticationFailureHandler implements AuthenticationFailure
         // Log failed login attempt
         auditLogService.logFailedOperation(
                 AuditAction.LOGIN_FAILED,
-                "ANONYMOUS",
+                "OAUTH2_AUTH",
                 null,
                 description,
-                getClientIpAddress());
+                errorDetails.description);
 
         // Log security violation for suspicious activities
         if (isSuspiciousActivity(errorDetails.error)) {
             auditLogService.logSecurityViolation(
                     String.format("Suspicious OAuth2 activity detected: %s", errorDetails.error),
-                    getClientIpAddress());
+                    String.format("Provider: %s, Error: %s, Details: %s",
+                            providerName, errorDetails.error, errorDetails.description));
         }
     }
 
@@ -277,14 +278,5 @@ public class OAuth2AuthenticationFailureHandler implements AuthenticationFailure
             this.description = description;
             this.httpStatus = httpStatus;
         }
-    }
-
-    /**
-     * Get client IP address from request context.
-     */
-    private String getClientIpAddress() {
-        // In a real implementation, you would extract this from the HttpServletRequest
-        // For now, return a placeholder
-        return "127.0.0.1";
     }
 }

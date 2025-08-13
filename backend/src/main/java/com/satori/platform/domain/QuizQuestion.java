@@ -27,12 +27,6 @@ public class QuizQuestion implements Serializable {
     @Column(name = "position", nullable = false)
     private Integer position;
 
-    @Column(name = "points")
-    private Double points;
-
-    @Column(name = "order_index")
-    private Integer orderIndex;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties(value = { "questions", "assignedTos", "courses", "lessons" }, allowSetters = true)
     private Quiz quiz;
@@ -69,32 +63,6 @@ public class QuizQuestion implements Serializable {
         this.position = position;
     }
 
-    public Double getPoints() {
-        return this.points;
-    }
-
-    public QuizQuestion points(Double points) {
-        this.setPoints(points);
-        return this;
-    }
-
-    public void setPoints(Double points) {
-        this.points = points;
-    }
-
-    public Integer getOrderIndex() {
-        return this.orderIndex;
-    }
-
-    public QuizQuestion orderIndex(Integer orderIndex) {
-        this.setOrderIndex(orderIndex);
-        return this;
-    }
-
-    public void setOrderIndex(Integer orderIndex) {
-        this.orderIndex = orderIndex;
-    }
-
     public Quiz getQuiz() {
         return this.quiz;
     }
@@ -121,8 +89,7 @@ public class QuizQuestion implements Serializable {
         return this;
     }
 
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and
-    // setters here
+    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
     public boolean equals(Object o) {
@@ -137,8 +104,7 @@ public class QuizQuestion implements Serializable {
 
     @Override
     public int hashCode() {
-        // see
-        // https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
+        // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
         return getClass().hashCode();
     }
 
@@ -146,8 +112,8 @@ public class QuizQuestion implements Serializable {
     @Override
     public String toString() {
         return "QuizQuestion{" +
-                "id=" + getId() +
-                ", position=" + getPosition() +
-                "}";
+            "id=" + getId() +
+            ", position=" + getPosition() +
+            "}";
     }
 }

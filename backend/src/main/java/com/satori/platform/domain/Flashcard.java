@@ -41,12 +41,6 @@ public class Flashcard implements Serializable {
     @Column(name = "position", nullable = false)
     private Integer position;
 
-    @Column(name = "front")
-    private String front;
-
-    @Column(name = "back")
-    private String back;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties(value = { "flashcards", "course", "quizzes" }, allowSetters = true)
     private Lesson lesson;
@@ -131,32 +125,6 @@ public class Flashcard implements Serializable {
         this.position = position;
     }
 
-    public String getFront() {
-        return this.front;
-    }
-
-    public Flashcard front(String front) {
-        this.setFront(front);
-        return this;
-    }
-
-    public void setFront(String front) {
-        this.front = front;
-    }
-
-    public String getBack() {
-        return this.back;
-    }
-
-    public Flashcard back(String back) {
-        this.setBack(back);
-        return this;
-    }
-
-    public void setBack(String back) {
-        this.back = back;
-    }
-
     public Lesson getLesson() {
         return this.lesson;
     }
@@ -170,8 +138,7 @@ public class Flashcard implements Serializable {
         return this;
     }
 
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and
-    // setters here
+    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
     public boolean equals(Object o) {
@@ -186,8 +153,7 @@ public class Flashcard implements Serializable {
 
     @Override
     public int hashCode() {
-        // see
-        // https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
+        // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
         return getClass().hashCode();
     }
 
@@ -195,12 +161,12 @@ public class Flashcard implements Serializable {
     @Override
     public String toString() {
         return "Flashcard{" +
-                "id=" + getId() +
-                ", term='" + getTerm() + "'" +
-                ", definition='" + getDefinition() + "'" +
-                ", imageUrl='" + getImageUrl() + "'" +
-                ", hint='" + getHint() + "'" +
-                ", position=" + getPosition() +
-                "}";
+            "id=" + getId() +
+            ", term='" + getTerm() + "'" +
+            ", definition='" + getDefinition() + "'" +
+            ", imageUrl='" + getImageUrl() + "'" +
+            ", hint='" + getHint() + "'" +
+            ", position=" + getPosition() +
+            "}";
     }
 }

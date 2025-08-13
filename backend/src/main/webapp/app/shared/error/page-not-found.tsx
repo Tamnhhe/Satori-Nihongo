@@ -5,7 +5,7 @@ import { Alert } from 'reactstrap';
 const PageNotFound = () => {
   return (
     <div>
-      <Alert color="danger" fade={false}>
+      <Alert color="danger">
         <Translate contentKey="error.http.404">The page does not exist.</Translate>
       </Alert>
     </div>

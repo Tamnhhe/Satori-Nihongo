@@ -6,7 +6,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import java.util.List;
 
 /**
  * Spring Data JPA repository for the Course entity.
@@ -41,16 +40,4 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
      */
     @Query("SELECT c, COUNT(l) as lessonCount FROM Course c LEFT JOIN c.lessons l GROUP BY c")
     Page<Object[]> findCoursesWithLessonCount(Pageable pageable);
-
-    /**
-     * Count classes by course ID.
-     */
-    @Query("SELECT COUNT(cc) FROM CourseClass cc WHERE cc.course.id = :courseId")
-    int countClassesByCourseId(@Param("courseId") Long courseId);
-
-    /**
-     * Find courses by teacher profile user ID.
-     */
-    @Query("SELECT c FROM Course c WHERE c.teacher.username = :teacherId")
-    List<Course> findByTeacherProfileUserId(@Param("teacherId") String teacherId);
 }
