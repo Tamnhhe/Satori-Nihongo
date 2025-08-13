@@ -1,0 +1,56 @@
+id;title;description;is_test;is_practice;quiz_type
+701;Bài kiểm tra Chào hỏi;Trắc nghiệm chủ đề chào hỏi;true;false;LESSON
+702;Quiz Số đếm;Ôn luyện số đếm;false;true;LESSON
+703;Đánh giá giữa khóa;Bài test giữa khóa;true;false;COURSE
+704;Bài 1 Quiz;Quiz for Lesson 1;false;true;LESSON
+705;Bài 2 Quiz;Quiz for Lesson 2;false;true;LESSON
+706;Bài 3 Quiz;Quiz for Lesson 3;false;true;LESSON
+707;Bài 4 Quiz;Quiz for Lesson 4;false;true;LESSON
+708;Bài 5 Quiz;Quiz for Lesson 5;false;true;LESSON
+709;Bài 6 Quiz;Quiz for Lesson 6;false;true;LESSON
+710;Bài 7 Quiz;Quiz for Lesson 7;false;true;LESSON
+711;Bài 8 Quiz;Quiz for Lesson 8;false;true;LESSON
+712;Bài 9 Quiz;Quiz for Lesson 9;false;true;LESSON
+713;Bài 10 Quiz;Quiz for Lesson 10;false;true;LESSON
+714;Bài 11 Quiz;Quiz for Lesson 11;false;true;LESSON
+715;Bài 12 Quiz;Quiz for Lesson 12;false;true;LESSON
+716;Bài 13 Quiz;Quiz for Lesson 13;false;true;LESSON
+717;Bài 14 Quiz;Quiz for Lesson 14;false;true;LESSON
+718;Bài 15 Quiz;Quiz for Lesson 15;false;true;LESSON
+719;Bài 16 Quiz;Quiz for Lesson 16;false;true;LESSON
+720;Bài 17 Quiz;Quiz for Lesson 17;false;true;LESSON
+721;Bài 18 Quiz;Quiz for Lesson 18;false;true;LESSON
+722;Bài 19 Quiz;Quiz for Lesson 19;false;true;LESSON
+723;Bài 20 Quiz;Quiz for Lesson 20;false;true;LESSON
+724;Bài 21 Quiz;Quiz for Lesson 21;false;true;LESSON
+725;Bài 22 Quiz;Quiz for Lesson 22;false;true;LESSON
+726;Bài 23 Quiz;Quiz for Lesson 23;false;true;LESSON
+727;Bài 24 Quiz;Quiz for Lesson 24;false;true;LESSON
+728;Bài 25 Quiz;Quiz for Lesson 25;false;true;LESSON
+729;Final Exam N5;Final exam for N5 course;true;false;COURSE
+730;Bài 26 Quiz;Quiz for Lesson 26;false;true;LESSON
+731;Bài 27 Quiz;Quiz for Lesson 27;false;true;LESSON
+732;Bài 28 Quiz;Quiz for Lesson 28;false;true;LESSON
+733;Bài 29 Quiz;Quiz for Lesson 29;false;true;LESSON
+734;Bài 30 Quiz;Quiz for Lesson 30;false;true;LESSON
+735;Bài 31 Quiz;Quiz for Lesson 31;false;true;LESSON
+736;Bài 32 Quiz;Quiz for Lesson 32;false;true;LESSON
+737;Bài 33 Quiz;Quiz for Lesson 33;false;true;LESSON
+738;Bài 34 Quiz;Quiz for Lesson 34;false;true;LESSON
+739;Bài 35 Quiz;Quiz for Lesson 35;false;true;LESSON
+740;Bài 36 Quiz;Quiz for Lesson 36;false;true;LESSON
+741;Bài 37 Quiz;Quiz for Lesson 37;false;true;LESSON
+742;Bài 38 Quiz;Quiz for Lesson 38;false;true;LESSON
+743;Bài 39 Quiz;Quiz for Lesson 39;false;true;LESSON
+744;Bài 40 Quiz;Quiz for Lesson 40;false;true;LESSON
+745;Bài 41 Quiz;Quiz for Lesson 41;false;true;LESSON
+746;Bài 42 Quiz;Quiz for Lesson 42;false;true;LESSON
+747;Bài 43 Quiz;Quiz for Lesson 43;false;true;LESSON
+748;Bài 44 Quiz;Quiz for Lesson 44;false;true;LESSON
+749;Bài 45 Quiz;Quiz for Lesson 45;false;true;LESSON
+750;Bài 46 Quiz;Quiz for Lesson 46;false;true;LESSON
+751;Bài 47 Quiz;Quiz for Lesson 47;false;true;LESSON
+752;Bài 48 Quiz;Quiz for Lesson 48;false;true;LESSON
+753;Bài 49 Quiz;Quiz for Lesson 49;false;true;LESSON
+754;Bài 50 Quiz;Quiz for Lesson 50;false;true;LESSON
+755;Final Exam N4;Final exam for N4 course;true;false;COURSE

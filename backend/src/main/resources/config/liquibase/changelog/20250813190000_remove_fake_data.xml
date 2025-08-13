@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <!-- Remove demo relations first to satisfy FK constraints -->
+    <changeSet id="20250813190000-1-delete-relations" author="copilot">
+        <delete tableName="rel_quiz__lesson">
+            <where>quiz_id IN (701, 702) OR lesson_id IN (501, 502)</where>
+        </delete>
+        <delete tableName="rel_quiz__course">
+            <where>quiz_id IN (703) OR course_id IN (301)</where>
+        </delete>
+        <delete tableName="quiz_question">
+            <where>id IN (901,902,903,904,905) OR quiz_id IN (701,702,703) OR question_id IN (801,802,803)</where>
+        </delete>
+        <delete tableName="rel_course_class__students">
+            <where>course_class_id IN (401) OR students_id IN (101,102,103)</where>
+        </delete>
+    </changeSet>
+
+    <!-- Remove demo domain records -->
+    <changeSet id="20250813190000-2-delete-domain" author="copilot">
+        <delete tableName="schedule">
+            <where>id IN (601,602) OR course_id = 301</where>
+        </delete>
+        <delete tableName="lesson">
+            <where>id IN (501,502) OR course_id = 301</where>
+        </delete>
+        <delete tableName="quiz">
+            <where>id IN (701,702,703)</where>
+        </delete>
+        <delete tableName="question">
+            <where>id IN (801,802,803)</where>
+        </delete>
+        <delete tableName="course_class">
+            <where>id IN (401) OR course_id = 301</where>
+        </delete>
+        <delete tableName="course">
+            <where>id IN (301)</where>
+        </delete>
+        <delete tableName="user_profile">
+            <where>id IN (201,202,203,204)</where>
+        </delete>
+        <delete tableName="student_profile">
+            <where>id IN (101,102,103)</where>
+        </delete>
+        <delete tableName="teacher_profile">
+            <where>id IN (1)</where>
+        </delete>
+    </changeSet>
+
+    <!-- Remove demo jhi_user and its authorities; keep ROLE_TEACHER authority defined -->
+    <changeSet id="20250813190000-3-delete-teacher-user" author="copilot">
+        <delete tableName="jhi_user_authority">
+            <where>user_id = 3</where>
+        </delete>
+        <delete tableName="jhi_user">
+            <where>id = 3 OR login = 'teacher'</where>
+        </delete>
+    </changeSet>
+
+</databaseChangeLog>
