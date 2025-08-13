@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <!-- Re-seed center materials so the DB has realistic data for demo/presentation -->
+
+    <changeSet id="20250813195500-1-authorities" author="copilot">
+        <loadUpdateData
+                primaryKey="name"
+                file="config/liquibase/real-data/authority.csv"
+                separator=";"
+                tableName="jhi_authority"
+                usePreparedStatements="true">
+            <column name="name" type="string" />
+        </loadUpdateData>
+    </changeSet>
+
+    <changeSet id="20250813195500-2-users" author="copilot">
+        <loadUpdateData
+                primaryKey="id"
+                file="config/liquibase/real-data/user.csv"
+                separator=";"
+                tableName="jhi_user"
+                usePreparedStatements="true">
+            <column name="id" type="numeric" />
+            <column name="created_date" type="timestamp" />
+            <column name="activated" type="boolean" />
+        </loadUpdateData>
+    </changeSet>
+
+    <changeSet id="20250813195500-3-user-authorities" author="copilot">
+        <loadUpdateData
+                primaryKey="user_id,authority_name"
+                file="config/liquibase/real-data/user_authority.csv"
+                separator=";"
+                tableName="jhi_user_authority"
+                usePreparedStatements="true">
+            <column name="user_id" type="numeric" />
+            <column name="authority_name" type="string" />
+        </loadUpdateData>
+    </changeSet>
+
+    <changeSet id="20250813195500-4-teacher-profile" author="copilot">
+        <loadUpdateData
+                primaryKey="id"
+                file="config/liquibase/real-data/teacher_profile.csv"
+                separator=";"
+                tableName="teacher_profile"
+                usePreparedStatements="true">
+            <column name="id" type="numeric" />
+            <column name="teacher_code" type="string" />
+        </loadUpdateData>
+    </changeSet>
+
+    <changeSet id="20250813195500-5-student-profiles" author="copilot">
+        <loadUpdateData
+                primaryKey="id"
+                file="config/liquibase/real-data/student_profile.csv"
+                separator=";"
+                tableName="student_profile"
+                usePreparedStatements="true">
+            <column name="id" type="numeric" />
+            <column name="student_id" type="string" />
+            <column name="gpa" type="numeric" />
+        </loadUpdateData>
+    </changeSet>
+
+    <changeSet id="20250813195500-6-user-profiles" author="copilot">
+        <loadUpdateData
+                primaryKey="id"
+                file="config/liquibase/real-data/user_profile.csv"
+                separator=";"
+                tableName="user_profile"
+                usePreparedStatements="true">
+            <column name="id" type="numeric" />
+            <column name="username" type="string" />
+            <column name="password_hash" type="string" />
+            <column name="email" type="string" />
+            <column name="full_name" type="string" />
+            <column name="gender" type="boolean" />
+            <column name="role" type="string" />
+            <column name="teacher_profile_id" type="numeric" />
+            <column name="student_profile_id" type="numeric" />
+        </loadUpdateData>
+    </changeSet>
+
+    <changeSet id="20250813195500-7-courses" author="copilot">
+        <loadUpdateData
+                primaryKey="id"
+                file="config/liquibase/real-data/course.csv"
+                separator=";"
+                tableName="course"
+                usePreparedStatements="true">
+            <column name="id" type="numeric" />
+            <column name="title" type="string" />
+            <column name="description" type="string" />
+            <column name="course_code" type="string" />
+            <column name="teacher_id" type="numeric" />
+        </loadUpdateData>
+    </changeSet>
+
+    <changeSet id="20250813195500-8-course-class" author="copilot">
+        <loadUpdateData
+                primaryKey="id"
+                file="config/liquibase/real-data/course_class.csv"
+                separator=";"
+                tableName="course_class"
+                usePreparedStatements="true">
+            <column name="id" type="numeric" />
+            <column name="code" type="string" />
+            <column name="name" type="string" />
+            <column name="description" type="string" />
+            <column name="start_date" type="timestamp" />
+            <column name="end_date" type="timestamp" />
+            <column name="capacity" type="numeric" />
+            <column name="course_id" type="numeric" />
+            <column name="teacher_id" type="numeric" />
+        </loadUpdateData>
+    </changeSet>
+
+    <changeSet id="20250813195500-9-course-class-students" author="copilot">
+        <loadUpdateData
+                primaryKey="course_class_id,students_id"
+                file="config/liquibase/real-data/rel_course_class__students.csv"
+                separator=";"
+                tableName="rel_course_class__students"
+                usePreparedStatements="true">
+            <column name="course_class_id" type="numeric" />
+            <column name="students_id" type="numeric" />
+        </loadUpdateData>
+    </changeSet>
+
+    <changeSet id="20250813195500-10-lessons" author="copilot">
+        <loadUpdateData
+                primaryKey="id"
+                file="config/liquibase/real-data/lesson.csv"
+                separator=";"
+                tableName="lesson"
+                usePreparedStatements="true">
+            <column name="id" type="numeric" />
+            <column name="title" type="string" />
+            <column name="content" type="clob" />
+            <column name="video_url" type="string" />
+            <column name="slide_url" type="string" />
+            <column name="course_id" type="numeric" />
+        </loadUpdateData>
+    </changeSet>
+
+    <changeSet id="20250813195500-11-schedules" author="copilot">
+        <loadUpdateData
+                primaryKey="id"
+                file="config/liquibase/real-data/schedule.csv"
+                separator=";"
+                tableName="schedule"
+                usePreparedStatements="true">
+            <column name="id" type="numeric" />
+            <column name="date" type="date" />
+            <column name="start_time" type="date" />
+            <column name="end_time" type="date" />
+            <column name="location" type="string" />
+            <column name="course_id" type="numeric" />
+        </loadUpdateData>
+    </changeSet>
+
+    <changeSet id="20250813195500-12-quiz" author="copilot">
+        <loadUpdateData
+                primaryKey="id"
+                file="config/liquibase/real-data/quiz.csv"
+                separator=";"
+                tableName="quiz"
+                usePreparedStatements="true">
+            <column name="id" type="numeric" />
+            <column name="title" type="string" />
+            <column name="description" type="string" />
+            <column name="is_test" type="boolean" />
+            <column name="is_practice" type="boolean" />
+            <column name="quiz_type" type="string" />
+        </loadUpdateData>
+    </changeSet>
+
+    <changeSet id="20250813195500-13-question" author="copilot">
+        <loadUpdateData
+                primaryKey="id"
+                file="config/liquibase/real-data/question.csv"
+                separator=";"
+                tableName="question"
+                usePreparedStatements="true">
+            <column name="id" type="numeric" />
+            <column name="content" type="string" />
+            <column name="image_url" type="string" />
+            <column name="suggestion" type="string" />
+            <column name="answer_explanation" type="string" />
+            <column name="correct_answer" type="string" />
+            <column name="type" type="string" />
+        </loadUpdateData>
+    </changeSet>
+
+    <changeSet id="20250813195500-14-quiz-question" author="copilot">
+        <loadUpdateData
+                primaryKey="id"
+                file="config/liquibase/real-data/quiz_question.csv"
+                separator=";"
+                tableName="quiz_question"
+                usePreparedStatements="true">
+            <column name="id" type="numeric" />
+            <column name="position" type="numeric" />
+            <column name="quiz_id" type="numeric" />
+            <column name="question_id" type="numeric" />
+        </loadUpdateData>
+    </changeSet>
+
+    <changeSet id="20250813195500-15-rel-quiz-course" author="copilot">
+        <loadUpdateData
+                primaryKey="quiz_id,course_id"
+                file="config/liquibase/real-data/rel_quiz__course.csv"
+                separator=";"
+                tableName="rel_quiz__course"
+                usePreparedStatements="true">
+            <column name="quiz_id" type="numeric" />
+            <column name="course_id" type="numeric" />
+        </loadUpdateData>
+    </changeSet>
+
+    <changeSet id="20250813195500-16-rel-quiz-lesson" author="copilot">
+        <loadUpdateData
+                primaryKey="quiz_id,lesson_id"
+                file="config/liquibase/real-data/rel_quiz__lesson.csv"
+                separator=";"
+                tableName="rel_quiz__lesson"
+                usePreparedStatements="true">
+            <column name="quiz_id" type="numeric" />
+            <column name="lesson_id" type="numeric" />
+        </loadUpdateData>
+    </changeSet>
+
+</databaseChangeLog>
