@@ -1,9 +1,12 @@
 package com.satori.platform.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.satori.platform.domain.enumeration.GradeLevel;
+import com.satori.platform.domain.enumeration.StudentLevel;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
 import org.hibernate.annotations.Cache;
@@ -30,9 +33,31 @@ public class StudentProfile implements Serializable {
     private String studentId;
 
     @Column(name = "gpa")
+    @DecimalMin(value = "0.0", message = "GPA must be at least 0.0")
+    @DecimalMax(value = "4.0", message = "GPA must not exceed 4.0")
     private Double gpa;
 
-    @JsonIgnoreProperties(value = { "teacherProfile", "studentProfile", "createdCourses", "quizAttempts" }, allowSetters = true)
+    @Enumerated(EnumType.STRING)
+    @Column(name = "level")
+    private StudentLevel level;
+
+    @Column(name = "enrollment_date")
+    private Instant enrollmentDate;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "grade_level")
+    private GradeLevel gradeLevel;
+
+    @Column(name = "learning_goals", length = 1000)
+    @Size(max = 1000)
+    private String learningGoals;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(unique = true)
+    private User user;
+
+    @JsonIgnoreProperties(value = { "teacherProfile", "studentProfile", "createdCourses",
+            "quizAttempts" }, allowSetters = true)
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "studentProfile")
     private UserProfile userProfile;
 
@@ -92,6 +117,75 @@ public class StudentProfile implements Serializable {
         this.gpa = gpa;
     }
 
+    public StudentLevel getLevel() {
+        return this.level;
+    }
+
+    public StudentProfile level(StudentLevel level) {
+        this.setLevel(level);
+        return this;
+    }
+
+    public void setLevel(StudentLevel level) {
+        this.level = level;
+    }
+
+    public Instant getEnrollmentDate() {
+        return this.enrollmentDate;
+    }
+
+    public StudentProfile enrollmentDate(Instant enrollmentDate) {
+        this.setEnrollmentDate(enrollmentDate);
+        return this;
+    }
+
+    public void setEnrollmentDate(Instant enrollmentDate) {
+        this.enrollmentDate = enrollmentDate;
+    }
+
+    public GradeLevel getGradeLevel() {
+        return this.gradeLevel;
+    }
+
+    public StudentProfile gradeLevel(GradeLevel gradeLevel) {
+        this.setGradeLevel(gradeLevel);
+        return this;
+    }
+
+    public void setGradeLevel(GradeLevel gradeLevel) {
+        this.gradeLevel = gradeLevel;
+    }
+
+    public String getLearningGoals() {
+        return this.learningGoals;
+    }
+
+    public StudentProfile learningGoals(String learningGoals) {
+        this.setLearningGoals(learningGoals);
+        return this;
+    }
+
+    public void setLearningGoals(String learningGoals) {
+        if (learningGoals != null && learningGoals.trim().isEmpty()) {
+            this.learningGoals = null;
+        } else {
+            this.learningGoals = learningGoals;
+        }
+    }
+
+    public User getUser() {
+        return this.user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public StudentProfile user(User user) {
+        this.setUser(user);
+        return this;
+    }
+
     public UserProfile getUserProfile() {
         return this.userProfile;
     }
@@ -141,7 +235,7 @@ public class StudentProfile implements Serializable {
         courseClass.getStudents().remove(this);
         return this;
     }
-    
+
     public Set<FlashcardSession> getFlashcardSessions() {
         return this.flashcardSessions;
     }
@@ -204,7 +298,104 @@ public class StudentProfile implements Serializable {
         return this;
     }
 
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
+    // Business logic methods
+
+    /**
+     * Check if the student is a beginner level
+     */
+    public boolean isBeginner() {
+        return this.level == StudentLevel.N5;
+    }
+
+    /**
+     * Check if the student is advanced level
+     */
+    public boolean isAdvanced() {
+        return this.level == StudentLevel.N1 || this.level == StudentLevel.NATIVE;
+    }
+
+    /**
+     * Get the number of days since enrollment
+     */
+    public long getDaysSinceEnrollment() {
+        if (this.enrollmentDate == null) {
+            return 0;
+        }
+        return java.time.Duration.between(this.enrollmentDate, Instant.now()).toDays();
+    }
+
+    /**
+     * Check if the student has good academic standing (GPA >= 3.0)
+     */
+    public boolean hasGoodAcademicStanding() {
+        return this.gpa != null && this.gpa >= 3.0;
+    }
+
+    /**
+     * Get a formatted display name for the student
+     */
+    public String getDisplayName() {
+        if (this.userProfile != null && this.userProfile.getFullName() != null) {
+            return this.userProfile.getFullName() + " (" + this.studentId + ")";
+        }
+        return this.studentId;
+    }
+
+    /**
+     * Builder pattern for creating StudentProfile instances
+     */
+    public static class Builder {
+        private final StudentProfile studentProfile;
+
+        public Builder(String studentId) {
+            this.studentProfile = new StudentProfile();
+            this.studentProfile.setStudentId(studentId);
+        }
+
+        public Builder gpa(Double gpa) {
+            this.studentProfile.setGpa(gpa);
+            return this;
+        }
+
+        public Builder level(StudentLevel level) {
+            this.studentProfile.setLevel(level);
+            return this;
+        }
+
+        public Builder enrollmentDate(Instant enrollmentDate) {
+            this.studentProfile.setEnrollmentDate(enrollmentDate);
+            return this;
+        }
+
+        public Builder gradeLevel(GradeLevel gradeLevel) {
+            this.studentProfile.setGradeLevel(gradeLevel);
+            return this;
+        }
+
+        public Builder learningGoals(String learningGoals) {
+            this.studentProfile.setLearningGoals(learningGoals);
+            return this;
+        }
+
+        public Builder userProfile(UserProfile userProfile) {
+            this.studentProfile.setUserProfile(userProfile);
+            return this;
+        }
+
+        public StudentProfile build() {
+            return this.studentProfile;
+        }
+    }
+
+    /**
+     * Create a new Builder instance
+     */
+    public static Builder builder(String studentId) {
+        return new Builder(studentId);
+    }
+
+    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and
+    // setters here
 
     @Override
     public boolean equals(Object o) {
@@ -219,7 +410,8 @@ public class StudentProfile implements Serializable {
 
     @Override
     public int hashCode() {
-        // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
+        // see
+        // https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
         return getClass().hashCode();
     }
 
@@ -227,9 +419,13 @@ public class StudentProfile implements Serializable {
     @Override
     public String toString() {
         return "StudentProfile{" +
-            "id=" + getId() +
-            ", studentId='" + getStudentId() + "'" +
-            ", gpa=" + getGpa() +
-            "}";
+                "id=" + getId() +
+                ", studentId='" + getStudentId() + "'" +
+                ", gpa=" + getGpa() +
+                ", level='" + getLevel() + "'" +
+                ", enrollmentDate=" + getEnrollmentDate() +
+                ", gradeLevel='" + getGradeLevel() + "'" +
+                ", learningGoals='" + getLearningGoals() + "'" +
+                "}";
     }
 }

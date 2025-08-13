@@ -25,9 +25,19 @@ public class LessonDTO implements Serializable {
 
     private String slideUrl;
 
+    private Long courseId;
+
+    private Integer orderIndex;
+
+    private Integer duration;
+
     private CourseDTO course;
 
     private Set<QuizDTO> quizzes = new HashSet<>();
+
+    private Set<FlashcardDTO> flashcards = new HashSet<>();
+
+    private Set<FileMetaDataDTO> fileAttachments = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -69,6 +79,30 @@ public class LessonDTO implements Serializable {
         this.slideUrl = slideUrl;
     }
 
+    public Long getCourseId() {
+        return courseId;
+    }
+
+    public void setCourseId(Long courseId) {
+        this.courseId = courseId;
+    }
+
+    public Integer getOrderIndex() {
+        return orderIndex;
+    }
+
+    public void setOrderIndex(Integer orderIndex) {
+        this.orderIndex = orderIndex;
+    }
+
+    public Integer getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Integer duration) {
+        this.duration = duration;
+    }
+
     public CourseDTO getCourse() {
         return course;
     }
@@ -83,6 +117,22 @@ public class LessonDTO implements Serializable {
 
     public void setQuizzes(Set<QuizDTO> quizzes) {
         this.quizzes = quizzes;
+    }
+
+    public Set<FlashcardDTO> getFlashcards() {
+        return flashcards;
+    }
+
+    public void setFlashcards(Set<FlashcardDTO> flashcards) {
+        this.flashcards = flashcards;
+    }
+
+    public Set<FileMetaDataDTO> getFileAttachments() {
+        return fileAttachments;
+    }
+
+    public void setFileAttachments(Set<FileMetaDataDTO> fileAttachments) {
+        this.fileAttachments = fileAttachments;
     }
 
     @Override
@@ -110,13 +160,15 @@ public class LessonDTO implements Serializable {
     @Override
     public String toString() {
         return "LessonDTO{" +
-            "id=" + getId() +
-            ", title='" + getTitle() + "'" +
-            ", content='" + getContent() + "'" +
-            ", videoUrl='" + getVideoUrl() + "'" +
-            ", slideUrl='" + getSlideUrl() + "'" +
-            ", course=" + getCourse() +
-            ", quizzes=" + getQuizzes() +
-            "}";
+                "id=" + getId() +
+                ", title='" + getTitle() + "'" +
+                ", content='" + getContent() + "'" +
+                ", videoUrl='" + getVideoUrl() + "'" +
+                ", slideUrl='" + getSlideUrl() + "'" +
+                ", course=" + getCourse() +
+                ", quizzes=" + getQuizzes() +
+                ", flashcards=" + getFlashcards() +
+                ", fileAttachments=" + getFileAttachments() +
+                "}";
     }
 }

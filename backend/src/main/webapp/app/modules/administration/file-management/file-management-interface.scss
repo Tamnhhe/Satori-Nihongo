@@ -1,0 +1,216 @@
+.file-management-interface {
+  .file-controls {
+    margin-bottom: 16px;
+  }
+
+  .file-card {
+    height: 200px;
+
+    .file-preview {
+      height: 120px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #f5f5f5;
+
+      img {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: cover;
+      }
+
+      .file-icon {
+        color: #8c8c8c;
+      }
+    }
+
+    .file-name {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-weight: 500;
+    }
+
+    .file-details {
+      font-size: 12px;
+      color: #8c8c8c;
+
+      div {
+        margin-bottom: 2px;
+      }
+    }
+  }
+
+  .file-content {
+    min-height: 400px;
+  }
+
+  .ant-tree {
+    .ant-tree-node-content-wrapper {
+      &:hover {
+        background-color: #f5f5f5;
+      }
+    }
+
+    .ant-tree-node-selected {
+      .ant-tree-node-content-wrapper {
+        background-color: #e6f7ff;
+      }
+    }
+  }
+
+  .ant-card-head {
+    .ant-card-head-title {
+      font-weight: 600;
+    }
+  }
+
+  .ant-upload-drag {
+    .ant-upload-drag-icon {
+      margin-bottom: 16px;
+
+      .anticon {
+        font-size: 48px;
+        color: #40a9ff;
+      }
+    }
+
+    .ant-upload-text {
+      font-size: 16px;
+      color: #666;
+      margin-bottom: 8px;
+    }
+
+    .ant-upload-hint {
+      color: #999;
+    }
+  }
+
+  .ant-table {
+    .ant-table-tbody > tr:hover > td {
+      background-color: #f5f5f5;
+    }
+  }
+
+  .ant-descriptions {
+    .ant-descriptions-item-label {
+      font-weight: 600;
+      background-color: #fafafa;
+    }
+  }
+
+  .ant-modal {
+    .ant-modal-header {
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .ant-modal-footer {
+      border-top: 1px solid #f0f0f0;
+    }
+  }
+
+  .ant-progress-circle {
+    .ant-progress-text {
+      color: #1890ff;
+    }
+  }
+
+  // Responsive design
+  @media (max-width: 768px) {
+    .ant-col:first-child {
+      margin-bottom: 16px;
+    }
+
+    .file-card {
+      height: auto;
+
+      .file-preview {
+        height: 100px;
+      }
+    }
+
+    .ant-card-actions {
+      li {
+        margin: 4px 0;
+      }
+    }
+  }
+
+  // Dark theme support
+  .ant-layout-content.dark {
+    .file-card {
+      .file-preview {
+        background-color: #262626;
+      }
+
+      .file-details {
+        color: #bfbfbf;
+      }
+    }
+
+    .ant-tree {
+      .ant-tree-node-content-wrapper {
+        &:hover {
+          background-color: #262626;
+        }
+      }
+
+      .ant-tree-node-selected {
+        .ant-tree-node-content-wrapper {
+          background-color: #111b26;
+        }
+      }
+    }
+  }
+
+  // Loading states
+  .loading-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+  }
+
+  // Drag and drop states
+  .drag-over {
+    border: 2px dashed #1890ff;
+    background-color: #f0f8ff;
+  }
+
+  // File type icons
+  .file-type-icon {
+    &.pdf {
+      color: #ff4d4f;
+    }
+    &.doc,
+    &.docx {
+      color: #1890ff;
+    }
+    &.xls,
+    &.xlsx {
+      color: #52c41a;
+    }
+    &.ppt,
+    &.pptx {
+      color: #fa8c16;
+    }
+    &.image {
+      color: #722ed1;
+    }
+    &.video {
+      color: #eb2f96;
+    }
+    &.audio {
+      color: #13c2c2;
+    }
+    &.archive {
+      color: #8c8c8c;
+    }
+  }
+}

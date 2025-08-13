@@ -152,4 +152,37 @@ public interface StudentProgressRepository extends JpaRepository<StudentProgress
                         "sp.flashcardsMastered, sp.totalFlashcards, sp.studyTimeMinutes, sp.lastActivityDate) " +
                         "FROM StudentProgress sp WHERE sp.student.id = :studentId")
         List<CoursePerformanceDTO> getCoursePerformanceByStudentId(@Param("studentId") Long studentId);
+
+        /**
+         * Count enrolled students by course ID.
+         */
+        @Query("SELECT COUNT(sp) FROM StudentProgress sp WHERE sp.course.id = :courseId")
+        int countByCourseId(@Param("courseId") Long courseId);
+
+        /**
+         * Get average completion rate by course ID.
+         */
+        @Query("SELECT AVG(sp.completionPercentage) FROM StudentProgress sp WHERE sp.course.id = :courseId")
+        Double getAverageCompletionRateByCourseId(@Param("courseId") Long courseId);
+
+        /**
+         * Get average score by course ID.
+         */
+        @Query("SELECT AVG(sp.averageQuizScore) FROM StudentProgress sp WHERE sp.course.id = :courseId AND sp.averageQuizScore IS NOT NULL")
+        Double getAverageScoreByCourseId(@Param("courseId") Long courseId);
+
+        /**
+         * Count active students by course ID (students with activity in last 30 days).
+         */
+        @Query("SELECT COUNT(sp) FROM StudentProgress sp WHERE sp.course.id = :courseId AND sp.lastActivityDate >= :thirtyDaysAgo")
+        int countActiveStudentsByCourseId(@Param("courseId") Long courseId,
+                        @Param("thirtyDaysAgo") LocalDateTime thirtyDaysAgo);
+
+        /**
+         * Count active students by course ID (students with activity in last 30 days) -
+         * overloaded method.
+         */
+        default int countActiveStudentsByCourseId(Long courseId) {
+                return countActiveStudentsByCourseId(courseId, LocalDateTime.now().minusDays(30));
+        }
 }

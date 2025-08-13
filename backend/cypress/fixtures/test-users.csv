@@ -1,0 +1,4 @@
+username,email,fullName,role,isActive
+imported.user1,imported1@example.com,Imported User 1,HOC_VIEN,true
+imported.user2,imported2@example.com,Imported User 2,HOC_VIEN,true
+imported.user3,imported3@example.com,Imported User 3,GIANG_VIEN,true

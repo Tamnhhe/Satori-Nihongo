@@ -1,0 +1,162 @@
+{
+  "courseManagement": {
+    "home": {
+      "title": "Course Management",
+      "createLabel": "Create new Course",
+      "search": "Search courses...",
+      "notFound": "No courses found"
+    },
+    "created": "A new course has been created with identifier {{ param }}",
+    "updated": "A course has been updated with identifier {{ param }}",
+    "deleted": "A course has been deleted with identifier {{ param }}",
+    "enrolled": "Student {{ param }} has been enrolled successfully",
+    "progressUpdated": "Progress updated for student {{ param }}",
+    "delete": {
+      "question": "Are you sure you want to delete course {{ id }}?"
+    },
+    "detail": {
+      "title": "Course Details"
+    },
+    "create": {
+      "title": "Create Course"
+    },
+    "edit": {
+      "title": "Edit Course"
+    },
+    "form": {
+      "title": "Title",
+      "title.placeholder": "Enter course title",
+      "courseCode": "Course Code",
+      "courseCode.placeholder": "Enter course code (e.g., JPNS101)",
+      "description": "Description",
+      "description.placeholder": "Enter course description",
+      "teacher": "Teacher",
+      "teacher.placeholder": "Select a teacher"
+    },
+    "validation": {
+      "title": {
+        "required": "Course title is required",
+        "minLength": "Title must be at least 2 characters long",
+        "maxLength": "Title cannot exceed 100 characters"
+      },
+      "courseCode": {
+        "pattern": "Course code can only contain uppercase letters, numbers, underscores and hyphens",
+        "maxLength": "Course code cannot exceed 20 characters"
+      },
+      "description": {
+        "maxLength": "Description cannot exceed 500 characters"
+      }
+    },
+    "title": "Title",
+    "courseCode": "Course Code",
+    "description": "Description",
+    "teacher": "Teacher",
+    "stats": {
+      "students": "Students",
+      "lessons": "Lessons",
+      "quizzes": "Quizzes",
+      "completion": "Completion",
+      "averageScore": "Avg Score"
+    },
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive",
+      "draft": "Draft"
+    },
+    "viewMode": {
+      "grid": "Grid View",
+      "list": "List View"
+    },
+    "assignment": {
+      "title": "Assign Course",
+      "assign": "Assign Course",
+      "course": "Course",
+      "type": "Assignment Type",
+      "assignTeacher": "Assign to Teacher",
+      "assignClasses": "Assign to Classes",
+      "selectTeacher": "Select Teacher",
+      "selectTeacherPlaceholder": "Choose a teacher...",
+      "selectClasses": "Select Classes",
+      "selectClassesPlaceholder": "Choose classes...",
+      "notes": "Notes",
+      "notesPlaceholder": "Add any notes about this assignment...",
+      "teacherAssigned": "Course assigned to teacher successfully",
+      "classesAssigned": "Course assigned to {{ param }} classes successfully"
+    },
+    "schedule": {
+      "manage": "Manage Schedule",
+      "title": "Schedule Management",
+      "createTitle": "Create Schedule",
+      "editTitle": "Edit Schedule",
+      "createSchedule": "Create Schedule",
+      "course": "Course",
+      "date": "Date",
+      "startTime": "Start Time",
+      "endTime": "End Time",
+      "location": "Location",
+      "locationPlaceholder": "Enter location (optional)",
+      "checkConflicts": "Check Conflicts",
+      "conflictsDetected": "Schedule Conflicts Detected",
+      "invalidTimeRange": "End time must be after start time",
+      "noSchedules": "No schedules",
+      "totalSchedules": "Total Schedules",
+      "thisWeek": "This Week"
+    }
+  },
+  "lesson": {
+    "editor": {
+      "title": "Lesson Content Editor"
+    },
+    "title": "Title",
+    "content": "Content",
+    "video": "Video",
+    "slides": "Slides",
+    "flashcards": "Flashcards",
+    "video": {
+      "upload": "Drop video here or click to select",
+      "replace": "Drop video to replace or click to select",
+      "current": "Current video:",
+      "formats": "Supported: MP4, AVI, MOV, WMV, FLV, WebM, MKV (max 100MB)"
+    },
+    "slides": {
+      "upload": "Drop slides here or click to select",
+      "replace": "Drop slides to replace or click to select",
+      "current": "Current slides:",
+      "formats": "Supported: PDF, PPT, PPTX, ODP (max 50MB)"
+    },
+    "flashcards": {
+      "add": "Add New Flashcard",
+      "edit": "Edit Flashcard",
+      "term": "Term",
+      "definition": "Definition",
+      "hint": "Hint",
+      "image": "Image",
+      "term.placeholder": "Enter the term or question",
+      "definition.placeholder": "Enter the definition or answer",
+      "hint.placeholder": "Enter an optional hint",
+      "add.button": "Add Flashcard",
+      "moveUp": "Move up",
+      "moveDown": "Move down"
+    },
+    "upload": {
+      "error": "Failed to upload file. Please try again.",
+      "uploading": "Uploading...",
+      "error.fileSize": "File size exceeds maximum allowed size of {{ max }}"
+    },
+    "save": {
+      "error": "Failed to save lesson. Please try again."
+    },
+    "validation": {
+      "title": {
+        "required": "Lesson title is required"
+      },
+      "content": {
+        "required": "Lesson content is required"
+      }
+    },
+    "content": {
+      "placeholder": "Enter lesson content...",
+      "help": "Use the toolbar above to format your content. You can add headings, lists, links, images, and more."
+    }
+  }
+}

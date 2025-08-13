@@ -24,7 +24,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * Service Implementation for managing {@link com.satori.platform.domain.Schedule}.
+ * Service Implementation for managing
+ * {@link com.satori.platform.domain.Schedule}.
  */
 @Service
 @Transactional
@@ -39,7 +40,7 @@ public class ScheduleService {
     private final ScheduleMapper scheduleMapper;
     private final NotificationService notificationService;
 
-     public ScheduleService(
+    public ScheduleService(
             ScheduleRepository scheduleRepository,
             CourseRepository courseRepository,
             UserProfileRepository userProfileRepository,
@@ -66,7 +67,7 @@ public class ScheduleService {
     public ScheduleDTO createSchedule(ScheduleDTO scheduleDTO, Long teacherId) {
         LOG.debug("Request to create Schedule : {} by teacher: {}", scheduleDTO, teacherId);
 
-        validateTeacherPermission(teacherId, scheduleDTO.getCourse().getId());
+        validateTeacherPermission(teacherId, scheduleDTO.getCourseId());
         validateScheduleData(scheduleDTO);
         checkForConflicts(scheduleDTO, null);
 
@@ -240,7 +241,7 @@ public class ScheduleService {
         LOG.debug("Request to check conflicts for schedule: {}", scheduleDTO);
 
         List<Schedule> conflicts = scheduleRepository.findConflictingSchedules(
-                scheduleDTO.getCourse().getId(),
+                scheduleDTO.getCourseId(),
                 scheduleDTO.getStartTime(),
                 scheduleDTO.getEndTime());
 
@@ -285,7 +286,7 @@ public class ScheduleService {
             throw new IllegalArgumentException("Start time must be before end time");
         }
 
-        if (scheduleDTO.getCourse() == null || scheduleDTO.getCourse().getId() == null) {
+        if (scheduleDTO.getCourseId() == null) {
             throw new IllegalArgumentException("Course is required for schedule");
         }
 
@@ -345,8 +346,8 @@ public class ScheduleService {
     public ScheduleDTO save(ScheduleDTO scheduleDTO) {
         LOG.debug("Request to save Schedule : {}", scheduleDTO);
         // For new schedules, we need to determine the teacher from the course
-        if (scheduleDTO.getId() == null && scheduleDTO.getCourse() != null) {
-            Course course = courseRepository.findById(scheduleDTO.getCourse().getId())
+        if (scheduleDTO.getId() == null && scheduleDTO.getCourseId() != null) {
+            Course course = courseRepository.findById(scheduleDTO.getCourseId())
                     .orElseThrow(() -> new EntityNotFoundException("Course not found"));
             return createSchedule(scheduleDTO, course.getTeacher().getId());
         }
@@ -361,8 +362,8 @@ public class ScheduleService {
      */
     public ScheduleDTO update(ScheduleDTO scheduleDTO) {
         LOG.debug("Request to update Schedule : {}", scheduleDTO);
-        if (scheduleDTO.getId() != null && scheduleDTO.getCourse() != null) {
-            Course course = courseRepository.findById(scheduleDTO.getCourse().getId())
+        if (scheduleDTO.getId() != null && scheduleDTO.getCourseId() != null) {
+            Course course = courseRepository.findById(scheduleDTO.getCourseId())
                     .orElseThrow(() -> new EntityNotFoundException("Course not found"));
             return updateSchedule(scheduleDTO.getId(), scheduleDTO, course.getTeacher().getId());
         }

@@ -1,11 +1,12 @@
 package com.satori.platform.repository;
 
 import com.satori.platform.domain.FileMetaData;
-import java.util.List;
-import java.util.Optional;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
+import java.util.Optional;
 
 /**
  * Spring Data JPA repository for the FileMetaData entity.
@@ -13,77 +14,67 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface FileMetaDataRepository extends JpaRepository<FileMetaData, Long> {
 
-        /**
-         * Find all files by lesson
-         */
-        List<FileMetaData> findByLessonId(Long lessonId);
+        @Query("SELECT f FROM FileMetaData f WHERE f.uploadedBy.id = :userId")
+        List<FileMetaData> findByUploadedBy(@Param("userId") Long userId);
 
-        /**
-         * Find all files by lesson and file type
-         */
-        List<FileMetaData> findByLessonIdAndFileType(Long lessonId, String fileType);
+        @Query("SELECT f FROM FileMetaData f WHERE f.lesson.id = :lessonId")
+        List<FileMetaData> findByLessonId(@Param("lessonId") Long lessonId);
 
-        /**
-         * Find all files uploaded by a specific user
-         */
-        List<FileMetaData> findByUploadedById(Long uploadedById);
-
-        /**
-         * Find file by lesson and original name (for duplicate checking)
-         */
-        Optional<FileMetaData> findByLessonIdAndOriginalName(Long lessonId, String originalName);
-
-        /**
-         * Find files by lesson with access control validation
-         * Only returns files if the user has access to the lesson's course
-         */
-        @Query("SELECT fm FROM FileMetaData fm " +
-                        "JOIN fm.lesson l " +
-                        "JOIN l.course c " +
-                        "LEFT JOIN c.teacher t " +
-                        "LEFT JOIN StudentProfile sp ON sp.userProfile.id = :userId " +
-                        "LEFT JOIN sp.classes cc " +
-                        "WHERE fm.lesson.id = :lessonId " +
-                        "AND (t.id = :userId OR cc.course.id = c.id)")
+        @Query("SELECT f FROM FileMetaData f WHERE f.lesson.id = :lessonId AND " +
+                        "(f.isPublic = true OR f.uploadedBy.id = :userId OR " +
+                        "f.lesson.course.teacher.id = :userId)")
         List<FileMetaData> findByLessonIdWithAccessControl(@Param("lessonId") Long lessonId,
                         @Param("userId") Long userId);
 
-        /**
-         * Check if user has access to a specific file
-         */
-        @Query("SELECT CASE WHEN COUNT(fm) > 0 THEN true ELSE false END FROM FileMetaData fm " +
-                        "JOIN fm.lesson l " +
-                        "JOIN l.course c " +
-                        "LEFT JOIN c.teacher t " +
-                        "LEFT JOIN StudentProfile sp ON sp.userProfile.id = :userId " +
-                        "LEFT JOIN sp.classes cc " +
-                        "WHERE fm.id = :fileId " +
-                        "AND (t.id = :userId OR cc.course.id = c.id)")
+        @Query("SELECT CASE WHEN COUNT(f) > 0 THEN true ELSE false END FROM FileMetaData f WHERE " +
+                        "f.id = :fileId AND (f.isPublic = true OR f.uploadedBy.id = :userId OR " +
+                        "f.lesson.course.teacher.id = :userId)")
         boolean hasAccessToFile(@Param("fileId") Long fileId, @Param("userId") Long userId);
 
-        /**
-         * Find files by file type across all lessons
-         */
-        List<FileMetaData> findByFileTypeIn(List<String> fileTypes);
-
-        /**
-         * Find files larger than specified size
-         */
-        List<FileMetaData> findByFileSizeGreaterThan(Long fileSize);
-
-        /**
-         * Find files by checksum (for duplicate detection)
-         */
         Optional<FileMetaData> findByChecksum(String checksum);
 
-        /**
-         * Count files by lesson
-         */
-        long countByLessonId(Long lessonId);
+        Optional<FileMetaData> findByFileName(String fileName);
 
-        /**
-         * Get total file size for a lesson
-         */
-        @Query("SELECT COALESCE(SUM(fm.fileSize), 0) FROM FileMetaData fm WHERE fm.lesson.id = :lessonId")
-        Long getTotalFileSizeByLesson(@Param("lessonId") Long lessonId);
+        @Query("SELECT f FROM FileMetaData f WHERE f.folderPath = :folderPath")
+        List<FileMetaData> findByFolderPath(@Param("folderPath") String folderPath);
+
+        @Query("SELECT f FROM FileMetaData f WHERE " +
+                        "(:query IS NULL OR LOWER(f.originalName) LIKE LOWER(CONCAT('%', :query, '%')) OR " +
+                        "LOWER(f.description) LIKE LOWER(CONCAT('%', :query, '%'))) AND " +
+                        "(:folder IS NULL OR f.folderPath = :folder) AND " +
+                        "(:mimeType IS NULL OR f.mimeType LIKE CONCAT(:mimeType, '%')) AND " +
+                        "(f.isPublic = true OR f.uploadedBy.id = :userId)")
+        List<FileMetaData> searchFiles(@Param("query") String query,
+                        @Param("folder") String folder,
+                        @Param("mimeType") String mimeType,
+                        @Param("userId") Long userId);
+
+        @Query("SELECT f FROM FileMetaData f WHERE f.mimeType LIKE 'image/%'")
+        List<FileMetaData> findAllImages();
+
+        @Query("SELECT f FROM FileMetaData f WHERE f.mimeType LIKE 'video/%'")
+        List<FileMetaData> findAllVideos();
+
+        @Query("SELECT f FROM FileMetaData f WHERE f.mimeType LIKE 'audio/%'")
+        List<FileMetaData> findAllAudio();
+
+        @Query("SELECT f FROM FileMetaData f WHERE f.mimeType = 'application/pdf'")
+        List<FileMetaData> findAllPdfs();
+
+        @Query("SELECT COUNT(f) FROM FileMetaData f WHERE f.uploadedBy.id = :userId")
+        long countByUploadedBy(@Param("userId") Long userId);
+
+        @Query("SELECT SUM(f.fileSize) FROM FileMetaData f WHERE f.uploadedBy.id = :userId")
+        Long getTotalFileSizeByUser(@Param("userId") Long userId);
+
+        @Query("SELECT f FROM FileMetaData f WHERE f.uploadedBy.id = :userId ORDER BY f.uploadDate DESC")
+        List<FileMetaData> findRecentFilesByUser(@Param("userId") Long userId,
+                        org.springframework.data.domain.Pageable pageable);
+
+        @Query("SELECT f FROM FileMetaData f WHERE f.lesson IS NULL AND f.folderPath IS NOT NULL")
+        List<FileMetaData> findOrphanedFiles();
+
+        @Modifying
+        @Query("UPDATE FileMetaData f SET f.downloadCount = f.downloadCount + 1, f.lastAccessedDate = CURRENT_TIMESTAMP WHERE f.id = :fileId")
+        void incrementDownloadCount(@Param("fileId") Long fileId);
 }

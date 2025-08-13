@@ -1,11 +1,16 @@
 id;content;image_url;suggestion;answer_explanation;correct_answer;type
-1;forenenst;blind;times provided analyse;pastel;if;aside
-2;when brr deceivingly;sometimes how;jovially who abacus;cross begonia nor;hateful flood aha;oof unwritten
-3;eyeliner across;as;zowie matter;even;athwart;freight where
-4;versus swill;never co-producer;somber treasure;overproduce;tired graceful;while
-5;analogy commonly iridescence;once ponder;aw condense;feather;rosy sudden clear;meanwhile
-6;around gadzooks big;pish lieu majority;eventually;larva dark yowza;impeccable disloyal;elliptical towards
-7;out;knowledgeably yuck;slump including;uncover t-shirt;absent;always accidentally unless
-8;alive;boohoo minus upbeat;papa;while;alliance slowly worthy;numeric bitterly
-9;abnormally neat longingly;developing;roughly newsprint;eternity that nor;negative;obsess belabor
-10;dearly;crossly utterly;best like;creative secrecy luck;regular;given alongside
+1;はじめまして。私は田中です。よろしく_______。;https://example.com/greeting.jpg;Choose the appropriate ending;This is a standard greeting formula when meeting someone for the first time;お願いします;MULTIPLE_CHOICE
+2;これは_______ですか。;https://example.com/objects.jpg;Look at the image and choose;Use 'nan' to ask 'what' about objects;何;MULTIPLE_CHOICE
+3;今_______時ですか。;https://example.com/clock.jpg;Time-telling question;Use 'nanji' to ask about time;何;FILL_IN_BLANK
+4;図書館は9時_______5時までです。;https://example.com/library.jpg;Choose the correct particle;Use 'kara' to indicate starting point of time;から;MULTIPLE_CHOICE
+5;大阪_______行きます。;https://example.com/train.jpg;Choose the correct particle;Use 'made' to indicate destination or endpoint;まで;MULTIPLE_CHOICE
+6;いっしょに映画を_______ませんか。;https://example.com/cinema.jpg;Invitation pattern;Use 'mi' from 'miru' (to watch) for inviting to watch movies;見;MULTIPLE_CHOICE
+7;家族は_______人ですか。;https://example.com/family.jpg;Counting people;Use 'nan' to ask 'how many' people;何;FILL_IN_BLANK
+8;今日は_______ですね。;https://example.com/sunny.jpg;Weather expression;Describes sunny weather;いい天気;MULTIPLE_CHOICE
+9;昨日映画を_______ました。;https://example.com/movie.jpg;Past tense verb;Past form of 'miru' (to watch);見;MULTIPLE_CHOICE
+10;コンサートは_______でしたか。;https://example.com/concert.jpg;Opinion question;Standard way to ask for opinion about events;どう;MULTIPLE_CHOICE
+11;すみません、これを_______。;https://example.com/shopping.jpg;Shopping expression;Polite way to ask for something in a shop;ください;MULTIPLE_CHOICE
+12;お祭りは_______でしたか。;https://example.com/festival.jpg;Past experience question;Asking about how the festival was;どう;MULTIPLE_CHOICE
+13;別々に_______します。;https://example.com/payment.jpg;Payment situation;Polite way to ask for separate bills;お願い;MULTIPLE_CHOICE
+14;とても_______ました。;https://example.com/tired.jpg;Expressing tiredness;Past form of expressing fatigue;疲れ;FILL_IN_BLANK
+15;これは家族の_______ですか。;https://example.com/photo.jpg;About photographs;Word for photograph or picture;写真;MULTIPLE_CHOICE

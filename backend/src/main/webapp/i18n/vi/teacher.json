@@ -1,0 +1,9 @@
+{
+  "teacher": {
+    "dashboard": {
+      "title": "Bảng điều khiển giáo viên",
+      "welcome": "Chào mừng đến với bảng điều khiển giáo viên",
+      "description": "Đây là bảng điều khiển giáo viên nơi bạn có thể quản lý các khóa học, lớp học và tiến độ học tập của học sinh."
+    }
+  }
+}

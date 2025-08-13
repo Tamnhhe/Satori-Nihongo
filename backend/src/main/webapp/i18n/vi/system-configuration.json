@@ -1,0 +1,47 @@
+{
+  "systemConfiguration": {
+    "title": "Cấu Hình Hệ Thống",
+    "description": "Quản lý cài đặt hệ thống, cấu hình bảo mật và tính năng",
+    "noData": "Không có dữ liệu cấu hình",
+    "validate": "Xác Thực",
+    "backup": "Tạo Sao Lưu",
+    "restore": "Khôi Phục",
+    "backupId": "ID Sao Lưu",
+    "enterBackupId": "Nhập ID sao lưu để khôi phục",
+    "updateSuccess": "Cập nhật cấu hình thành công",
+    "validationErrors": "Lỗi Xác Thực",
+    "backupCreated": "Đã tạo sao lưu với ID:",
+    "tabs": {
+      "security": "Bảo Mật",
+      "oauth2": "OAuth2",
+      "features": "Tính Năng",
+      "parameters": "Tham Số Hệ Thống"
+    },
+    "security": {
+      "title": "Cài Đặt Bảo Mật",
+      "csp": "Chính Sách Bảo Mật Nội Dung",
+      "sessionTimeout": "Thời Gian Chờ Phiên (phút)",
+      "maxLoginAttempts": "Số Lần Đăng Nhập Tối Đa",
+      "lockoutDuration": "Thời Gian Khóa Tài Khoản (phút)",
+      "requireHttps": "Yêu Cầu HTTPS",
+      "enableCsrf": "Bật Bảo Vệ CSRF"
+    },
+    "oauth2": {
+      "title": "Cấu Hình OAuth2",
+      "enabled": "Bật Xác Thực OAuth2",
+      "redirectBaseUrl": "URL Chuyển Hướng Cơ Sở",
+      "providers": "Nhà Cung Cấp OAuth2",
+      "clientId": "ID Khách Hàng",
+      "clientSecret": "Khóa Bí Mật",
+      "scope": "Phạm Vi"
+    },
+    "features": {
+      "title": "Bật/Tắt Tính Năng",
+      "description": "Bật hoặc tắt các tính năng hệ thống"
+    },
+    "parameters": {
+      "title": "Tham Số Hệ Thống",
+      "description": "Cấu hình các tham số toàn hệ thống"
+    }
+  }
+}

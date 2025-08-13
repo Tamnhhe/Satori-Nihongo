@@ -1,4 +1,7 @@
-// Override Bootstrap variables
+// Import Satori Design System
+@import 'shared/design-system/styles/globals';
+
+// Override Bootstrap variables (keeping for compatibility)
 @import 'bootstrap-variables';
 // Import Bootstrap source files from node_modules
 @import 'bootstrap/scss/bootstrap';

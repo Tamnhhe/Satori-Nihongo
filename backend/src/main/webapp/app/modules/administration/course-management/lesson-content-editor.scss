@@ -1,0 +1,280 @@
+.lesson-content-editor {
+  .dropzone {
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+
+    &.active {
+      border-color: #007bff !important;
+      background-color: #e3f2fd !important;
+      transform: scale(1.02);
+    }
+
+    &.reject {
+      border-color: #dc3545 !important;
+      background-color: #f8d7da !important;
+    }
+
+    &.disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    &:hover:not(.disabled):not(.active):not(.reject) {
+      border-color: #007bff;
+      background-color: #f8f9fa;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 123, 255, 0.15);
+    }
+
+    .upload-progress {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background-color: #007bff;
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s ease;
+    }
+  }
+
+  .quill {
+    .ql-editor {
+      min-height: 200px;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .ql-toolbar {
+      border-top: 1px solid #ccc;
+      border-left: 1px solid #ccc;
+      border-right: 1px solid #ccc;
+    }
+
+    .ql-container {
+      border-bottom: 1px solid #ccc;
+      border-left: 1px solid #ccc;
+      border-right: 1px solid #ccc;
+    }
+  }
+
+  .flashcard-display {
+    border: 1px solid #dee2e6;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    margin-bottom: 0.75rem;
+    background-color: #fff;
+    transition: all 0.3s ease;
+    position: relative;
+
+    &:hover {
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      transform: translateY(-2px);
+      border-color: #007bff;
+    }
+
+    .badge {
+      font-size: 0.75rem;
+    }
+
+    .btn-group {
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    &:hover .btn-group {
+      opacity: 1;
+    }
+
+    img {
+      transition: transform 0.2s ease;
+
+      &:hover {
+        transform: scale(1.1);
+      }
+    }
+  }
+
+  .flashcard-editor {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border: 2px solid #007bff;
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.15);
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    .btn {
+      border-radius: 0.375rem;
+    }
+  }
+
+  .file-upload-area {
+    border: 2px dashed #dee2e6;
+    border-radius: 0.375rem;
+    padding: 2rem;
+    text-align: center;
+    background-color: #f8f9fa;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &:hover {
+      border-color: #007bff;
+      background-color: #e3f2fd;
+    }
+
+    &.drag-active {
+      border-color: #007bff;
+      background-color: #e3f2fd;
+      transform: scale(1.02);
+    }
+
+    .upload-icon {
+      color: #6c757d;
+      margin-bottom: 1rem;
+    }
+
+    .upload-text {
+      color: #6c757d;
+      font-size: 0.9rem;
+    }
+  }
+
+  .media-preview {
+    margin-top: 1rem;
+    padding: 0.5rem;
+    background-color: #f8f9fa;
+    border-radius: 0.375rem;
+
+    .media-info {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      .media-name {
+        font-size: 0.875rem;
+        color: #495057;
+        word-break: break-all;
+      }
+
+      .media-actions {
+        display: flex;
+        gap: 0.5rem;
+      }
+    }
+  }
+
+  .validation-error {
+    color: #dc3545;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+  }
+
+  .loading-overlay {
+    position: relative;
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(255, 255, 255, 0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+    }
+  }
+
+  .btn-group-sm .btn {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+  }
+
+  .flashcard-position-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+
+    .btn {
+      padding: 0.125rem 0.25rem;
+      font-size: 0.75rem;
+      line-height: 1;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .quill .ql-toolbar {
+      flex-wrap: wrap;
+    }
+
+    .flashcard-item {
+      .d-flex {
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .flashcard-actions {
+        opacity: 1;
+        align-self: flex-end;
+      }
+    }
+
+    .file-upload-area {
+      padding: 1rem;
+
+      .upload-icon {
+        font-size: 1.5rem;
+      }
+    }
+  }
+}
+
+// Dark mode support
+@media (prefers-color-scheme: dark) {
+  .lesson-content-editor {
+    .dropzone {
+      background-color: #2d3748;
+      border-color: #4a5568;
+      color: #e2e8f0;
+
+      &.active {
+        border-color: #63b3ed;
+        background-color: #2a4365;
+      }
+    }
+
+    .flashcard-item {
+      background-color: #2d3748;
+      border-color: #4a5568;
+      color: #e2e8f0;
+    }
+
+    .flashcard-editor {
+      background-color: #1a202c;
+      border-color: #63b3ed;
+    }
+
+    .file-upload-area {
+      background-color: #2d3748;
+      border-color: #4a5568;
+      color: #e2e8f0;
+
+      &:hover {
+        border-color: #63b3ed;
+        background-color: #2a4365;
+      }
+    }
+
+    .media-preview {
+      background-color: #2d3748;
+      color: #e2e8f0;
+    }
+  }
+}

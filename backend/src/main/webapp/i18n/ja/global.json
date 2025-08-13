@@ -43,6 +43,10 @@
         "database": "データベース",
         "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"
       },
+      "teacher": {
+        "main": "教師",
+        "dashboard": "ダッシュボード"
+      },
       "language": "言語"
     },
     "form": {

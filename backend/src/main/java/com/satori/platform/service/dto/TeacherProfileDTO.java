@@ -2,6 +2,7 @@ package com.satori.platform.service.dto;
 
 import jakarta.validation.constraints.*;
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.Objects;
 
 /**
@@ -14,6 +15,10 @@ public class TeacherProfileDTO implements Serializable {
 
     @NotNull
     private String teacherCode;
+
+    private String employeeId;
+
+    private Instant hireDate;
 
     public Long getId() {
         return id;
@@ -29,6 +34,22 @@ public class TeacherProfileDTO implements Serializable {
 
     public void setTeacherCode(String teacherCode) {
         this.teacherCode = teacherCode;
+    }
+
+    public String getEmployeeId() {
+        return employeeId;
+    }
+
+    public void setEmployeeId(String employeeId) {
+        this.employeeId = employeeId;
+    }
+
+    public Instant getHireDate() {
+        return hireDate;
+    }
+
+    public void setHireDate(Instant hireDate) {
+        this.hireDate = hireDate;
     }
 
     @Override
@@ -56,8 +77,8 @@ public class TeacherProfileDTO implements Serializable {
     @Override
     public String toString() {
         return "TeacherProfileDTO{" +
-            "id=" + getId() +
-            ", teacherCode='" + getTeacherCode() + "'" +
-            "}";
+                "id=" + getId() +
+                ", teacherCode='" + getTeacherCode() + "'" +
+                "}";
     }
 }

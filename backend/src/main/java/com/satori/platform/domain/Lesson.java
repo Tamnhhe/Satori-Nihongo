@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
 import org.hibernate.annotations.Cache;
@@ -38,6 +39,18 @@ public class Lesson implements Serializable {
 
     @Column(name = "slide_url")
     private String slideUrl;
+
+    @Column(name = "order_index")
+    private Integer orderIndex;
+
+    @Column(name = "duration")
+    private Integer duration;
+
+    @Column(name = "active")
+    private Boolean active;
+
+    @Column(name = "created_date")
+    private Instant createdDate;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "lesson")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
@@ -128,6 +141,58 @@ public class Lesson implements Serializable {
 
     public void setSlideUrl(String slideUrl) {
         this.slideUrl = slideUrl;
+    }
+
+    public Integer getOrderIndex() {
+        return this.orderIndex;
+    }
+
+    public Lesson orderIndex(Integer orderIndex) {
+        this.setOrderIndex(orderIndex);
+        return this;
+    }
+
+    public void setOrderIndex(Integer orderIndex) {
+        this.orderIndex = orderIndex;
+    }
+
+    public Integer getDuration() {
+        return this.duration;
+    }
+
+    public Lesson duration(Integer duration) {
+        this.setDuration(duration);
+        return this;
+    }
+
+    public void setDuration(Integer duration) {
+        this.duration = duration;
+    }
+
+    public Boolean getActive() {
+        return this.active;
+    }
+
+    public Lesson active(Boolean active) {
+        this.setActive(active);
+        return this;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
+
+    public Instant getCreatedDate() {
+        return this.createdDate;
+    }
+
+    public Lesson createdDate(Instant createdDate) {
+        this.setCreatedDate(createdDate);
+        return this;
+    }
+
+    public void setCreatedDate(Instant createdDate) {
+        this.createdDate = createdDate;
     }
 
     public Set<Flashcard> getFlashcards() {
@@ -267,7 +332,8 @@ public class Lesson implements Serializable {
         return this;
     }
 
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
+    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and
+    // setters here
 
     @Override
     public boolean equals(Object o) {
@@ -282,7 +348,8 @@ public class Lesson implements Serializable {
 
     @Override
     public int hashCode() {
-        // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
+        // see
+        // https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
         return getClass().hashCode();
     }
 
@@ -290,11 +357,11 @@ public class Lesson implements Serializable {
     @Override
     public String toString() {
         return "Lesson{" +
-            "id=" + getId() +
-            ", title='" + getTitle() + "'" +
-            ", content='" + getContent() + "'" +
-            ", videoUrl='" + getVideoUrl() + "'" +
-            ", slideUrl='" + getSlideUrl() + "'" +
-            "}";
+                "id=" + getId() +
+                ", title='" + getTitle() + "'" +
+                ", content='" + getContent() + "'" +
+                ", videoUrl='" + getVideoUrl() + "'" +
+                ", slideUrl='" + getSlideUrl() + "'" +
+                "}";
     }
 }

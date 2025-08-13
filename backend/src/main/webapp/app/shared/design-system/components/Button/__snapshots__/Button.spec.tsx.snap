@@ -1,0 +1,61 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Button Component should match snapshot 1`] = `
+<div>
+  <button
+    aria-disabled="false"
+    aria-label="Primary"
+    class="satori-button satori-button--primary satori-button--md"
+    type="button"
+  >
+    <span
+      class="satori-button__content"
+    >
+      Primary
+    </span>
+  </button>
+  <button
+    aria-disabled="false"
+    aria-label="Secondary Small"
+    class="satori-button satori-button--secondary satori-button--small"
+    type="button"
+  >
+    <span
+      class="satori-button__content"
+    >
+      Secondary Small
+    </span>
+  </button>
+  <button
+    aria-disabled="true"
+    aria-label="Outline Disabled"
+    class="satori-button satori-button--outline satori-button--md satori-button--disabled"
+    disabled=""
+    type="button"
+  >
+    <span
+      class="satori-button__content"
+    >
+      Outline Disabled
+    </span>
+  </button>
+  <button
+    aria-disabled="true"
+    aria-label="Loading"
+    class="satori-button satori-button--primary satori-button--md satori-button--loading"
+    disabled=""
+    type="button"
+  >
+    <span
+      class="sr-only"
+    >
+      Loading...
+    </span>
+    <span
+      class="satori-button__content"
+    >
+      Loading
+    </span>
+  </button>
+</div>
+`;

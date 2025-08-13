@@ -70,12 +70,14 @@ public class AuditLog implements Serializable {
     @Column(name = "session_id", length = 100)
     private String sessionId;
 
-
     @Column(name = "success")
     private Boolean success;
 
     @Column(name = "error_message", length = 1000)
     private String errorMessage;
+
+    @Column(name = "details", columnDefinition = "TEXT")
+    private String details;
 
     // Constructors, Getters, Setters, equals, hashCode, toString methods
     public AuditLog() {
@@ -93,36 +95,47 @@ public class AuditLog implements Serializable {
     public Long getId() {
         return id;
     }
+
     public void setId(Long id) {
         this.id = id;
     }
+
     public String getUsername() {
         return username;
     }
+
     public void setUsername(String username) {
         this.username = username;
     }
+
     public AuditAction getAction() {
         return action;
     }
+
     public void setAction(AuditAction action) {
         this.action = action;
     }
+
     public String getResourceType() {
         return resourceType;
     }
+
     public void setResourceType(String resourceType) {
         this.resourceType = resourceType;
     }
+
     public Long getResourceId() {
         return resourceId;
     }
+
     public void setResourceId(Long resourceId) {
         this.resourceId = resourceId;
     }
+
     public String getDescription() {
         return description;
     }
+
     public void setDescription(String description) {
         this.description = description;
     }
@@ -130,57 +143,83 @@ public class AuditLog implements Serializable {
     public String getIpAddress() {
         return ipAddress;
     }
+
     public void setIpAddress(String ipAddress) {
         this.ipAddress = ipAddress;
     }
+
     public String getUserAgent() {
         return userAgent;
     }
+
     public void setUserAgent(String userAgent) {
         this.userAgent = userAgent;
     }
+
     public String getRequestUrl() {
         return requestUrl;
     }
+
     public void setRequestUrl(String requestUrl) {
         this.requestUrl = requestUrl;
     }
+
     public String getOldValues() {
         return oldValues;
     }
+
     public void setOldValues(String oldValues) {
         this.oldValues = oldValues;
     }
+
     public String getNewValues() {
         return newValues;
     }
+
     public void setNewValues(String newValues) {
         this.newValues = newValues;
     }
+
     public Instant getTimestamp() {
         return timestamp;
     }
+
     public void setTimestamp(Instant timestamp) {
         this.timestamp = timestamp;
     }
+
     public String getSessionId() {
         return sessionId;
     }
+
     public void setSessionId(String sessionId) {
         this.sessionId = sessionId;
     }
+
     public Boolean getSuccess() {
         return success;
     }
+
     public void setSuccess(Boolean success) {
         this.success = success;
     }
+
     public String getErrorMessage() {
         return errorMessage;
     }
+
     public void setErrorMessage(String errorMessage) {
         this.errorMessage = errorMessage;
     }
+
+    public String getDetails() {
+        return details;
+    }
+
+    public void setDetails(String details) {
+        this.details = details;
+    }
+
     @Override
     public String toString() {
         return "AuditLog{" +
@@ -204,8 +243,10 @@ public class AuditLog implements Serializable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof AuditLog)) return false;
+        if (this == o)
+            return true;
+        if (!(o instanceof AuditLog))
+            return false;
         AuditLog auditLog = (AuditLog) o;
         return id != null && id.equals(auditLog.id);
     }

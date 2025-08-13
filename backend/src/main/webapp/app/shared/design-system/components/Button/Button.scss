@@ -1,0 +1,296 @@
+@import '../../tokens/variables';
+
+.satori-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: $font-family-sans;
+  font-weight: $font-weight-medium;
+  border-radius: $radius-md;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all $transition-fast;
+  text-decoration: none;
+  white-space: nowrap;
+  user-select: none;
+  position: relative;
+  overflow: hidden;
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba($primary-500, 0.1);
+  }
+
+  &:active {
+    transform: translateY(1px);
+  }
+
+  // Size variants
+  &--sm {
+    height: $button-height-sm;
+    padding: 0 $spacing-3;
+    font-size: $text-sm;
+    line-height: $leading-tight;
+
+    &.satori-button--icon-only {
+      width: $button-height-sm;
+      padding: 0;
+    }
+  }
+
+  &--md {
+    height: $button-height-md;
+    padding: 0 $spacing-4;
+    font-size: $text-base;
+    line-height: $leading-normal;
+
+    &.satori-button--icon-only {
+      width: $button-height-md;
+      padding: 0;
+    }
+  }
+
+  &--lg {
+    height: $button-height-lg;
+    padding: 0 $spacing-6;
+    font-size: $text-lg;
+    line-height: $leading-normal;
+
+    &.satori-button--icon-only {
+      width: $button-height-lg;
+      padding: 0;
+    }
+  }
+
+  // Variant styles
+  &--primary {
+    background-color: $primary-600;
+    color: white;
+    border-color: $primary-600;
+
+    &:hover:not(:disabled) {
+      background-color: $primary-700;
+      border-color: $primary-700;
+    }
+
+    &:active:not(:disabled) {
+      background-color: $primary-800;
+      border-color: $primary-800;
+    }
+  }
+
+  &--secondary {
+    background-color: $secondary-600;
+    color: white;
+    border-color: $secondary-600;
+
+    &:hover:not(:disabled) {
+      background-color: $secondary-700;
+      border-color: $secondary-700;
+    }
+
+    &:active:not(:disabled) {
+      background-color: $secondary-800;
+      border-color: $secondary-800;
+    }
+  }
+
+  &--outline {
+    background-color: transparent;
+    color: $gray-700;
+    border-color: $gray-300;
+
+    &:hover:not(:disabled) {
+      background-color: $gray-50;
+      border-color: $gray-400;
+      color: $gray-900;
+    }
+
+    &:active:not(:disabled) {
+      background-color: $gray-100;
+    }
+  }
+
+  &--ghost {
+    background-color: transparent;
+    color: $gray-600;
+    border-color: transparent;
+
+    &:hover:not(:disabled) {
+      background-color: $gray-100;
+      color: $gray-900;
+    }
+
+    &:active:not(:disabled) {
+      background-color: $gray-200;
+    }
+  }
+
+  &--danger {
+    background-color: $error-600;
+    color: white;
+    border-color: $error-600;
+
+    &:hover:not(:disabled) {
+      background-color: $error-700;
+      border-color: $error-700;
+    }
+
+    &:active:not(:disabled) {
+      background-color: $error-800;
+      border-color: $error-800;
+    }
+  }
+
+  &--success {
+    background-color: $success-600;
+    color: white;
+    border-color: $success-600;
+
+    &:hover:not(:disabled) {
+      background-color: $success-700;
+      border-color: $success-700;
+    }
+
+    &:active:not(:disabled) {
+      background-color: $success-800;
+      border-color: $success-800;
+    }
+  }
+
+  &--warning {
+    background-color: $warning-600;
+    color: white;
+    border-color: $warning-600;
+
+    &:hover:not(:disabled) {
+      background-color: $warning-700;
+      border-color: $warning-700;
+    }
+
+    &:active:not(:disabled) {
+      background-color: $warning-800;
+      border-color: $warning-800;
+    }
+  }
+
+  // States
+  &--disabled,
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  &--loading {
+    cursor: wait;
+    pointer-events: none;
+  }
+
+  &--full-width {
+    width: 100%;
+  }
+
+  // Content and icons
+  &__content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__icon {
+    flex-shrink: 0;
+
+    &--left {
+      margin-right: $spacing-2;
+    }
+
+    &--right {
+      margin-left: $spacing-2;
+    }
+
+    &--spinning {
+      animation: spin 1s linear infinite;
+    }
+  }
+
+  // Icon only buttons
+  &--icon-only {
+    .satori-button__icon {
+      margin: 0;
+    }
+  }
+}
+
+// Button Group
+.satori-button-group {
+  display: flex;
+
+  &--horizontal {
+    flex-direction: row;
+
+    &.satori-button-group--spacing-none {
+      .satori-button:not(:first-child) {
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+        margin-left: -1px;
+      }
+
+      .satori-button:not(:last-child) {
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+      }
+    }
+
+    &.satori-button-group--spacing-sm {
+      gap: $spacing-2;
+    }
+
+    &.satori-button-group--spacing-md {
+      gap: $spacing-3;
+    }
+
+    &.satori-button-group--spacing-lg {
+      gap: $spacing-4;
+    }
+  }
+
+  &--vertical {
+    flex-direction: column;
+
+    &.satori-button-group--spacing-none {
+      .satori-button:not(:first-child) {
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+        margin-top: -1px;
+      }
+
+      .satori-button:not(:last-child) {
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+      }
+    }
+
+    &.satori-button-group--spacing-sm {
+      gap: $spacing-2;
+    }
+
+    &.satori-button-group--spacing-md {
+      gap: $spacing-3;
+    }
+
+    &.satori-button-group--spacing-lg {
+      gap: $spacing-4;
+    }
+  }
+}
+
+// Animations
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

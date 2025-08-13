@@ -1,0 +1,28 @@
+{
+  "teacherDashboard": {
+    "title": "Bảng điều khiển Giáo viên",
+    "refresh": "Làm mới",
+    "loading": "Đang tải...",
+    "totalCourses": "Tổng số Khóa học",
+    "activeClasses": "Lớp học Đang hoạt động",
+    "totalStudents": "Tổng số Học viên",
+    "avgCompletion": "Hoàn thành Trung bình",
+    "assignedCourses": "Khóa học được Phân công",
+    "noCourses": "Chưa có khóa học được phân công",
+    "noClasses": "Không có lớp học đang hoạt động",
+    "noStudents": "Không có dữ liệu học viên",
+    "enrollment": "Đăng ký",
+    "nextSession": "Buổi học Tiếp theo",
+    "studentProgress": "Tiến độ Học viên",
+    "completion": "Hoàn thành",
+    "avgScore": "Điểm TB",
+    "lastActivity": "Hoạt động Cuối",
+    "viewAllStudents": "Xem tất cả học viên",
+    "quickActions": "Thao tác Nhanh",
+    "createCourse": "Tạo Khóa học",
+    "createQuiz": "Tạo Bài kiểm tra",
+    "scheduleClass": "Lên lịch Lớp học",
+    "viewStudents": "Xem Học viên",
+    "pendingQuizzes": "Bài kiểm tra Chờ xử lý"
+  }
+}

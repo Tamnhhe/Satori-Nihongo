@@ -1,0 +1,111 @@
+{
+  "panel": {
+    "title": "Help & Documentation",
+    "help": "Help",
+    "openHelp": "Open Help Panel",
+    "searchPlaceholder": "Search help articles...",
+    "noResults": "No help articles found for your search.",
+    "clearSearch": "Clear Search"
+  },
+  "categories": {
+    "user-management": "User Management",
+    "course-management": "Course Management",
+    "class-management": "Class Management",
+    "quiz-management": "Quiz & Assessment Management",
+    "analytics": "Analytics & Reporting",
+    "file-management": "File Management",
+    "notification-management": "Notification Management",
+    "system-administration": "System Administration"
+  },
+  "tours": {
+    "skip": "Skip Tour",
+    "next": "Next",
+    "previous": "Previous",
+    "finish": "Finish",
+    "userManagement": {
+      "name": "User Management Tour",
+      "step1": {
+        "title": "User Table",
+        "content": "This table shows all users in the system. You can sort, filter, and search for specific users."
+      },
+      "step2": {
+        "title": "User Filters",
+        "content": "Use these filters to narrow down the user list by role, status, or other criteria."
+      }
+    },
+    "courseManagement": {
+      "name": "Course Management Tour",
+      "step1": {
+        "title": "Course Grid",
+        "content": "View all courses in a grid layout. Click on any course to edit its details."
+      },
+      "step2": {
+        "title": "Create Course",
+        "content": "Click here to create a new course with lessons and assignments."
+      }
+    }
+  },
+  "userManagement": {
+    "overview": {
+      "title": "User Management Overview",
+      "content": "<p>The User Management system allows administrators to manage all user accounts, roles, and permissions within the platform.</p><h3>Key Features:</h3><ul><li>View and search all users</li><li>Edit user profiles and roles</li><li>Manage account status (active/inactive)</li><li>Bulk operations for multiple users</li><li>CSV import/export functionality</li></ul><h3>User Roles:</h3><ul><li><strong>ADMIN</strong>: Full system access</li><li><strong>GIANG_VIEN (Teacher)</strong>: Course and class management</li><li><strong>HOC_VIEN (Student)</strong>: Learning access only</li></ul>"
+    },
+    "roles": {
+      "title": "User Roles and Permissions",
+      "content": "<p>Understanding user roles is crucial for proper system administration.</p><h3>Administrator (ADMIN)</h3><ul><li>Full access to all system features</li><li>User management and role assignment</li><li>System configuration and monitoring</li><li>Analytics and reporting</li></ul><h3>Teacher (GIANG_VIEN)</h3><ul><li>Course and lesson management</li><li>Class scheduling and enrollment</li><li>Quiz creation and grading</li><li>Student progress tracking</li></ul><h3>Student (HOC_VIEN)</h3><ul><li>Course enrollment and learning</li><li>Quiz taking and progress viewing</li><li>Profile management</li></ul>"
+    }
+  },
+  "courseManagement": {
+    "creation": {
+      "title": "Creating and Managing Courses",
+      "content": "<p>Course management is central to the learning platform. Here's how to effectively create and manage courses.</p><h3>Creating a New Course:</h3><ol><li>Click the 'Create Course' button</li><li>Fill in required information (title, description, course code)</li><li>Assign a teacher to the course</li><li>Add lessons and content</li><li>Set up class schedules</li></ol><h3>Course Components:</h3><ul><li><strong>Lessons</strong>: Individual learning units with content</li><li><strong>Classes</strong>: Scheduled learning sessions</li><li><strong>Assignments</strong>: Tasks for students to complete</li><li><strong>Quizzes</strong>: Assessment tools</li></ul>"
+    },
+    "lessonEditor": {
+      "title": "Lesson Content Editor",
+      "content": "<p>The lesson content editor provides rich text editing capabilities for creating engaging learning content.</p><h3>Features:</h3><ul><li>Rich text formatting (bold, italic, lists, etc.)</li><li>Image and video embedding</li><li>File attachments</li><li>Flashcard integration</li><li>Preview functionality</li></ul><h3>Best Practices:</h3><ul><li>Use clear headings to structure content</li><li>Include multimedia to enhance learning</li><li>Add interactive elements like flashcards</li><li>Preview content before publishing</li></ul>"
+    }
+  },
+  "quizManagement": {
+    "builder": {
+      "title": "Quiz Builder Guide",
+      "content": "<p>The quiz builder allows you to create comprehensive assessments for your courses.</p><h3>Question Types:</h3><ul><li><strong>Multiple Choice</strong>: Single or multiple correct answers</li><li><strong>Fill in the Blank</strong>: Text input questions</li><li><strong>Essay</strong>: Long-form written responses</li><li><strong>True/False</strong>: Simple binary questions</li></ul><h3>Quiz Settings:</h3><ul><li>Time limits and attempts</li><li>Randomization options</li><li>Grading and feedback settings</li><li>Availability dates</li></ul><h3>Tips:</h3><ul><li>Use a mix of question types</li><li>Provide clear instructions</li><li>Include explanations for answers</li><li>Test your quiz before publishing</li></ul>"
+    }
+  },
+  "analytics": {
+    "student": {
+      "title": "Student Analytics and Progress Tracking",
+      "content": "<p>Monitor student progress and performance with comprehensive analytics tools.</p><h3>Available Metrics:</h3><ul><li>Course completion rates</li><li>Quiz scores and trends</li><li>Time spent learning</li><li>Engagement levels</li><li>Learning path progress</li></ul><h3>Reports:</h3><ul><li><strong>Individual Progress</strong>: Detailed student performance</li><li><strong>Class Overview</strong>: Aggregate class statistics</li><li><strong>Course Analytics</strong>: Course-wide performance metrics</li><li><strong>Comparative Analysis</strong>: Cross-course comparisons</li></ul><h3>Using Analytics:</h3><ul><li>Identify struggling students early</li><li>Adjust teaching methods based on data</li><li>Track improvement over time</li><li>Generate reports for stakeholders</li></ul>"
+    }
+  },
+  "tooltips": {
+    "userTable": {
+      "sortColumn": "Click to sort by this column",
+      "filterButton": "Open filters to narrow down the user list",
+      "editUser": "Click to edit this user's profile and settings",
+      "userStatus": "Shows whether the user account is active or inactive"
+    },
+    "courseManagement": {
+      "createCourse": "Create a new course with lessons and assignments",
+      "editCourse": "Modify course details, lessons, and settings",
+      "courseStats": "View enrollment numbers and course statistics",
+      "assignTeacher": "Assign or change the teacher for this course"
+    },
+    "quizBuilder": {
+      "addQuestion": "Add a new question to this quiz",
+      "questionType": "Select the type of question (multiple choice, essay, etc.)",
+      "dragReorder": "Drag questions to reorder them in the quiz",
+      "previewQuiz": "Preview how the quiz will appear to students"
+    },
+    "analytics": {
+      "timeRange": "Select the time period for analytics data",
+      "exportData": "Export analytics data to CSV or PDF format",
+      "chartType": "Change how the data is visualized (line, bar, pie chart)",
+      "drillDown": "Click on data points to see more detailed information"
+    }
+  },
+  "common": {
+    "back": "Back",
+    "tags": "Tags",
+    "learnMore": "Learn More"
+  }
+}

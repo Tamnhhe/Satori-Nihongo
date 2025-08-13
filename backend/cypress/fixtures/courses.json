@@ -1,0 +1,29 @@
+[
+  {
+    "id": "1",
+    "title": "Basic Japanese",
+    "description": "Introduction to Japanese language",
+    "courseCode": "JP-001",
+    "status": "ACTIVE",
+    "enrollmentCount": 25,
+    "createdDate": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "2",
+    "title": "Intermediate Japanese",
+    "description": "Intermediate level Japanese",
+    "courseCode": "JP-002",
+    "status": "ACTIVE",
+    "enrollmentCount": 18,
+    "createdDate": "2024-01-05T00:00:00Z"
+  },
+  {
+    "id": "3",
+    "title": "Advanced Japanese",
+    "description": "Advanced Japanese language skills",
+    "courseCode": "JP-003",
+    "status": "DRAFT",
+    "enrollmentCount": 0,
+    "createdDate": "2024-01-10T00:00:00Z"
+  }
+]

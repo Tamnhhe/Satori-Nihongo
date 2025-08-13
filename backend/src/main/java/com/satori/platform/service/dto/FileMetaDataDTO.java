@@ -1,54 +1,46 @@
 package com.satori.platform.service.dto;
 
-import jakarta.validation.constraints.*;
-import java.io.Serializable;
-import java.time.LocalDateTime;
-import java.util.Objects;
+import java.time.Instant;
 
-/**
- * A DTO for the {@link com.satori.platform.domain.FileMetadata} entity.
- */
-@SuppressWarnings("common-java:DuplicatedBlocks")
-public class FileMetaDataDTO implements Serializable {
-
-    private Long id;
-
-    @NotNull
+public class FileMetaDataDTO {
+    private String id;
     private String fileName;
-
-    @NotNull
-    private String originalName;
-
-    @NotNull
+    private String originalFileName;
     private String filePath;
-
-    @NotNull
-    private String fileType;
-
-    @NotNull
-    private Long fileSize;
-
     private String mimeType;
+    private Long fileSize;
+    private String uploadedBy;
+    private Instant uploadedDate;
+    private String folder;
+    private String description;
+    private Boolean isPublic;
+    private String thumbnailPath;
+    private Integer downloadCount;
+    private Instant lastAccessedDate;
 
-    private LocalDateTime uploadDate;
+    // Constructors
+    public FileMetaDataDTO() {
+    }
 
-    private Integer version;
+    public FileMetaDataDTO(String id, String fileName, String originalFileName, String filePath,
+            String mimeType, Long fileSize, String uploadedBy, Instant uploadedDate) {
+        this.id = id;
+        this.fileName = fileName;
+        this.originalFileName = originalFileName;
+        this.filePath = filePath;
+        this.mimeType = mimeType;
+        this.fileSize = fileSize;
+        this.uploadedBy = uploadedBy;
+        this.uploadedDate = uploadedDate;
+        this.downloadCount = 0;
+    }
 
-    private String checksum;
-
-    private Long lessonId;
-
-    private String lessonTitle;
-
-    private Long uploadedById;
-
-    private String uploadedByName;
-
-    public Long getId() {
+    // Getters and Setters
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -60,12 +52,12 @@ public class FileMetaDataDTO implements Serializable {
         this.fileName = fileName;
     }
 
-    public String getOriginalName() {
-        return originalName;
+    public String getOriginalFileName() {
+        return originalFileName;
     }
 
-    public void setOriginalName(String originalName) {
-        this.originalName = originalName;
+    public void setOriginalFileName(String originalFileName) {
+        this.originalFileName = originalFileName;
     }
 
     public String getFilePath() {
@@ -76,12 +68,12 @@ public class FileMetaDataDTO implements Serializable {
         this.filePath = filePath;
     }
 
-    public String getFileType() {
-        return fileType;
+    public String getMimeType() {
+        return mimeType;
     }
 
-    public void setFileType(String fileType) {
-        this.fileType = fileType;
+    public void setMimeType(String mimeType) {
+        this.mimeType = mimeType;
     }
 
     public Long getFileSize() {
@@ -92,109 +84,67 @@ public class FileMetaDataDTO implements Serializable {
         this.fileSize = fileSize;
     }
 
-    public String getMimeType() {
-        return mimeType;
+    public String getUploadedBy() {
+        return uploadedBy;
     }
 
-    public void setMimeType(String mimeType) {
-        this.mimeType = mimeType;
+    public void setUploadedBy(String uploadedBy) {
+        this.uploadedBy = uploadedBy;
     }
 
-    public LocalDateTime getUploadDate() {
-        return uploadDate;
+    public Instant getUploadedDate() {
+        return uploadedDate;
     }
 
-    public void setUploadDate(LocalDateTime uploadDate) {
-        this.uploadDate = uploadDate;
+    public void setUploadedDate(Instant uploadedDate) {
+        this.uploadedDate = uploadedDate;
     }
 
-    public Integer getVersion() {
-        return version;
+    public String getFolder() {
+        return folder;
     }
 
-    public void setVersion(Integer version) {
-        this.version = version;
+    public void setFolder(String folder) {
+        this.folder = folder;
     }
 
-    public String getChecksum() {
-        return checksum;
+    public String getDescription() {
+        return description;
     }
 
-    public void setChecksum(String checksum) {
-        this.checksum = checksum;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public Long getLessonId() {
-        return lessonId;
+    public Boolean getIsPublic() {
+        return isPublic;
     }
 
-    public void setLessonId(Long lessonId) {
-        this.lessonId = lessonId;
+    public void setIsPublic(Boolean isPublic) {
+        this.isPublic = isPublic;
     }
 
-    public String getLessonTitle() {
-        return lessonTitle;
+    public String getThumbnailPath() {
+        return thumbnailPath;
     }
 
-    public void setLessonTitle(String lessonTitle) {
-        this.lessonTitle = lessonTitle;
+    public void setThumbnailPath(String thumbnailPath) {
+        this.thumbnailPath = thumbnailPath;
     }
 
-    public Long getUploadedById() {
-        return uploadedById;
+    public Integer getDownloadCount() {
+        return downloadCount;
     }
 
-    public void setUploadedById(Long uploadedById) {
-        this.uploadedById = uploadedById;
+    public void setDownloadCount(Integer downloadCount) {
+        this.downloadCount = downloadCount;
     }
 
-    public String getUploadedByName() {
-        return uploadedByName;
+    public Instant getLastAccessedDate() {
+        return lastAccessedDate;
     }
 
-    public void setUploadedByName(String uploadedByName) {
-        this.uploadedByName = uploadedByName;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof FileMetaDataDTO)) {
-            return false;
-        }
-
-        FileMetaDataDTO fileMetaDataDTO = (FileMetaDataDTO) o;
-        if (this.id == null) {
-            return false;
-        }
-        return Objects.equals(this.id, fileMetaDataDTO.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(this.id);
-    }
-
-    // prettier-ignore
-    @Override
-    public String toString() {
-        return "FileMetaDataDTO{" +
-                "id=" + getId() +
-                ", fileName='" + getFileName() + "'" +
-                ", originalName='" + getOriginalName() + "'" +
-                ", filePath='" + getFilePath() + "'" +
-                ", fileType='" + getFileType() + "'" +
-                ", fileSize=" + getFileSize() +
-                ", mimeType='" + getMimeType() + "'" +
-                ", uploadDate='" + getUploadDate() + "'" +
-                ", version=" + getVersion() +
-                ", checksum='" + getChecksum() + "'" +
-                ", lessonId=" + getLessonId() +
-                ", lessonTitle='" + getLessonTitle() + "'" +
-                ", uploadedById=" + getUploadedById() +
-                ", uploadedByName='" + getUploadedByName() + "'" +
-                "}";
+    public void setLastAccessedDate(Instant lastAccessedDate) {
+        this.lastAccessedDate = lastAccessedDate;
     }
 }

@@ -1,11 +1,16 @@
 id;title;description;is_test;is_practice;quiz_type
-1;obediently self-confidence dutiful;pepper offend rapidly;false;false;LESSON
-2;analyse entry;guest beneath;true;true;LESSON
-3;optimistically capitalise grade;loftily yippee beneath;false;true;COURSE
-4;when until;likewise;false;false;COURSE
-5;inquisitively concerning during;mmm;false;false;COURSE
-6;privilege verbally deceivingly;officially grandiose;true;true;LESSON
-7;though;that how;true;true;LESSON
-8;confusion typeface powerfully;throughout tut;true;true;LESSON
-9;among mockingly shoot;pish;true;false;COURSE
-10;officially ick boom;unconscious fireplace circumnavigate;true;true;COURSE
+1;N5 Grammar Practice Quiz;Practice quiz covering basic Japanese grammar patterns from lessons 1-5;false;true;LESSON
+2;Hiragana Reading Test;Comprehensive test of hiragana reading ability with common vocabulary;true;false;LESSON
+3;N5 Vocabulary Quiz;Practice quiz for essential N5 vocabulary including common daily expressions;false;true;COURSE
+4;Katakana Recognition Test;Test your ability to read and recognize katakana characters;true;false;LESSON
+5;Basic Conversation Quiz;Practice quiz for basic Japanese conversation patterns and responses;false;true;COURSE
+6;JLPT N5 Mock Exam Part 1;Full JLPT N5 style examination covering vocabulary and grammar;true;false;COURSE
+7;Lesson 1-10 Review Quiz;Comprehensive review quiz covering material from the first 10 lessons;false;true;LESSON
+8;Kanji Introduction Quiz;Basic kanji recognition quiz for beginners covering essential characters;false;true;LESSON
+9;Time and Numbers Quiz;Practice quiz for telling time, dates, and using numbers in Japanese;false;true;LESSON
+10;JLPT N5 Mock Exam Part 2;Reading comprehension and listening sections of JLPT N5 practice exam;true;false;COURSE
+11;Greetings and Introductions;Quiz on proper Japanese greetings, introductions, and polite expressions;false;true;LESSON
+12;Family and Relationships;Vocabulary and grammar quiz about family members and relationships;false;true;LESSON
+13;Daily Activities Quiz;Practice quiz covering verbs and expressions for daily activities;false;true;LESSON
+14;Shopping and Money;Quiz on shopping vocabulary, prices, and making purchases in Japanese;false;true;LESSON
+15;Weather and Seasons;Practice quiz about weather vocabulary and seasonal expressions;false;true;LESSON
