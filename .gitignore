@@ -144,3 +144,5 @@ client/app/config/app-config.js
 
 #Ignore vscode AI rules
 .github\copilot-instructions.md
+/client/refer
+backend/src/main/resources/config/application-dev.yml
