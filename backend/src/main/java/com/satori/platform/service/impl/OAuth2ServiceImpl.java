@@ -306,10 +306,19 @@ public class OAuth2ServiceImpl implements OAuth2Service {
     }
 
     private OAuth2Properties.ProviderConfig getProviderConfig(OAuth2Provider provider) {
+        log.debug("Looking for provider config: {}", provider.name().toLowerCase());
+        log.debug("Available providers: {}", oauth2Properties.getProviders().keySet());
+        log.debug("OAuth2 enabled: {}", oauth2Properties.isEnabled());
+        
         OAuth2Properties.ProviderConfig config = oauth2Properties.getProviders().get(provider.name().toLowerCase());
         if (config == null) {
+            log.error("OAuth2 provider '{}' not found in configuration. Available providers: {}", 
+                provider.name().toLowerCase(), oauth2Properties.getProviders().keySet());
             throw new BadRequestAlertException("OAuth2 provider not configured", "oauth2", "provider.not.configured");
         }
+        
+        log.debug("Found provider config for {}: enabled={}, clientId={}", 
+            provider.name().toLowerCase(), config.isEnabled(), config.getClientId());
         return config;
     }
 
