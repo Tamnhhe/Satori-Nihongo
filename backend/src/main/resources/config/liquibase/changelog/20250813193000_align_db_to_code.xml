@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <!-- Align GiftCode: rename valid_until -> expiry_date -->
+    <changeSet id="20250813193000-1a-giftcode-expiry" author="copilot">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <tableExists tableName="giftcode"/>
+                <columnExists tableName="giftcode" columnName="valid_until"/>
+            </and>
+        </preConditions>
+        <renameColumn tableName="giftcode"
+                      oldColumnName="valid_until"
+                      newColumnName="expiry_date"
+                      columnDataType="timestamp"/>
+    </changeSet>
+
+    <!-- Align GiftCode: rename is_active -> active -->
+    <changeSet id="20250813193000-1b-giftcode-active" author="copilot">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <tableExists tableName="giftcode"/>
+                <columnExists tableName="giftcode" columnName="is_active"/>
+            </and>
+        </preConditions>
+        <renameColumn tableName="giftcode"
+                      oldColumnName="is_active"
+                      newColumnName="active"
+                      columnDataType="boolean"/>
+    </changeSet>
+
+    <!-- OAuth2Account: rename last_login_date -> last_used_at -->
+    <changeSet id="20250813193000-2a-oauth2-last-used" author="copilot">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <tableExists tableName="oauth2_account"/>
+                <columnExists tableName="oauth2_account" columnName="last_login_date"/>
+            </and>
+        </preConditions>
+        <renameColumn tableName="oauth2_account"
+                      oldColumnName="last_login_date"
+                      newColumnName="last_used_at"
+                      columnDataType="timestamp"/>
+    </changeSet>
+
+    <!-- OAuth2Account: add provider_username -->
+    <changeSet id="20250813193000-2b-oauth2-provider-username" author="copilot">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <tableExists tableName="oauth2_account"/>
+                <not>
+                    <columnExists tableName="oauth2_account" columnName="provider_username"/>
+                </not>
+            </and>
+        </preConditions>
+        <addColumn tableName="oauth2_account">
+            <column name="provider_username" type="varchar(255)">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <!-- OAuth2Account: add profile_data -->
+    <changeSet id="20250813193000-2c-oauth2-profile-data" author="copilot">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <tableExists tableName="oauth2_account"/>
+                <not>
+                    <columnExists tableName="oauth2_account" columnName="profile_data"/>
+                </not>
+            </and>
+        </preConditions>
+        <addColumn tableName="oauth2_account">
+            <column name="profile_data" type="longtext">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <!-- OAuth2Account: add linked_at NOT NULL default CURRENT_TIMESTAMP -->
+    <changeSet id="20250813193000-2d-oauth2-linked-at" author="copilot">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <tableExists tableName="oauth2_account"/>
+                <not>
+                    <columnExists tableName="oauth2_account" columnName="linked_at"/>
+                </not>
+            </and>
+        </preConditions>
+        <addColumn tableName="oauth2_account">
+            <column name="linked_at" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <!-- OAuth2Account: add audit columns created_by / last_modified_by / last_modified_date -->
+    <changeSet id="20250813193000-2e-oauth2-created-by" author="copilot">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <tableExists tableName="oauth2_account"/>
+                <not>
+                    <columnExists tableName="oauth2_account" columnName="created_by"/>
+                </not>
+            </and>
+        </preConditions>
+        <addColumn tableName="oauth2_account">
+            <column name="created_by" type="varchar(50)">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="20250813193000-2f-oauth2-last-modified-by" author="copilot">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <tableExists tableName="oauth2_account"/>
+                <not>
+                    <columnExists tableName="oauth2_account" columnName="last_modified_by"/>
+                </not>
+            </and>
+        </preConditions>
+        <addColumn tableName="oauth2_account">
+            <column name="last_modified_by" type="varchar(50)">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="20250813193000-2g-oauth2-last-modified-date" author="copilot">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <tableExists tableName="oauth2_account"/>
+                <not>
+                    <columnExists tableName="oauth2_account" columnName="last_modified_date"/>
+                </not>
+            </and>
+        </preConditions>
+        <addColumn tableName="oauth2_account">
+            <column name="last_modified_date" type="timestamp">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <!-- OAuth2Account: add user_id and FK to jhi_user -->
+    <changeSet id="20250813193000-2h-oauth2-user-id" author="copilot">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <tableExists tableName="oauth2_account"/>
+                <not>
+                    <columnExists tableName="oauth2_account" columnName="user_id"/>
+                </not>
+            </and>
+        </preConditions>
+        <addColumn tableName="oauth2_account">
+            <column name="user_id" type="bigint">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="20250813193000-2i-oauth2-fk-user" author="copilot">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <tableExists tableName="oauth2_account"/>
+                <columnExists tableName="oauth2_account" columnName="user_id"/>
+                <tableExists tableName="jhi_user"/>
+            </and>
+        </preConditions>
+        <addForeignKeyConstraint baseTableName="oauth2_account"
+                                 baseColumnNames="user_id"
+                                 constraintName="fk_oauth2_account_user_id"
+                                 referencedTableName="jhi_user"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+</databaseChangeLog>
