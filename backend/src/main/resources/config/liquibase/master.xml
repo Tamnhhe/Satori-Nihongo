@@ -34,6 +34,7 @@
     <include file="config/liquibase/changelog/20250813190000_remove_fake_data.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20250813193000_align_db_to_code.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20250813195500_load_center_real_materials.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20250813200500_load_n4_data.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="config/liquibase/changelog/20250720033206_added_entity_constraints_UserProfile.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20250720033306_added_entity_constraints_SocialAccount.xml" relativeToChangelogFile="false"/>

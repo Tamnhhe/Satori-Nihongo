@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="20250813200500-1-courses" author="copilot">
+        <loadUpdateData
+                primaryKey="id"
+                file="config/liquibase/real-data/course.csv"
+                separator=";"
+                tableName="course"
+                usePreparedStatements="true">
+            <column name="id" type="numeric" />
+            <column name="title" type="string" />
+            <column name="description" type="string" />
+            <column name="course_code" type="string" />
+            <column name="teacher_id" type="numeric" />
+        </loadUpdateData>
+    </changeSet>
+
+    <changeSet id="20250813200500-2-lessons" author="copilot">
+        <loadUpdateData
+                primaryKey="id"
+                file="config/liquibase/real-data/lesson.csv"
+                separator=";"
+                tableName="lesson"
+                usePreparedStatements="true">
+            <column name="id" type="numeric" />
+            <column name="title" type="string" />
+            <column name="content" type="string" />
+            <column name="course_id" type="numeric" />
+        </loadUpdateData>
+    </changeSet>
+
+    <changeSet id="20250813200500-3-quizzes" author="copilot">
+        <loadUpdateData
+                primaryKey="id"
+                file="config/liquibase/real-data/quiz.csv"
+                separator=";"
+                tableName="quiz"
+                usePreparedStatements="true">
+            <column name="id" type="numeric" />
+            <column name="title" type="string" />
+            <column name="description" type="string" />
+        </loadUpdateData>
+    </changeSet>
+
+    <changeSet id="20250813200500-4-rel-quiz-lesson" author="copilot">
+        <loadUpdateData
+                primaryKey="quiz_id,lesson_id"
+                file="config/liquibase/real-data/rel_quiz__lesson.csv"
+                separator=";"
+                tableName="rel_quiz__lesson"
+                usePreparedStatements="true">
+            <column name="quiz_id" type="numeric" />
+            <column name="lesson_id" type="numeric" />
+        </loadUpdateData>
+    </changeSet>
+
+    <changeSet id="20250813200500-5-rel-quiz-course" author="copilot">
+        <loadUpdateData
+                primaryKey="quiz_id,course_id"
+                file="config/liquibase/real-data/rel_quiz__course.csv"
+                separator=";"
+                tableName="rel_quiz__course"
+                usePreparedStatements="true">
+            <column name="quiz_id" type="numeric" />
+            <column name="course_id" type="numeric" />
+        </loadUpdateData>
+    </changeSet>
+
+    <changeSet id="20250813200500-6-flashcards" author="copilot">
+        <loadUpdateData
+                primaryKey="id"
+                file="config/liquibase/real-data/flashcard.csv"
+                separator=";"
+                tableName="flashcard"
+                usePreparedStatements="true">
+            <column name="id" type="numeric" />
+            <column name="term" type="string" />
+            <column name="definition" type="string" />
+            <column name="image_url" type="string" />
+            <column name="lesson_id" type="numeric" />
+            <column name="position" type="numeric" />
+        </loadUpdateData>
+    </changeSet>
+
+</databaseChangeLog>
