@@ -3,9 +3,9 @@ import { Route, Routes, Navigate } from 'react-router-dom';
 import { useAppSelector } from 'app/config/store';
 import { hasAnyAuthority } from 'app/shared/auth/private-route';
 import { AUTHORITIES } from 'app/config/constants';
-import DashboardLayout from 'app/shared/components/business/dashboard/SimpleDashboardLayout';
-import TeacherDashboard from 'app/shared/components/business/dashboard/TeacherDashboardSimple';
-import AdminDashboard from 'app/shared/components/business/dashboard/AdminDashboardSimple';
+import DashboardLayout from 'app/shared/components/business/dashboard/DashboardLayout';
+import TeacherDashboard from 'app/shared/components/business/dashboard/TeacherDashboard';
+import AdminDashboard from 'app/shared/components/business/dashboard/AdminDashboard';
 
 // Import existing JHipster components that we'll keep
 import SatoriLogin from 'app/modules/login/SatoriLogin';

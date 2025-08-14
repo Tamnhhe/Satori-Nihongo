@@ -11,6 +11,9 @@ import { getSession } from 'app/shared/reducers/authentication';
 import { getProfile } from 'app/shared/reducers/application-profile';
 import ErrorBoundary from 'app/shared/error/error-boundary';
 import BusinessRoutes from 'app/BusinessRoutes';
+import { ThemeProvider } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+import satoriTheme from 'app/shared/components/ui/theme/satoriTheme';
 
 const baseHref = document.querySelector('base').getAttribute('href').replace(/\/$/, '');
 
@@ -23,14 +26,17 @@ export const App = () => {
   }, []);
 
   return (
-    <BrowserRouter basename={baseHref}>
-      <div className="app-container">
-        <ToastContainer position="top-right" className="toastify-container" toastClassName="toastify-toast" />
-        <ErrorBoundary>
-          <BusinessRoutes />
-        </ErrorBoundary>
-      </div>
-    </BrowserRouter>
+    <ThemeProvider theme={satoriTheme}>
+      <CssBaseline />
+      <BrowserRouter basename={baseHref}>
+        <div className="app-container">
+          <ToastContainer position="top-right" className="toastify-container" toastClassName="toastify-toast" />
+          <ErrorBoundary>
+            <BusinessRoutes />
+          </ErrorBoundary>
+        </div>
+      </BrowserRouter>
+    </ThemeProvider>
   );
 };
 
