@@ -102,7 +102,13 @@
     "ribbon": {
       "dev": "Development"
     },
-    "item-count": "{{total}}件中 {{first}} - {{second}}件目を表示しています。"
+    "item-count": "{{total}}件中 {{first}} - {{second}}件目を表示しています。",
+    "entities": {
+      "studentManagement": "学習者管理",
+      "teachingSchedule": "授業スケジュール",
+      "notificationAnalytics": "通知分析",
+      "studentReports": "学習者レポート"
+    }
   },
   "entity": {
     "action": {
