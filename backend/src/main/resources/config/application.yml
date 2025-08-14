@@ -271,6 +271,9 @@ app:
         model: ${OPENAI_EMBEDDING_MODEL:text-embedding-ada-002}
         dimensions: ${OPENAI_EMBEDDING_DIMENSIONS:1536}
         base-url: ${OPENAI_BASE_URL:https://api.openai.com/v1}
+    ingestion:
+      enabled: ${RAG_INGESTION_ENABLED:false}
+      cron: ${RAG_INGESTION_CRON:0 30 3 * * *}
 
 spring:
   ai:
