@@ -7,15 +7,14 @@ import com.satori.platform.repository.*;
 import com.satori.platform.service.dto.*;
 import com.satori.platform.service.exception.AIServiceException;
 import com.satori.platform.service.mapper.QuizMapper;
+import java.time.Instant;
+import java.util.*;
+import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.Instant;
-import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * Service for AI-powered practice test generation.
@@ -36,6 +35,7 @@ public class AIPracticeTestService {
     private final StudentQuizRepository studentQuizRepository;
     private final StudentAnalyticsService studentAnalyticsService;
     private final AIContentAnalysisService aiContentAnalysisService;
+    private final java.util.Optional<SpringAIQuestionService> springAIQuestionService;
     private final RAGContentRetrievalService ragContentRetrievalService;
     private final QuizMapper quizMapper;
 
@@ -49,16 +49,18 @@ public class AIPracticeTestService {
     private boolean fallbackEnabled;
 
     public AIPracticeTestService(
-            QuizRepository quizRepository,
-            QuestionRepository questionRepository,
-            QuizQuestionRepository quizQuestionRepository,
-            CourseRepository courseRepository,
-            LessonRepository lessonRepository,
-            StudentQuizRepository studentQuizRepository,
-            StudentAnalyticsService studentAnalyticsService,
-            AIContentAnalysisService aiContentAnalysisService,
-            RAGContentRetrievalService ragContentRetrievalService,
-            QuizMapper quizMapper) {
+        QuizRepository quizRepository,
+        QuestionRepository questionRepository,
+        QuizQuestionRepository quizQuestionRepository,
+        CourseRepository courseRepository,
+        LessonRepository lessonRepository,
+        StudentQuizRepository studentQuizRepository,
+        StudentAnalyticsService studentAnalyticsService,
+        AIContentAnalysisService aiContentAnalysisService,
+        java.util.Optional<SpringAIQuestionService> springAIQuestionService,
+        RAGContentRetrievalService ragContentRetrievalService,
+        QuizMapper quizMapper
+    ) {
         this.quizRepository = quizRepository;
         this.questionRepository = questionRepository;
         this.quizQuestionRepository = quizQuestionRepository;
@@ -67,6 +69,7 @@ public class AIPracticeTestService {
         this.studentQuizRepository = studentQuizRepository;
         this.studentAnalyticsService = studentAnalyticsService;
         this.aiContentAnalysisService = aiContentAnalysisService;
+        this.springAIQuestionService = springAIQuestionService;
         this.ragContentRetrievalService = ragContentRetrievalService;
         this.quizMapper = quizMapper;
     }
@@ -93,11 +96,13 @@ public class AIPracticeTestService {
             // Create the practice quiz
             Quiz practiceQuiz = createPracticeQuiz(request, aiQuestions);
 
-            log.info("Successfully generated AI practice test with {} questions for student: {}",
-                    aiQuestions.size(), request.getStudentId());
+            log.info(
+                "Successfully generated AI practice test with {} questions for student: {}",
+                aiQuestions.size(),
+                request.getStudentId()
+            );
 
             return quizMapper.toDto(practiceQuiz);
-
         } catch (AIServiceException e) {
             log.warn("AI service failed, attempting fallback generation: {}", e.getMessage());
             if (fallbackEnabled) {
@@ -120,8 +125,9 @@ public class AIPracticeTestService {
     public QuizDTO generateLessonPracticeTest(Long lessonId, Long studentId, Integer questionCount) {
         log.debug("Generating lesson-based practice test for lesson: {} and student: {}", lessonId, studentId);
 
-        Lesson lesson = lessonRepository.findById(lessonId)
-                .orElseThrow(() -> new IllegalArgumentException("Lesson not found with id: " + lessonId));
+        Lesson lesson = lessonRepository
+            .findById(lessonId)
+            .orElseThrow(() -> new IllegalArgumentException("Lesson not found with id: " + lessonId));
 
         AIPracticeTestRequestDTO request = new AIPracticeTestRequestDTO();
         request.setStudentId(studentId);
@@ -144,12 +150,12 @@ public class AIPracticeTestService {
      * @return the generated practice test
      */
     @Transactional
-    public QuizDTO generateCoursePracticeTest(Long courseId, Long studentId, Integer questionCount,
-            DifficultyLevel difficultyLevel) {
+    public QuizDTO generateCoursePracticeTest(Long courseId, Long studentId, Integer questionCount, DifficultyLevel difficultyLevel) {
         log.debug("Generating course-based practice test for course: {} and student: {}", courseId, studentId);
 
-        Course course = courseRepository.findById(courseId)
-                .orElseThrow(() -> new IllegalArgumentException("Course not found with id: " + courseId));
+        Course course = courseRepository
+            .findById(courseId)
+            .orElseThrow(() -> new IllegalArgumentException("Course not found with id: " + courseId));
 
         AIPracticeTestRequestDTO request = new AIPracticeTestRequestDTO();
         request.setStudentId(studentId);
@@ -221,7 +227,6 @@ public class AIPracticeTestService {
 
             // Get recent performance trends
             analysis.setRecentPerformanceTrend(calculatePerformanceTrend(request.getStudentId()));
-
         } catch (Exception e) {
             log.warn("Failed to analyze student performance, using defaults: {}", e.getMessage());
             analysis.setWeakAreas(new ArrayList<>());
@@ -232,8 +237,10 @@ public class AIPracticeTestService {
         return analysis;
     }
 
-    private List<AIGeneratedQuestionDTO> generateQuestionsWithAI(AIPracticeTestRequestDTO request,
-            StudentPerformanceAnalysisDTO performanceAnalysis) {
+    private List<AIGeneratedQuestionDTO> generateQuestionsWithAI(
+        AIPracticeTestRequestDTO request,
+        StudentPerformanceAnalysisDTO performanceAnalysis
+    ) {
         log.debug("Generating questions using AI service");
 
         // Prepare content for AI analysis (now includes RAG-enhanced content)
@@ -247,16 +254,25 @@ public class AIPracticeTestService {
         // Create AI generation request
         AIQuestionGenerationRequestDTO aiRequest = new AIQuestionGenerationRequestDTO();
         aiRequest.setContent(contentToAnalyze);
-        aiRequest.setQuestionCount(
-                request.getQuestionCount() != null ? request.getQuestionCount() : defaultQuestionCount);
-        aiRequest.setDifficultyLevel(request.getDifficultyLevel() != null ? request.getDifficultyLevel()
-                : performanceAnalysis.getRecommendedDifficulty());
+        aiRequest.setQuestionCount(request.getQuestionCount() != null ? request.getQuestionCount() : defaultQuestionCount);
+        aiRequest.setDifficultyLevel(
+            request.getDifficultyLevel() != null ? request.getDifficultyLevel() : performanceAnalysis.getRecommendedDifficulty()
+        );
         aiRequest.setIncludeImages(request.getIncludeImages() != null ? request.getIncludeImages() : false);
         aiRequest.setWeakAreas(performanceAnalysis.getWeakAreas());
         aiRequest.setFocusOnWeakAreas(request.getFocusOnWeakAreas() != null ? request.getFocusOnWeakAreas() : false);
 
         // Generate questions using AI service
-        List<AIGeneratedQuestionDTO> questions = aiContentAnalysisService.generateQuestions(aiRequest);
+        List<AIGeneratedQuestionDTO> questions = springAIQuestionService
+            .map(service -> {
+                try {
+                    return service.generateQuestions(aiRequest);
+                } catch (Exception e) {
+                    log.warn("Spring AI generation failed, falling back to external AI service: {}", e.getMessage());
+                    return aiContentAnalysisService.generateQuestions(aiRequest);
+                }
+            })
+            .orElseGet(() -> aiContentAnalysisService.generateQuestions(aiRequest));
 
         // Validate and filter generated questions
         return validateAndFilterQuestions(questions);
@@ -277,14 +293,16 @@ public class AIPracticeTestService {
 
         // Associate with course or lesson
         if (request.getCourseId() != null) {
-            Course course = courseRepository.findById(request.getCourseId())
-                    .orElseThrow(() -> new IllegalArgumentException("Course not found"));
+            Course course = courseRepository
+                .findById(request.getCourseId())
+                .orElseThrow(() -> new IllegalArgumentException("Course not found"));
             practiceQuiz.getCourses().add(course);
         }
 
         if (request.getLessonId() != null) {
-            Lesson lesson = lessonRepository.findById(request.getLessonId())
-                    .orElseThrow(() -> new IllegalArgumentException("Lesson not found"));
+            Lesson lesson = lessonRepository
+                .findById(request.getLessonId())
+                .orElseThrow(() -> new IllegalArgumentException("Lesson not found"));
             practiceQuiz.getLessons().add(lesson);
         }
 
@@ -363,8 +381,7 @@ public class AIPracticeTestService {
         StringBuilder weakAreaContent = new StringBuilder();
 
         try {
-            List<RAGContentResultDTO> weakAreaResults = ragContentRetrievalService
-                    .retrieveContentForWeakAreas(weakAreas, courseId);
+            List<RAGContentResultDTO> weakAreaResults = ragContentRetrievalService.retrieveContentForWeakAreas(weakAreas, courseId);
 
             if (!weakAreaResults.isEmpty()) {
                 weakAreaContent.append("\n=== Content for Weak Areas ===\n");
@@ -374,7 +391,6 @@ public class AIPracticeTestService {
                     weakAreaContent.append("Topics: ").append(String.join(", ", result.getTopics())).append("\n\n");
                 }
             }
-
         } catch (Exception e) {
             log.warn("Failed to gather weak area content: {}", e.getMessage());
         }
@@ -405,11 +421,9 @@ public class AIPracticeTestService {
                     ragContent.append("Source: ").append(contentResult.getSource()).append("\n");
                     ragContent.append("Title: ").append(contentResult.getTitle()).append("\n");
                     ragContent.append("Content: ").append(contentResult.getContent()).append("\n");
-                    ragContent.append("Relevance: ").append(String.format("%.2f", contentResult.getRelevanceScore()))
-                            .append("\n\n");
+                    ragContent.append("Relevance: ").append(String.format("%.2f", contentResult.getRelevanceScore())).append("\n\n");
                 }
             }
-
         } catch (Exception e) {
             log.warn("Failed to gather RAG-enhanced content: {}", e.getMessage());
         }
@@ -486,27 +500,36 @@ public class AIPracticeTestService {
 
         // Simple trend calculation - compare first half with second half
         int midPoint = recentQuizzes.size() / 2;
-        double firstHalfAvg = recentQuizzes.subList(0, midPoint).stream()
-                .mapToDouble(sq -> sq.getScore() != null ? sq.getScore() : 0.0)
-                .average().orElse(0.0);
+        double firstHalfAvg = recentQuizzes
+            .subList(0, midPoint)
+            .stream()
+            .mapToDouble(sq -> sq.getScore() != null ? sq.getScore() : 0.0)
+            .average()
+            .orElse(0.0);
 
-        double secondHalfAvg = recentQuizzes.subList(midPoint, recentQuizzes.size()).stream()
-                .mapToDouble(sq -> sq.getScore() != null ? sq.getScore() : 0.0)
-                .average().orElse(0.0);
+        double secondHalfAvg = recentQuizzes
+            .subList(midPoint, recentQuizzes.size())
+            .stream()
+            .mapToDouble(sq -> sq.getScore() != null ? sq.getScore() : 0.0)
+            .average()
+            .orElse(0.0);
 
         return secondHalfAvg - firstHalfAvg;
     }
 
     private List<AIGeneratedQuestionDTO> validateAndFilterQuestions(List<AIGeneratedQuestionDTO> questions) {
-        return questions.stream()
-                .filter(this::isValidAIQuestion)
-                .collect(Collectors.toList());
+        return questions.stream().filter(this::isValidAIQuestion).collect(Collectors.toList());
     }
 
     private boolean isValidAIQuestion(AIGeneratedQuestionDTO question) {
-        return question.getContent() != null && !question.getContent().trim().isEmpty() &&
-                question.getCorrectAnswer() != null && !question.getCorrectAnswer().trim().isEmpty() &&
-                question.getType() != null && !question.getType().trim().isEmpty();
+        return (
+            question.getContent() != null &&
+            !question.getContent().trim().isEmpty() &&
+            question.getCorrectAnswer() != null &&
+            !question.getCorrectAnswer().trim().isEmpty() &&
+            question.getType() != null &&
+            !question.getType().trim().isEmpty()
+        );
     }
 
     private Question createQuestionFromAI(AIGeneratedQuestionDTO aiQuestion) {
@@ -534,10 +557,9 @@ public class AIPracticeTestService {
             List<Quiz> courseQuizzes = quizRepository.findByCourseId(request.getCourseId());
             for (Quiz quiz : courseQuizzes) {
                 List<QuizQuestion> quizQuestions = quizQuestionRepository.findByQuizIdOrderByPosition(quiz.getId());
-                questions.addAll(quizQuestions.stream()
-                        .map(QuizQuestion::getQuestion)
-                        .filter(Objects::nonNull)
-                        .collect(Collectors.toList()));
+                questions.addAll(
+                    quizQuestions.stream().map(QuizQuestion::getQuestion).filter(Objects::nonNull).collect(Collectors.toList())
+                );
             }
         }
 
@@ -546,26 +568,22 @@ public class AIPracticeTestService {
             List<Quiz> lessonQuizzes = quizRepository.findByLessonId(request.getLessonId());
             for (Quiz quiz : lessonQuizzes) {
                 List<QuizQuestion> quizQuestions = quizQuestionRepository.findByQuizIdOrderByPosition(quiz.getId());
-                questions.addAll(quizQuestions.stream()
-                        .map(QuizQuestion::getQuestion)
-                        .filter(Objects::nonNull)
-                        .collect(Collectors.toList()));
+                questions.addAll(
+                    quizQuestions.stream().map(QuizQuestion::getQuestion).filter(Objects::nonNull).collect(Collectors.toList())
+                );
             }
         }
 
         return questions.stream().distinct().collect(Collectors.toList());
     }
 
-    private List<Question> selectQuestionsForFallback(List<Question> existingQuestions,
-            AIPracticeTestRequestDTO request) {
+    private List<Question> selectQuestionsForFallback(List<Question> existingQuestions, AIPracticeTestRequestDTO request) {
         int targetCount = request.getQuestionCount() != null ? request.getQuestionCount() : defaultQuestionCount;
 
         // Shuffle and select random questions
         Collections.shuffle(existingQuestions);
 
-        return existingQuestions.stream()
-                .limit(Math.min(targetCount, existingQuestions.size()))
-                .collect(Collectors.toList());
+        return existingQuestions.stream().limit(Math.min(targetCount, existingQuestions.size())).collect(Collectors.toList());
     }
 
     private Quiz createFallbackQuiz(AIPracticeTestRequestDTO request, List<Question> selectedQuestions) {
@@ -580,14 +598,16 @@ public class AIPracticeTestService {
 
         // Associate with course or lesson
         if (request.getCourseId() != null) {
-            Course course = courseRepository.findById(request.getCourseId())
-                    .orElseThrow(() -> new IllegalArgumentException("Course not found"));
+            Course course = courseRepository
+                .findById(request.getCourseId())
+                .orElseThrow(() -> new IllegalArgumentException("Course not found"));
             fallbackQuiz.getCourses().add(course);
         }
 
         if (request.getLessonId() != null) {
-            Lesson lesson = lessonRepository.findById(request.getLessonId())
-                    .orElseThrow(() -> new IllegalArgumentException("Lesson not found"));
+            Lesson lesson = lessonRepository
+                .findById(request.getLessonId())
+                .orElseThrow(() -> new IllegalArgumentException("Lesson not found"));
             fallbackQuiz.getLessons().add(lesson);
         }
 

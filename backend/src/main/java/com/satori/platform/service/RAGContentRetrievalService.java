@@ -2,12 +2,11 @@ package com.satori.platform.service;
 
 import com.satori.platform.service.dto.RAGContentRequestDTO;
 import com.satori.platform.service.dto.RAGContentResultDTO;
+import java.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
-import java.util.*;
 
 /**
  * Service for RAG-based content retrieval.
@@ -19,6 +18,7 @@ public class RAGContentRetrievalService {
 
     private static final Logger log = LoggerFactory.getLogger(RAGContentRetrievalService.class);
 
+    private final java.util.Optional<SpringAIEmbeddingService> springAIEmbeddingService;
     private final GeminiEmbeddingService geminiEmbeddingService;
     private final PostgreSQLVectorService postgreSQLVectorService;
 
@@ -31,8 +31,12 @@ public class RAGContentRetrievalService {
     @Value("${app.rag.vector-db.type:postgresql}")
     private String vectorDbType;
 
-    public RAGContentRetrievalService(GeminiEmbeddingService geminiEmbeddingService,
-            PostgreSQLVectorService postgreSQLVectorService) {
+    public RAGContentRetrievalService(
+        java.util.Optional<SpringAIEmbeddingService> springAIEmbeddingService,
+        GeminiEmbeddingService geminiEmbeddingService,
+        PostgreSQLVectorService postgreSQLVectorService
+    ) {
+        this.springAIEmbeddingService = springAIEmbeddingService;
         this.geminiEmbeddingService = geminiEmbeddingService;
         this.postgreSQLVectorService = postgreSQLVectorService;
     }
@@ -53,14 +57,15 @@ public class RAGContentRetrievalService {
 
         try {
             // Step 1: Generate embedding for the query using Gemini
-            List<Double> queryEmbedding = geminiEmbeddingService.generateEmbedding(request.getQuery());
+            List<Double> queryEmbedding = springAIEmbeddingService
+                .map(s -> s.generateEmbedding(request.getQuery()))
+                .orElseGet(() -> geminiEmbeddingService.generateEmbedding(request.getQuery()));
 
             // Step 2: Search PostgreSQL vector database for similar content
             List<RAGContentResultDTO> results = postgreSQLVectorService.searchSimilarContent(queryEmbedding, request);
 
             log.info("Retrieved {} relevant content pieces for query: {}", results.size(), request.getQuery());
             return results;
-
         } catch (Exception e) {
             log.error("Failed to retrieve content using RAG: {}", e.getMessage(), e);
             return new ArrayList<>();
@@ -132,10 +137,17 @@ public class RAGContentRetrievalService {
      * @param courseId        course ID
      * @param lessonId        lesson ID
      */
-    public void storeContent(String contentId, String title, String content,
-            String contentType, String source, String difficultyLevel,
-            List<String> topics, Long courseId, Long lessonId) {
-
+    public void storeContent(
+        String contentId,
+        String title,
+        String content,
+        String contentType,
+        String source,
+        String difficultyLevel,
+        List<String> topics,
+        Long courseId,
+        Long lessonId
+    ) {
         if (!ragEnabled) {
             log.debug("RAG is disabled, skipping content storage");
             return;
@@ -143,15 +155,25 @@ public class RAGContentRetrievalService {
 
         try {
             // Generate embedding for the content
-            List<Double> embedding = geminiEmbeddingService.generateEmbedding(content);
+            List<Double> embedding = springAIEmbeddingService
+                .map(s -> s.generateEmbedding(content))
+                .orElseGet(() -> geminiEmbeddingService.generateEmbedding(content));
 
             // Store in PostgreSQL vector database
             postgreSQLVectorService.storeContent(
-                    contentId, title, content, contentType, source,
-                    difficultyLevel, topics, courseId, lessonId, embedding);
+                contentId,
+                title,
+                content,
+                contentType,
+                source,
+                difficultyLevel,
+                topics,
+                courseId,
+                lessonId,
+                embedding
+            );
 
             log.debug("Successfully stored content: {}", contentId);
-
         } catch (Exception e) {
             log.error("Failed to store content {}: {}", contentId, e.getMessage(), e);
         }
