@@ -20,7 +20,11 @@
         "question": "Question",
         "quizQuestion": "Quiz Question",
         "studentQuiz": "Student Quiz",
-        "flashcard": "Flashcard"
+        "flashcard": "Flashcard",
+        "studentManagement": "Quản lý học viên",
+        "teachingSchedule": "Lịch dạy học",
+        "notificationAnalytics": "Phân tích thông báo",
+        "studentReports": "Báo cáo học viên"
       },
       "account": {
         "main": "Tài khoản",

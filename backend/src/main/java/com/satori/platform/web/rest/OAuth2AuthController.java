@@ -12,19 +12,18 @@ import com.satori.platform.service.exception.*;
 import com.satori.platform.web.rest.errors.BadRequestAlertException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
-
 import java.security.SecureRandom;
 import java.time.Instant;
 import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * REST controller for OAuth2 authentication.
@@ -57,9 +56,9 @@ public class OAuth2AuthController {
      */
     @GetMapping("/authorize/{provider}")
     public ResponseEntity<OAuth2AuthorizationResponse> authorize(
-            @PathVariable String provider,
-            @RequestParam(required = false) String redirectUrl) {
-
+        @PathVariable String provider,
+        @RequestParam(required = false) String redirectUrl
+    ) {
         LOG.debug("REST request to get OAuth2 authorization URL for provider: {}", provider);
 
         try {
@@ -67,22 +66,18 @@ public class OAuth2AuthController {
             String state = generateSecureState();
             String authorizationUrl = oauth2Service.generateAuthorizationUrl(oauth2Provider, state);
 
-            OAuth2AuthorizationResponse response = new OAuth2AuthorizationResponse(
-                    authorizationUrl, state, provider);
+            OAuth2AuthorizationResponse response = new OAuth2AuthorizationResponse(authorizationUrl, state, provider);
 
             return ResponseEntity.ok(response);
-
         } catch (IllegalArgumentException e) {
             LOG.error("Invalid OAuth2 provider: {}", provider, e);
             throw new BadRequestAlertException("Invalid OAuth2 provider", ENTITY_NAME, "invalidprovider");
         } catch (OAuth2ProviderDisabledException e) {
             LOG.error("OAuth2 provider disabled: {}", provider, e);
-            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
-                    .body(null);
+            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(null);
         } catch (Exception e) {
             LOG.error("Error generating OAuth2 authorization URL for provider: {}", provider, e);
-            throw new BadRequestAlertException("Failed to generate authorization URL", ENTITY_NAME,
-                    "authorizationerror");
+            throw new BadRequestAlertException("Failed to generate authorization URL", ENTITY_NAME, "authorizationerror");
         }
     }
 
@@ -95,16 +90,12 @@ public class OAuth2AuthController {
      * @return the JWT token response
      */
     @PostMapping("/callback/{provider}")
-    public ResponseEntity<JWTToken> handleCallback(
-            @PathVariable String provider,
-            @Valid @RequestBody OAuth2CallbackRequest request) {
-
+    public ResponseEntity<JWTToken> handleCallback(@PathVariable String provider, @Valid @RequestBody OAuth2CallbackRequest request) {
         LOG.debug("REST request to handle OAuth2 callback for provider: {}", provider);
 
         try {
             OAuth2Provider oauth2Provider = OAuth2Provider.fromProviderId(provider);
-            OAuth2AuthenticationResult authResult = oauth2Service.handleCallback(
-                    oauth2Provider, request.getCode(), request.getState());
+            OAuth2AuthenticationResult authResult = oauth2Service.handleCallback(oauth2Provider, request.getCode(), request.getState());
 
             if (!authResult.isSuccessful()) {
                 LOG.error("OAuth2 authentication failed for provider: {}", provider);
@@ -119,11 +110,14 @@ public class OAuth2AuthController {
             tokenResponse.setNewUser(authResult.isNewUser());
             tokenResponse.setProvider(provider);
 
-            LOG.debug("OAuth2 authentication successful for provider: {}, user: {}, isNewUser: {}",
-                    provider, authResult.getUser().getLogin(), authResult.isNewUser());
+            LOG.debug(
+                "OAuth2 authentication successful for provider: {}, user: {}, isNewUser: {}",
+                provider,
+                authResult.getUser().getLogin(),
+                authResult.isNewUser()
+            );
 
             return ResponseEntity.ok(tokenResponse);
-
         } catch (IllegalArgumentException e) {
             LOG.error("Invalid OAuth2 provider: {}", provider, e);
             throw new BadRequestAlertException("Invalid OAuth2 provider", ENTITY_NAME, "invalidprovider");
@@ -145,30 +139,25 @@ public class OAuth2AuthController {
      */
     @PostMapping("/link/{provider}")
     @PreAuthorize("hasAuthority('ROLE_USER')")
-    public ResponseEntity<Void> linkAccount(
-            @PathVariable String provider,
-            @Valid @RequestBody OAuth2LinkRequest request) {
-
+    public ResponseEntity<Void> linkAccount(@PathVariable String provider, @Valid @RequestBody OAuth2LinkRequest request) {
         LOG.debug("REST request to link OAuth2 account for provider: {}", provider);
 
         try {
             String currentUserLogin = SecurityUtils.getCurrentUserLogin()
-                    .orElseThrow(() -> new BadRequestAlertException("User not authenticated", ENTITY_NAME,
-                            "notauthenticated"));
+                .orElseThrow(() -> new BadRequestAlertException("User not authenticated", ENTITY_NAME, "notauthenticated"));
 
             Optional<User> userOptional = userService.getUserWithAuthoritiesByLogin(currentUserLogin);
             if (userOptional.isEmpty()) {
                 throw new BadRequestAlertException("User not found", ENTITY_NAME, "usernotfound");
             }
 
-            User user = userOptional.get();
+            User user = userOptional.orElseThrow();
             OAuth2Provider oauth2Provider = OAuth2Provider.fromProviderId(provider);
 
             oauth2Service.linkAccount(user, oauth2Provider, request.getCode());
 
             LOG.debug("OAuth2 account linked successfully for provider: {}, user: {}", provider, user.getLogin());
             return ResponseEntity.ok().build();
-
         } catch (IllegalArgumentException e) {
             LOG.error("Invalid OAuth2 provider: {}", provider, e);
             throw new BadRequestAlertException("Invalid OAuth2 provider", ENTITY_NAME, "invalidprovider");
@@ -191,27 +180,24 @@ public class OAuth2AuthController {
     @DeleteMapping("/unlink/{provider}")
     @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<Void> unlinkAccount(@PathVariable String provider) {
-
         LOG.debug("REST request to unlink OAuth2 account for provider: {}", provider);
 
         try {
             String currentUserLogin = SecurityUtils.getCurrentUserLogin()
-                    .orElseThrow(() -> new BadRequestAlertException("User not authenticated", ENTITY_NAME,
-                            "notauthenticated"));
+                .orElseThrow(() -> new BadRequestAlertException("User not authenticated", ENTITY_NAME, "notauthenticated"));
 
             Optional<User> userOptional = userService.getUserWithAuthoritiesByLogin(currentUserLogin);
             if (userOptional.isEmpty()) {
                 throw new BadRequestAlertException("User not found", ENTITY_NAME, "usernotfound");
             }
 
-            User user = userOptional.get();
+            User user = userOptional.orElseThrow();
             OAuth2Provider oauth2Provider = OAuth2Provider.fromProviderId(provider);
 
             oauth2Service.unlinkAccount(user, oauth2Provider);
 
             LOG.debug("OAuth2 account unlinked successfully for provider: {}, user: {}", provider, user.getLogin());
             return ResponseEntity.ok().build();
-
         } catch (IllegalArgumentException e) {
             LOG.error("Invalid OAuth2 provider: {}", provider, e);
             throw new BadRequestAlertException("Invalid OAuth2 provider", ENTITY_NAME, "invalidprovider");
@@ -230,29 +216,24 @@ public class OAuth2AuthController {
     @GetMapping("/linked-accounts")
     @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<List<LinkedAccountDTO>> getLinkedAccounts() {
-
         LOG.debug("REST request to get linked OAuth2 accounts");
 
         try {
             String currentUserLogin = SecurityUtils.getCurrentUserLogin()
-                    .orElseThrow(() -> new BadRequestAlertException("User not authenticated", ENTITY_NAME,
-                            "notauthenticated"));
+                .orElseThrow(() -> new BadRequestAlertException("User not authenticated", ENTITY_NAME, "notauthenticated"));
 
             Optional<User> userOptional = userService.getUserWithAuthoritiesByLogin(currentUserLogin);
             if (userOptional.isEmpty()) {
                 throw new BadRequestAlertException("User not found", ENTITY_NAME, "usernotfound");
             }
 
-            User user = userOptional.get();
+            User user = userOptional.orElseThrow();
             List<OAuth2Account> linkedAccounts = oauth2Service.getUserLinkedAccounts(user);
 
-            List<LinkedAccountDTO> accountDTOs = linkedAccounts.stream()
-                    .map(this::convertToLinkedAccountDTO)
-                    .collect(Collectors.toList());
+            List<LinkedAccountDTO> accountDTOs = linkedAccounts.stream().map(this::convertToLinkedAccountDTO).collect(Collectors.toList());
 
             LOG.debug("Retrieved {} linked OAuth2 accounts for user: {}", accountDTOs.size(), user.getLogin());
             return ResponseEntity.ok(accountDTOs);
-
         } catch (Exception e) {
             LOG.error("Error retrieving linked OAuth2 accounts", e);
             throw new BadRequestAlertException("Failed to retrieve linked accounts", ENTITY_NAME, "retrievalerror");
@@ -264,15 +245,17 @@ public class OAuth2AuthController {
      */
     @ExceptionHandler(OAuth2AuthenticationException.class)
     public ResponseEntity<OAuth2ErrorResponse> handleOAuth2AuthenticationException(
-            OAuth2AuthenticationException ex, HttpServletRequest request) {
-
+        OAuth2AuthenticationException ex,
+        HttpServletRequest request
+    ) {
         LOG.error("OAuth2 authentication error: {}", ex.getMessage(), ex);
 
         OAuth2ErrorResponse errorResponse = new OAuth2ErrorResponse(
-                "oauth2_authentication_failed",
-                ex.getMessage(),
-                ex.getProvider(),
-                ex.getErrorCode());
+            "oauth2_authentication_failed",
+            ex.getMessage(),
+            ex.getProvider(),
+            ex.getErrorCode()
+        );
         errorResponse.setPath(request.getRequestURI());
 
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
@@ -283,15 +266,17 @@ public class OAuth2AuthController {
      */
     @ExceptionHandler(OAuth2AccountLinkingException.class)
     public ResponseEntity<OAuth2ErrorResponse> handleOAuth2AccountLinkingException(
-            OAuth2AccountLinkingException ex, HttpServletRequest request) {
-
+        OAuth2AccountLinkingException ex,
+        HttpServletRequest request
+    ) {
         LOG.error("OAuth2 account linking error: {}", ex.getMessage(), ex);
 
         OAuth2ErrorResponse errorResponse = new OAuth2ErrorResponse(
-                "oauth2_account_linking_failed",
-                ex.getMessage(),
-                ex.getProvider(),
-                ex.getErrorCode());
+            "oauth2_account_linking_failed",
+            ex.getMessage(),
+            ex.getProvider(),
+            ex.getErrorCode()
+        );
         errorResponse.setPath(request.getRequestURI());
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
@@ -302,15 +287,17 @@ public class OAuth2AuthController {
      */
     @ExceptionHandler(OAuth2ProviderDisabledException.class)
     public ResponseEntity<OAuth2ErrorResponse> handleOAuth2ProviderDisabledException(
-            OAuth2ProviderDisabledException ex, HttpServletRequest request) {
-
+        OAuth2ProviderDisabledException ex,
+        HttpServletRequest request
+    ) {
         LOG.error("OAuth2 provider disabled error: {}", ex.getMessage(), ex);
 
         OAuth2ErrorResponse errorResponse = new OAuth2ErrorResponse(
-                "oauth2_provider_disabled",
-                ex.getMessage(),
-                ex.getProvider(),
-                ex.getErrorCode());
+            "oauth2_provider_disabled",
+            ex.getMessage(),
+            ex.getProvider(),
+            ex.getErrorCode()
+        );
         errorResponse.setPath(request.getRequestURI());
 
         return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(errorResponse);
@@ -329,16 +316,16 @@ public class OAuth2AuthController {
      * Convert OAuth2Account to LinkedAccountDTO.
      */
     private LinkedAccountDTO convertToLinkedAccountDTO(OAuth2Account account) {
-        boolean tokenExpired = account.getTokenExpiresAt() != null &&
-                account.getTokenExpiresAt().isBefore(Instant.now());
+        boolean tokenExpired = account.getTokenExpiresAt() != null && account.getTokenExpiresAt().isBefore(Instant.now());
 
         return new LinkedAccountDTO(
-                account.getId(),
-                account.getProvider(),
-                account.getProviderUserId(),
-                account.getProviderUsername(),
-                account.getLinkedAt(),
-                account.getLastUsedAt(),
-                tokenExpired);
+            account.getId(),
+            account.getProvider(),
+            account.getProviderUserId(),
+            account.getProviderUsername(),
+            account.getLinkedAt(),
+            account.getLastUsedAt(),
+            tokenExpired
+        );
     }
 }

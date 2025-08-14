@@ -9,7 +9,12 @@ import com.satori.platform.repository.OAuth2AccountRepository;
 import com.satori.platform.service.OAuth2TokenService;
 import com.satori.platform.service.dto.OAuth2TokenValidationResult;
 import com.satori.platform.service.util.OAuth2TokenEncryption;
-
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.atomic.AtomicInteger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,13 +24,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
-
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
-import java.util.List;
-import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Service implementation for OAuth2 token lifecycle management.
@@ -56,11 +54,12 @@ public class OAuth2TokenServiceImpl implements OAuth2TokenService {
     private int defaultExpiryHours;
 
     public OAuth2TokenServiceImpl(
-            OAuth2AccountRepository oauth2AccountRepository,
-            OAuth2TokenEncryption tokenEncryption,
-            OAuth2Properties oauth2Properties,
-            RestTemplate restTemplate,
-            ObjectMapper objectMapper) {
+        OAuth2AccountRepository oauth2AccountRepository,
+        OAuth2TokenEncryption tokenEncryption,
+        OAuth2Properties oauth2Properties,
+        RestTemplate restTemplate,
+        ObjectMapper objectMapper
+    ) {
         this.oauth2AccountRepository = oauth2AccountRepository;
         this.tokenEncryption = tokenEncryption;
         this.oauth2Properties = oauth2Properties;
@@ -70,8 +69,7 @@ public class OAuth2TokenServiceImpl implements OAuth2TokenService {
 
     @Override
     public boolean refreshAccessToken(OAuth2Account account) {
-        log.debug("Refreshing access token for account: {} with provider: {}",
-                account.getId(), account.getProvider());
+        log.debug("Refreshing access token for account: {} with provider: {}", account.getId(), account.getProvider());
 
         if (account.getRefreshToken() == null || account.getRefreshToken().isEmpty()) {
             log.warn("No refresh token available for account: {}", account.getId());
@@ -110,17 +108,14 @@ public class OAuth2TokenServiceImpl implements OAuth2TokenService {
             HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(params, headers);
 
             // Make refresh request
-            ResponseEntity<String> response = restTemplate.exchange(
-                    tokenUrl.get(), HttpMethod.POST, entity, String.class);
+            ResponseEntity<String> response = restTemplate.exchange(tokenUrl.orElseThrow(), HttpMethod.POST, entity, String.class);
 
             if (response.getStatusCode() == HttpStatus.OK) {
                 return processTokenRefreshResponse(account, response.getBody());
             } else {
-                log.error("Token refresh failed with status: {} for account: {}",
-                        response.getStatusCode(), account.getId());
+                log.error("Token refresh failed with status: {} for account: {}", response.getStatusCode(), account.getId());
                 return false;
             }
-
         } catch (Exception e) {
             log.error("Error refreshing token for account: {}", account.getId(), e);
             return false;
@@ -172,8 +167,12 @@ public class OAuth2TokenServiceImpl implements OAuth2TokenService {
         OAuth2TokenValidationResult validation = validateToken(account);
 
         if (validation.isExpired() || validation.isNeedsRefresh()) {
-            log.debug("Token needs renewal for account: {}, expired: {}, needsRefresh: {}",
-                    account.getId(), validation.isExpired(), validation.isNeedsRefresh());
+            log.debug(
+                "Token needs renewal for account: {}, expired: {}, needsRefresh: {}",
+                account.getId(),
+                validation.isExpired(),
+                validation.isNeedsRefresh()
+            );
             return refreshAccessToken(account);
         }
 
@@ -183,8 +182,7 @@ public class OAuth2TokenServiceImpl implements OAuth2TokenService {
 
     @Override
     public boolean revokeTokens(OAuth2Account account) {
-        log.debug("Revoking tokens for account: {} with provider: {}",
-                account.getId(), account.getProvider());
+        log.debug("Revoking tokens for account: {} with provider: {}", account.getId(), account.getProvider());
 
         try {
             Optional<String> revokeUrl = getTokenRevokeUrl(account.getProvider());
@@ -217,8 +215,7 @@ public class OAuth2TokenServiceImpl implements OAuth2TokenService {
             HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(params, headers);
 
             // Make revoke request
-            ResponseEntity<String> response = restTemplate.exchange(
-                    revokeUrl.get(), HttpMethod.POST, entity, String.class);
+            ResponseEntity<String> response = restTemplate.exchange(revokeUrl.orElseThrow(), HttpMethod.POST, entity, String.class);
 
             boolean success = response.getStatusCode() == HttpStatus.OK;
             if (success) {
@@ -230,12 +227,10 @@ public class OAuth2TokenServiceImpl implements OAuth2TokenService {
                 account.setTokenExpiresAt(null);
                 oauth2AccountRepository.save(account);
             } else {
-                log.error("Token revocation failed with status: {} for account: {}",
-                        response.getStatusCode(), account.getId());
+                log.error("Token revocation failed with status: {} for account: {}", response.getStatusCode(), account.getId());
             }
 
             return success;
-
         } catch (Exception e) {
             log.error("Error revoking tokens for account: {}", account.getId(), e);
             return false;
@@ -365,7 +360,6 @@ public class OAuth2TokenServiceImpl implements OAuth2TokenService {
             oauth2AccountRepository.save(account);
 
             log.debug("Successfully stored encrypted tokens for account: {}", account.getId());
-
         } catch (Exception e) {
             log.error("Error storing tokens securely for account: {}", account.getId(), e);
             throw new RuntimeException("Failed to store tokens securely", e);
@@ -409,8 +403,10 @@ public class OAuth2TokenServiceImpl implements OAuth2TokenService {
         AtomicInteger successCount = new AtomicInteger(0);
 
         // Process accounts in parallel for better performance
-        List<CompletableFuture<Boolean>> futures = accounts.stream()
-                .map(account -> CompletableFuture.supplyAsync(() -> {
+        List<CompletableFuture<Boolean>> futures = accounts
+            .stream()
+            .map(account ->
+                CompletableFuture.supplyAsync(() -> {
                     try {
                         boolean success = refreshAccessToken(account);
                         if (success) {
@@ -421,14 +417,14 @@ public class OAuth2TokenServiceImpl implements OAuth2TokenService {
                         log.error("Error in batch refresh for account: {}", account.getId(), e);
                         return false;
                     }
-                }))
-                .toList();
+                })
+            )
+            .toList();
 
         // Wait for all futures to complete
         CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).join();
 
-        log.info("Batch refresh completed: {}/{} tokens refreshed successfully",
-                successCount.get(), accounts.size());
+        log.info("Batch refresh completed: {}/{} tokens refreshed successfully", successCount.get(), accounts.size());
 
         return successCount.get();
     }
@@ -481,7 +477,6 @@ public class OAuth2TokenServiceImpl implements OAuth2TokenService {
                 log.error("No access token in refresh response for account: {}", account.getId());
                 return false;
             }
-
         } catch (Exception e) {
             log.error("Error processing token refresh response for account: {}", account.getId(), e);
             return false;

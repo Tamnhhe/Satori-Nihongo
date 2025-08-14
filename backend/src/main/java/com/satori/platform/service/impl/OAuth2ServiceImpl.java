@@ -16,7 +16,12 @@ import com.satori.platform.service.dto.OAuth2AuthenticationResult;
 import com.satori.platform.service.dto.OAuth2UserProfile;
 import com.satori.platform.service.util.OAuth2TokenEncryption;
 import com.satori.platform.web.rest.errors.BadRequestAlertException;
-
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.*;
@@ -26,13 +31,6 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
-
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
 
 /**
  * Service implementation for OAuth2 authentication and account management.
@@ -53,14 +51,15 @@ public class OAuth2ServiceImpl implements OAuth2Service {
     private final OAuth2TokenService oauth2TokenService;
 
     public OAuth2ServiceImpl(
-            OAuth2Properties oauth2Properties,
-            OAuth2AccountRepository oauth2AccountRepository,
-            UserRepository userRepository,
-            UserService userService,
-            OAuth2TokenEncryption tokenEncryption,
-            RestTemplate restTemplate,
-            ObjectMapper objectMapper,
-            OAuth2TokenService oauth2TokenService) {
+        OAuth2Properties oauth2Properties,
+        OAuth2AccountRepository oauth2AccountRepository,
+        UserRepository userRepository,
+        UserService userService,
+        OAuth2TokenEncryption tokenEncryption,
+        RestTemplate restTemplate,
+        ObjectMapper objectMapper,
+        OAuth2TokenService oauth2TokenService
+    ) {
         this.oauth2Properties = oauth2Properties;
         this.oauth2AccountRepository = oauth2AccountRepository;
         this.userRepository = userRepository;
@@ -81,15 +80,14 @@ public class OAuth2ServiceImpl implements OAuth2Service {
         }
 
         String authUrl = getAuthorizationUrl(provider);
-        String redirectUri = oauth2Properties.getRedirectBaseUrl() + "/api/oauth2/callback/"
-                + provider.name().toLowerCase();
+        String redirectUri = oauth2Properties.getRedirectBaseUrl() + "/api/oauth2/callback/" + provider.name().toLowerCase();
 
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(authUrl)
-                .queryParam("client_id", config.getClientId())
-                .queryParam("redirect_uri", redirectUri)
-                .queryParam("scope", config.getScope())
-                .queryParam("response_type", "code")
-                .queryParam("state", state);
+            .queryParam("client_id", config.getClientId())
+            .queryParam("redirect_uri", redirectUri)
+            .queryParam("scope", config.getScope())
+            .queryParam("response_type", "code")
+            .queryParam("state", state);
 
         // Add provider-specific parameters
         config.getAdditionalParameters().forEach(builder::queryParam);
@@ -114,13 +112,13 @@ public class OAuth2ServiceImpl implements OAuth2Service {
             boolean isNewUser = false;
 
             if (existingUser.isPresent()) {
-                user = existingUser.get();
+                user = existingUser.orElseThrow();
                 log.debug("Found existing user for OAuth2 account: {}", user.getLogin());
             } else {
                 // Check if user exists by email
                 Optional<User> userByEmail = userRepository.findOneByEmailIgnoreCase(userProfile.getEmail());
                 if (userByEmail.isPresent()) {
-                    user = userByEmail.get();
+                    user = userByEmail.orElseThrow();
                     log.debug("Found existing user by email: {}", user.getLogin());
                 } else {
                     // Create new user
@@ -134,13 +132,12 @@ public class OAuth2ServiceImpl implements OAuth2Service {
             OAuth2Account oauth2Account = createOrUpdateOAuth2Account(user, provider, userProfile, accessToken);
 
             return OAuth2AuthenticationResult.builder()
-                    .user(user)
-                    .isNewUser(isNewUser)
-                    .oauth2Account(oauth2Account)
-                    .userProfile(userProfile)
-                    .accountLinked(true)
-                    .build();
-
+                .user(user)
+                .isNewUser(isNewUser)
+                .oauth2Account(oauth2Account)
+                .userProfile(userProfile)
+                .accountLinked(true)
+                .build();
         } catch (Exception e) {
             log.error("Error handling OAuth2 callback for provider: {}", provider, e);
             throw new BadRequestAlertException("OAuth2 authentication failed", "oauth2", "callback.failed");
@@ -152,8 +149,7 @@ public class OAuth2ServiceImpl implements OAuth2Service {
         log.debug("Linking OAuth2 account for user: {} with provider: {}", user.getLogin(), provider);
 
         // Check if account is already linked
-        Optional<OAuth2Account> existingAccount = oauth2AccountRepository
-                .findByUserAndProvider(user, provider);
+        Optional<OAuth2Account> existingAccount = oauth2AccountRepository.findByUserAndProvider(user, provider);
         if (existingAccount.isPresent()) {
             throw new BadRequestAlertException("Account already linked", "oauth2", "account.already.linked");
         }
@@ -167,14 +163,12 @@ public class OAuth2ServiceImpl implements OAuth2Service {
 
             // Check if this OAuth2 account is already linked to another user
             Optional<User> existingUser = findUserByProviderAccount(provider, userProfile.getId());
-            if (existingUser.isPresent() && !existingUser.get().getId().equals(user.getId())) {
-                throw new BadRequestAlertException("OAuth2 account already linked to another user", "oauth2",
-                        "account.linked.other.user");
+            if (existingUser.isPresent() && !existingUser.orElseThrow().getId().equals(user.getId())) {
+                throw new BadRequestAlertException("OAuth2 account already linked to another user", "oauth2", "account.linked.other.user");
             }
 
             // Create OAuth2 account
             return createOrUpdateOAuth2Account(user, provider, userProfile, accessToken);
-
         } catch (Exception e) {
             log.error("Error linking OAuth2 account for user: {} with provider: {}", user.getLogin(), provider, e);
             throw new BadRequestAlertException("Failed to link OAuth2 account", "oauth2", "link.failed");
@@ -185,11 +179,10 @@ public class OAuth2ServiceImpl implements OAuth2Service {
     public void unlinkAccount(User user, OAuth2Provider provider) {
         log.debug("Unlinking OAuth2 account for user: {} with provider: {}", user.getLogin(), provider);
 
-        Optional<OAuth2Account> oauth2Account = oauth2AccountRepository
-                .findByUserAndProvider(user, provider);
+        Optional<OAuth2Account> oauth2Account = oauth2AccountRepository.findByUserAndProvider(user, provider);
 
         if (oauth2Account.isPresent()) {
-            oauth2AccountRepository.delete(oauth2Account.get());
+            oauth2AccountRepository.delete(oauth2Account.orElseThrow());
             log.debug("Successfully unlinked OAuth2 account for user: {} with provider: {}", user.getLogin(), provider);
         } else {
             throw new BadRequestAlertException("OAuth2 account not found", "oauth2", "account.not.found");
@@ -207,8 +200,7 @@ public class OAuth2ServiceImpl implements OAuth2Service {
     @Transactional(readOnly = true)
     public Optional<User> findUserByProviderAccount(OAuth2Provider provider, String providerUserId) {
         log.debug("Finding user by provider account: {} - {}", provider, providerUserId);
-        return oauth2AccountRepository.findByProviderAndProviderUserId(provider, providerUserId)
-                .map(OAuth2Account::getUser);
+        return oauth2AccountRepository.findByProviderAndProviderUserId(provider, providerUserId).map(OAuth2Account::getUser);
     }
 
     @Override
@@ -220,9 +212,7 @@ public class OAuth2ServiceImpl implements OAuth2Service {
             oauth2TokenService.renewTokenIfNeeded(account);
         } else {
             // Fallback to original implementation if service is not available
-            if (account.getTokenExpiresAt() != null &&
-                    account.getTokenExpiresAt().isBefore(Instant.now().plus(5, ChronoUnit.MINUTES))) {
-
+            if (account.getTokenExpiresAt() != null && account.getTokenExpiresAt().isBefore(Instant.now().plus(5, ChronoUnit.MINUTES))) {
                 log.debug("Token is expiring soon, attempting refresh for account: {}", account.getId());
 
                 try {
@@ -255,8 +245,7 @@ public class OAuth2ServiceImpl implements OAuth2Service {
         HttpEntity<String> entity = new HttpEntity<>(headers);
 
         try {
-            ResponseEntity<String> response = restTemplate.exchange(
-                    profileUrl, HttpMethod.GET, entity, String.class);
+            ResponseEntity<String> response = restTemplate.exchange(profileUrl, HttpMethod.GET, entity, String.class);
 
             if (response.getStatusCode() == HttpStatus.OK) {
                 return parseUserProfile(provider, response.getBody());
@@ -275,8 +264,7 @@ public class OAuth2ServiceImpl implements OAuth2Service {
 
         OAuth2Properties.ProviderConfig config = getProviderConfig(provider);
         String tokenUrl = getTokenUrl(provider);
-        String redirectUri = oauth2Properties.getRedirectBaseUrl() + "/api/oauth2/callback/"
-                + provider.name().toLowerCase();
+        String redirectUri = oauth2Properties.getRedirectBaseUrl() + "/api/oauth2/callback/" + provider.name().toLowerCase();
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
@@ -291,8 +279,7 @@ public class OAuth2ServiceImpl implements OAuth2Service {
         HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(params, headers);
 
         try {
-            ResponseEntity<String> response = restTemplate.exchange(
-                    tokenUrl, HttpMethod.POST, entity, String.class);
+            ResponseEntity<String> response = restTemplate.exchange(tokenUrl, HttpMethod.POST, entity, String.class);
 
             if (response.getStatusCode() == HttpStatus.OK) {
                 return parseAccessToken(response.getBody());
@@ -309,16 +296,23 @@ public class OAuth2ServiceImpl implements OAuth2Service {
         log.debug("Looking for provider config: {}", provider.name().toLowerCase());
         log.debug("Available providers: {}", oauth2Properties.getProviders().keySet());
         log.debug("OAuth2 enabled: {}", oauth2Properties.isEnabled());
-        
+
         OAuth2Properties.ProviderConfig config = oauth2Properties.getProviders().get(provider.name().toLowerCase());
         if (config == null) {
-            log.error("OAuth2 provider '{}' not found in configuration. Available providers: {}", 
-                provider.name().toLowerCase(), oauth2Properties.getProviders().keySet());
+            log.error(
+                "OAuth2 provider '{}' not found in configuration. Available providers: {}",
+                provider.name().toLowerCase(),
+                oauth2Properties.getProviders().keySet()
+            );
             throw new BadRequestAlertException("OAuth2 provider not configured", "oauth2", "provider.not.configured");
         }
-        
-        log.debug("Found provider config for {}: enabled={}, clientId={}", 
-            provider.name().toLowerCase(), config.isEnabled(), config.getClientId());
+
+        log.debug(
+            "Found provider config for {}: enabled={}, clientId={}",
+            provider.name().toLowerCase(),
+            config.isEnabled(),
+            config.getClientId()
+        );
         return config;
     }
 
@@ -393,31 +387,30 @@ public class OAuth2ServiceImpl implements OAuth2Service {
 
     private OAuth2UserProfile parseGoogleProfile(JsonNode jsonNode) {
         return OAuth2UserProfile.builder()
-                .id(jsonNode.get("id").asText())
-                .email(jsonNode.has("email") ? jsonNode.get("email").asText() : null)
-                .firstName(jsonNode.has("given_name") ? jsonNode.get("given_name").asText() : null)
-                .lastName(jsonNode.has("family_name") ? jsonNode.get("family_name").asText() : null)
-                .displayName(jsonNode.has("name") ? jsonNode.get("name").asText() : null)
-                .profilePictureUrl(jsonNode.has("picture") ? jsonNode.get("picture").asText() : null)
-                .locale(jsonNode.has("locale") ? jsonNode.get("locale").asText() : null)
-                .build();
+            .id(jsonNode.get("id").asText())
+            .email(jsonNode.has("email") ? jsonNode.get("email").asText() : null)
+            .firstName(jsonNode.has("given_name") ? jsonNode.get("given_name").asText() : null)
+            .lastName(jsonNode.has("family_name") ? jsonNode.get("family_name").asText() : null)
+            .displayName(jsonNode.has("name") ? jsonNode.get("name").asText() : null)
+            .profilePictureUrl(jsonNode.has("picture") ? jsonNode.get("picture").asText() : null)
+            .locale(jsonNode.has("locale") ? jsonNode.get("locale").asText() : null)
+            .build();
     }
 
     private OAuth2UserProfile parseFacebookProfile(JsonNode jsonNode) {
         String pictureUrl = null;
-        if (jsonNode.has("picture") && jsonNode.get("picture").has("data") &&
-                jsonNode.get("picture").get("data").has("url")) {
+        if (jsonNode.has("picture") && jsonNode.get("picture").has("data") && jsonNode.get("picture").get("data").has("url")) {
             pictureUrl = jsonNode.get("picture").get("data").get("url").asText();
         }
 
         return OAuth2UserProfile.builder()
-                .id(jsonNode.get("id").asText())
-                .email(jsonNode.has("email") ? jsonNode.get("email").asText() : null)
-                .firstName(jsonNode.has("first_name") ? jsonNode.get("first_name").asText() : null)
-                .lastName(jsonNode.has("last_name") ? jsonNode.get("last_name").asText() : null)
-                .displayName(jsonNode.has("name") ? jsonNode.get("name").asText() : null)
-                .profilePictureUrl(pictureUrl)
-                .build();
+            .id(jsonNode.get("id").asText())
+            .email(jsonNode.has("email") ? jsonNode.get("email").asText() : null)
+            .firstName(jsonNode.has("first_name") ? jsonNode.get("first_name").asText() : null)
+            .lastName(jsonNode.has("last_name") ? jsonNode.get("last_name").asText() : null)
+            .displayName(jsonNode.has("name") ? jsonNode.get("name").asText() : null)
+            .profilePictureUrl(pictureUrl)
+            .build();
     }
 
     private OAuth2UserProfile parseGitHubProfile(JsonNode jsonNode) {
@@ -425,13 +418,13 @@ public class OAuth2ServiceImpl implements OAuth2Service {
         String[] nameParts = fullName != null ? fullName.split(" ", 2) : new String[] { null, null };
 
         return OAuth2UserProfile.builder()
-                .id(jsonNode.get("id").asText())
-                .email(jsonNode.has("email") ? jsonNode.get("email").asText() : null)
-                .firstName(nameParts.length > 0 ? nameParts[0] : null)
-                .lastName(nameParts.length > 1 ? nameParts[1] : null)
-                .displayName(jsonNode.has("login") ? jsonNode.get("login").asText() : null)
-                .profilePictureUrl(jsonNode.has("avatar_url") ? jsonNode.get("avatar_url").asText() : null)
-                .build();
+            .id(jsonNode.get("id").asText())
+            .email(jsonNode.has("email") ? jsonNode.get("email").asText() : null)
+            .firstName(nameParts.length > 0 ? nameParts[0] : null)
+            .lastName(nameParts.length > 1 ? nameParts[1] : null)
+            .displayName(jsonNode.has("login") ? jsonNode.get("login").asText() : null)
+            .profilePictureUrl(jsonNode.has("avatar_url") ? jsonNode.get("avatar_url").asText() : null)
+            .build();
     }
 
     private User createUserFromProfile(OAuth2UserProfile profile) {
@@ -447,9 +440,9 @@ public class OAuth2ServiceImpl implements OAuth2Service {
     }
 
     private String generateUniqueLogin(OAuth2UserProfile profile) {
-        String baseLogin = profile.getEmail() != null ? profile.getEmail().split("@")[0]
-                : profile.getDisplayName() != null ? profile.getDisplayName().toLowerCase().replaceAll("[^a-z0-9]", "")
-                        : "user";
+        String baseLogin = profile.getEmail() != null
+            ? profile.getEmail().split("@")[0]
+            : profile.getDisplayName() != null ? profile.getDisplayName().toLowerCase().replaceAll("[^a-z0-9]", "") : "user";
 
         String login = baseLogin;
         int counter = 1;
@@ -461,14 +454,12 @@ public class OAuth2ServiceImpl implements OAuth2Service {
         return login.toLowerCase();
     }
 
-    private OAuth2Account createOrUpdateOAuth2Account(User user, OAuth2Provider provider,
-            OAuth2UserProfile profile, String accessToken) {
-        Optional<OAuth2Account> existingAccount = oauth2AccountRepository
-                .findByUserAndProvider(user, provider);
+    private OAuth2Account createOrUpdateOAuth2Account(User user, OAuth2Provider provider, OAuth2UserProfile profile, String accessToken) {
+        Optional<OAuth2Account> existingAccount = oauth2AccountRepository.findByUserAndProvider(user, provider);
 
         OAuth2Account account;
         if (existingAccount.isPresent()) {
-            account = existingAccount.get();
+            account = existingAccount.orElseThrow();
         } else {
             account = new OAuth2Account();
             account.setUser(user);
@@ -499,8 +490,11 @@ public class OAuth2ServiceImpl implements OAuth2Service {
     }
 
     @Override
-    public OAuth2AuthenticationResult processOAuth2Authentication(String registrationId, String providerUserId,
-            Map<String, Object> attributes) {
+    public OAuth2AuthenticationResult processOAuth2Authentication(
+        String registrationId,
+        String providerUserId,
+        Map<String, Object> attributes
+    ) {
         log.debug("Processing OAuth2 authentication for provider: {} with user ID: {}", registrationId, providerUserId);
 
         try {
@@ -515,7 +509,7 @@ public class OAuth2ServiceImpl implements OAuth2Service {
             boolean isNewUser = false;
 
             if (existingUser.isPresent()) {
-                user = existingUser.get();
+                user = existingUser.orElseThrow();
                 log.debug("Found existing user for OAuth2 account: {}", user.getLogin());
             } else {
                 // Check if user exists by email
@@ -523,7 +517,7 @@ public class OAuth2ServiceImpl implements OAuth2Service {
                 if (email != null) {
                     Optional<User> userByEmail = userRepository.findOneByEmailIgnoreCase(email);
                     if (userByEmail.isPresent()) {
-                        user = userByEmail.get();
+                        user = userByEmail.orElseThrow();
                         log.debug("Found existing user by email: {}", user.getLogin());
                     } else {
                         // Create new user
@@ -543,16 +537,14 @@ public class OAuth2ServiceImpl implements OAuth2Service {
             OAuth2Account oauth2Account = createOrUpdateOAuth2AccountFromAttributes(user, provider, userProfile);
 
             return OAuth2AuthenticationResult.builder()
-                    .user(user)
-                    .isNewUser(isNewUser)
-                    .oauth2Account(oauth2Account)
-                    .userProfile(userProfile)
-                    .accountLinked(true)
-                    .build();
-
+                .user(user)
+                .isNewUser(isNewUser)
+                .oauth2Account(oauth2Account)
+                .userProfile(userProfile)
+                .accountLinked(true)
+                .build();
         } catch (Exception e) {
-            log.error("Error processing OAuth2 authentication for provider: {} with user ID: {}",
-                    registrationId, providerUserId, e);
+            log.error("Error processing OAuth2 authentication for provider: {} with user ID: {}", registrationId, providerUserId, e);
             throw new RuntimeException("OAuth2 authentication processing failed", e);
         }
     }
@@ -561,47 +553,45 @@ public class OAuth2ServiceImpl implements OAuth2Service {
         switch (provider) {
             case GOOGLE:
                 return OAuth2UserProfile.builder()
-                        .id((String) attributes.get("sub"))
-                        .email((String) attributes.get("email"))
-                        .firstName((String) attributes.get("given_name"))
-                        .lastName((String) attributes.get("family_name"))
-                        .displayName((String) attributes.get("name"))
-                        .profilePictureUrl((String) attributes.get("picture"))
-                        .locale((String) attributes.get("locale"))
-                        .build();
+                    .id((String) attributes.get("sub"))
+                    .email((String) attributes.get("email"))
+                    .firstName((String) attributes.get("given_name"))
+                    .lastName((String) attributes.get("family_name"))
+                    .displayName((String) attributes.get("name"))
+                    .profilePictureUrl((String) attributes.get("picture"))
+                    .locale((String) attributes.get("locale"))
+                    .build();
             case FACEBOOK:
                 return OAuth2UserProfile.builder()
-                        .id((String) attributes.get("id"))
-                        .email((String) attributes.get("email"))
-                        .firstName((String) attributes.get("first_name"))
-                        .lastName((String) attributes.get("last_name"))
-                        .displayName((String) attributes.get("name"))
-                        .profilePictureUrl((String) attributes.get("picture"))
-                        .build();
+                    .id((String) attributes.get("id"))
+                    .email((String) attributes.get("email"))
+                    .firstName((String) attributes.get("first_name"))
+                    .lastName((String) attributes.get("last_name"))
+                    .displayName((String) attributes.get("name"))
+                    .profilePictureUrl((String) attributes.get("picture"))
+                    .build();
             case GITHUB:
                 String fullName = (String) attributes.get("name");
                 String[] nameParts = fullName != null ? fullName.split(" ", 2) : new String[] { null, null };
                 return OAuth2UserProfile.builder()
-                        .id(String.valueOf(attributes.get("id")))
-                        .email((String) attributes.get("email"))
-                        .firstName(nameParts.length > 0 ? nameParts[0] : null)
-                        .lastName(nameParts.length > 1 ? nameParts[1] : null)
-                        .displayName((String) attributes.get("login"))
-                        .profilePictureUrl((String) attributes.get("avatar_url"))
-                        .build();
+                    .id(String.valueOf(attributes.get("id")))
+                    .email((String) attributes.get("email"))
+                    .firstName(nameParts.length > 0 ? nameParts[0] : null)
+                    .lastName(nameParts.length > 1 ? nameParts[1] : null)
+                    .displayName((String) attributes.get("login"))
+                    .profilePictureUrl((String) attributes.get("avatar_url"))
+                    .build();
             default:
                 throw new IllegalArgumentException("Unsupported OAuth2 provider: " + provider);
         }
     }
 
-    private OAuth2Account createOrUpdateOAuth2AccountFromAttributes(User user, OAuth2Provider provider,
-            OAuth2UserProfile profile) {
-        Optional<OAuth2Account> existingAccount = oauth2AccountRepository
-                .findByUserAndProvider(user, provider);
+    private OAuth2Account createOrUpdateOAuth2AccountFromAttributes(User user, OAuth2Provider provider, OAuth2UserProfile profile) {
+        Optional<OAuth2Account> existingAccount = oauth2AccountRepository.findByUserAndProvider(user, provider);
 
         OAuth2Account account;
         if (existingAccount.isPresent()) {
-            account = existingAccount.get();
+            account = existingAccount.orElseThrow();
         } else {
             account = new OAuth2Account();
             account.setUser(user);

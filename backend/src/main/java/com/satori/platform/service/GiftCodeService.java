@@ -8,12 +8,10 @@ import com.satori.platform.domain.UserProfile;
 import com.satori.platform.repository.CourseClassRepository;
 import com.satori.platform.repository.CourseRepository;
 import com.satori.platform.repository.GiftCodeRepository;
-
 import com.satori.platform.repository.UserProfileRepository;
 import com.satori.platform.service.dto.GiftCodeDTO;
 import com.satori.platform.service.dto.GiftCodeRedemptionDTO;
 import com.satori.platform.service.exception.GiftCodeException;
-
 import com.satori.platform.service.exception.GiftCodeInvalidException;
 import com.satori.platform.service.exception.GiftCodeUsageLimitException;
 import com.satori.platform.service.mapper.GiftCodeMapper;
@@ -48,11 +46,12 @@ public class GiftCodeService {
     private final GiftCodeMapper giftCodeMapper;
 
     public GiftCodeService(
-            GiftCodeRepository giftCodeRepository,
-            CourseRepository courseRepository,
-            CourseClassRepository courseClassRepository,
-            UserProfileRepository userProfileRepository,
-            GiftCodeMapper giftCodeMapper) {
+        GiftCodeRepository giftCodeRepository,
+        CourseRepository courseRepository,
+        CourseClassRepository courseClassRepository,
+        UserProfileRepository userProfileRepository,
+        GiftCodeMapper giftCodeMapper
+    ) {
         this.giftCodeRepository = giftCodeRepository;
         this.courseRepository = courseRepository;
         this.courseClassRepository = courseClassRepository;
@@ -96,13 +95,13 @@ public class GiftCodeService {
         log.debug("Request to partially update GiftCode : {}", giftCodeDTO);
 
         return giftCodeRepository
-                .findById(giftCodeDTO.getId())
-                .map(existingGiftCode -> {
-                    giftCodeMapper.partialUpdate(existingGiftCode, giftCodeDTO);
-                    return existingGiftCode;
-                })
-                .map(giftCodeRepository::save)
-                .map(giftCodeMapper::toDto);
+            .findById(giftCodeDTO.getId())
+            .map(existingGiftCode -> {
+                giftCodeMapper.partialUpdate(existingGiftCode, giftCodeDTO);
+                return existingGiftCode;
+            })
+            .map(giftCodeRepository::save)
+            .map(giftCodeMapper::toDto);
     }
 
     /**
@@ -148,28 +147,29 @@ public class GiftCodeService {
      * @param createdByUserId the user creating the code
      * @return the generated gift code
      */
-    public GiftCodeDTO generateCourseAccessCode(Long courseId, Integer validityDays, Integer maxUses,
-            Long createdByUserId) {
+    public GiftCodeDTO generateCourseAccessCode(Long courseId, Integer validityDays, Integer maxUses, Long createdByUserId) {
         log.debug("Request to generate gift code for course: {}", courseId);
 
-        Course course = courseRepository.findById(courseId)
-                .orElseThrow(() -> new GiftCodeException("Course not found with id: " + courseId));
+        Course course = courseRepository
+            .findById(courseId)
+            .orElseThrow(() -> new GiftCodeException("Course not found with id: " + courseId));
 
-        UserProfile createdBy = userProfileRepository.findById(createdByUserId)
-                .orElseThrow(() -> new GiftCodeException("User not found with id: " + createdByUserId));
+        UserProfile createdBy = userProfileRepository
+            .findById(createdByUserId)
+            .orElseThrow(() -> new GiftCodeException("User not found with id: " + createdByUserId));
 
         String code = generateUniqueCode();
         LocalDateTime expiryDate = LocalDateTime.now().plusDays(validityDays != null ? validityDays : 30);
 
         GiftCode giftCode = new GiftCode()
-                .code(code)
-                .expiryDate(expiryDate)
-                .active(true)
-                .maxUses(maxUses)
-                .currentUses(0)
-                .createdDate(LocalDateTime.now())
-                .course(course)
-                .createdBy(createdBy);
+            .code(code)
+            .expiryDate(expiryDate)
+            .active(true)
+            .maxUses(maxUses)
+            .currentUses(0)
+            .createdDate(LocalDateTime.now())
+            .course(course)
+            .createdBy(createdBy);
 
         giftCode = giftCodeRepository.save(giftCode);
         log.info("Generated gift code {} for course {}", code, course.getTitle());
@@ -204,8 +204,9 @@ public class GiftCodeService {
 
         try {
             // Find and validate the gift code
-            GiftCode giftCode = giftCodeRepository.findValidByCode(code, LocalDateTime.now())
-                    .orElseThrow(() -> new GiftCodeInvalidException(code));
+            GiftCode giftCode = giftCodeRepository
+                .findValidByCode(code, LocalDateTime.now())
+                .orElseThrow(() -> new GiftCodeInvalidException(code));
 
             // Check if code has reached usage limit
             if (giftCode.getMaxUses() != null && giftCode.getCurrentUses() >= giftCode.getMaxUses()) {
@@ -213,8 +214,9 @@ public class GiftCodeService {
             }
 
             // Find the student profile
-            UserProfile userProfile = userProfileRepository.findById(studentUserId)
-                    .orElseThrow(() -> new GiftCodeException("User not found with id: " + studentUserId));
+            UserProfile userProfile = userProfileRepository
+                .findById(studentUserId)
+                .orElseThrow(() -> new GiftCodeException("User not found with id: " + studentUserId));
 
             StudentProfile studentProfile = userProfile.getStudentProfile();
             if (studentProfile == null) {
@@ -223,8 +225,10 @@ public class GiftCodeService {
 
             // Check if student is already enrolled in the course
             Course course = giftCode.getCourse();
-            boolean alreadyEnrolled = studentProfile.getClasses().stream()
-                    .anyMatch(courseClass -> courseClass.getCourse().getId().equals(course.getId()));
+            boolean alreadyEnrolled = studentProfile
+                .getClasses()
+                .stream()
+                .anyMatch(courseClass -> courseClass.getCourse().getId().equals(course.getId()));
 
             if (alreadyEnrolled) {
                 result.setSuccess(false);
@@ -235,10 +239,12 @@ public class GiftCodeService {
             // Find an active course class for enrollment
             // For simplicity, we'll find the first available course class
             // In a real scenario, you might want more sophisticated logic
-            List<CourseClass> availableClasses = courseClassRepository.findAll().stream()
-                    .filter(cc -> cc.getCourse().getId().equals(course.getId()))
-                    .filter(cc -> cc.getCapacity() == null || cc.getStudents().size() < cc.getCapacity())
-                    .toList();
+            List<CourseClass> availableClasses = courseClassRepository
+                .findAll()
+                .stream()
+                .filter(cc -> cc.getCourse().getId().equals(course.getId()))
+                .filter(cc -> cc.getCapacity() == null || cc.getStudents().size() < cc.getCapacity())
+                .toList();
 
             if (availableClasses.isEmpty()) {
                 result.setSuccess(false);
@@ -261,9 +267,12 @@ public class GiftCodeService {
             result.setCourseId(course.getId());
             result.setCourseTitle(course.getTitle());
 
-            log.info("Successfully redeemed gift code {} for student {} in course {}",
-                    code, studentProfile.getStudentId(), course.getTitle());
-
+            log.info(
+                "Successfully redeemed gift code {} for student {} in course {}",
+                code,
+                studentProfile.getStudentId(),
+                course.getTitle()
+            );
         } catch (GiftCodeException e) {
             result.setSuccess(false);
             result.setMessage(e.getMessage());
@@ -283,7 +292,7 @@ public class GiftCodeService {
 
         Optional<GiftCode> giftCodeOpt = giftCodeRepository.findByCode(code);
         if (giftCodeOpt.isPresent()) {
-            GiftCode giftCode = giftCodeOpt.get();
+            GiftCode giftCode = giftCodeOpt.orElseThrow();
             giftCode.setActive(false);
             giftCodeRepository.save(giftCode);
             log.info("Expired gift code: {}", code);
@@ -299,10 +308,7 @@ public class GiftCodeService {
     @Transactional(readOnly = true)
     public List<GiftCodeDTO> findByCreatedByUserId(Long userId) {
         log.debug("Request to get gift codes created by user: {}", userId);
-        return giftCodeRepository.findByCreatedByUserId(userId)
-                .stream()
-                .map(giftCodeMapper::toDto)
-                .toList();
+        return giftCodeRepository.findByCreatedByUserId(userId).stream().map(giftCodeMapper::toDto).toList();
     }
 
     /**
@@ -314,10 +320,7 @@ public class GiftCodeService {
     @Transactional(readOnly = true)
     public List<GiftCodeDTO> findActiveByCourseId(Long courseId) {
         log.debug("Request to get active gift codes for course: {}", courseId);
-        return giftCodeRepository.findActiveByCourseId(courseId)
-                .stream()
-                .map(giftCodeMapper::toDto)
-                .toList();
+        return giftCodeRepository.findActiveByCourseId(courseId).stream().map(giftCodeMapper::toDto).toList();
     }
 
     /**

@@ -63,11 +63,12 @@ public class UserSessionService {
      * Update session last accessed time.
      */
     public void updateSessionAccess(String sessionId) {
-        userSessionRepository.findBySessionIdAndActiveTrue(sessionId)
-                .ifPresent(session -> {
-                    session.setLastAccessedDate(Instant.now());
-                    userSessionRepository.save(session);
-                });
+        userSessionRepository
+            .findBySessionIdAndActiveTrue(sessionId)
+            .ifPresent(session -> {
+                session.setLastAccessedDate(Instant.now());
+                userSessionRepository.save(session);
+            });
     }
 
     /**
@@ -75,11 +76,12 @@ public class UserSessionService {
      */
     public void invalidateSession(String sessionId) {
         LOG.debug("Invalidating session: {}", sessionId);
-        userSessionRepository.findBySessionIdAndActiveTrue(sessionId)
-                .ifPresent(session -> {
-                    session.setActive(false);
-                    userSessionRepository.save(session);
-                });
+        userSessionRepository
+            .findBySessionIdAndActiveTrue(sessionId)
+            .ifPresent(session -> {
+                session.setActive(false);
+                userSessionRepository.save(session);
+            });
     }
 
     /**
@@ -103,10 +105,7 @@ public class UserSessionService {
      */
     @Transactional(readOnly = true)
     public List<UserSessionDTO> getActiveUserSessions(User user) {
-        return userSessionRepository.findActiveSessionsByUser(user)
-                .stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
+        return userSessionRepository.findActiveSessionsByUser(user).stream().map(this::convertToDTO).collect(Collectors.toList());
     }
 
     /**
@@ -119,7 +118,7 @@ public class UserSessionService {
             return false;
         }
 
-        UserSession userSession = session.get();
+        UserSession userSession = session.orElseThrow();
         Instant now = Instant.now();
 
         // Check if session has expired
@@ -160,12 +159,13 @@ public class UserSessionService {
 
     private UserSessionDTO convertToDTO(UserSession session) {
         return new UserSessionDTO(
-                session.getId(),
-                session.getSessionId(),
-                session.getUser().getLogin(),
-                session.getCreatedDate(),
-                session.getLastAccessedDate(),
-                session.getIpAddress(),
-                session.getActive());
+            session.getId(),
+            session.getSessionId(),
+            session.getUser().getLogin(),
+            session.getCreatedDate(),
+            session.getLastAccessedDate(),
+            session.getIpAddress(),
+            session.getActive()
+        );
     }
 }

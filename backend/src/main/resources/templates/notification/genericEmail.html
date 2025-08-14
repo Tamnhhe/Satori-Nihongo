@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <title th:text="#{notification.generic.email.subject}">Notification</title>
+</head>
+
+<body>
+    <p th:text="|Hello ${fullName},|">Hello Student,</p>
+    <p th:text="#{notification.generic.push.message}">You have a new notification.</p>
+    <hr />
+    <small>onlineSatoriPlatform</small>
+</body>
+
+</html>

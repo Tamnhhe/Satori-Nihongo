@@ -2,22 +2,22 @@ package com.satori.platform.service;
 
 import com.satori.platform.domain.Quiz;
 import com.satori.platform.domain.QuizQuestion;
+import com.satori.platform.domain.StudentQuiz;
 import com.satori.platform.domain.StudentQuizResponse;
 import com.satori.platform.domain.UserProfile;
-import com.satori.platform.repository.QuizRepository;
 import com.satori.platform.repository.QuizQuestionRepository;
-import com.satori.platform.domain.StudentQuiz;
+import com.satori.platform.repository.QuizRepository;
 import com.satori.platform.repository.StudentQuizRepository;
 import com.satori.platform.repository.StudentQuizResponseRepository;
 import com.satori.platform.repository.UserProfileRepository;
 import com.satori.platform.service.dto.*;
+import com.satori.platform.service.dto.StudentQuizDTO;
 import com.satori.platform.service.exception.QuizNotActiveException;
 import com.satori.platform.service.exception.QuizSessionException;
 import com.satori.platform.service.exception.QuizTimeExpiredException;
-import com.satori.platform.service.dto.StudentQuizDTO;
+import com.satori.platform.service.mapper.QuizQuestionMapper;
 import com.satori.platform.service.mapper.StudentQuizMapper;
 import com.satori.platform.service.mapper.StudentQuizResponseMapper;
-import com.satori.platform.service.mapper.QuizQuestionMapper;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
@@ -51,14 +51,15 @@ public class StudentQuizService {
     private final QuizQuestionMapper quizQuestionMapper;
 
     public StudentQuizService(
-            StudentQuizRepository studentQuizRepository,
-            StudentQuizResponseRepository studentQuizResponseRepository,
-            QuizRepository quizRepository,
-            QuizQuestionRepository quizQuestionRepository,
-            UserProfileRepository userProfileRepository,
-            StudentQuizMapper studentQuizMapper,
-            StudentQuizResponseMapper studentQuizResponseMapper,
-            QuizQuestionMapper quizQuestionMapper) {
+        StudentQuizRepository studentQuizRepository,
+        StudentQuizResponseRepository studentQuizResponseRepository,
+        QuizRepository quizRepository,
+        QuizQuestionRepository quizQuestionRepository,
+        UserProfileRepository userProfileRepository,
+        StudentQuizMapper studentQuizMapper,
+        StudentQuizResponseMapper studentQuizResponseMapper,
+        QuizQuestionMapper quizQuestionMapper
+    ) {
         this.studentQuizRepository = studentQuizRepository;
         this.studentQuizResponseRepository = studentQuizResponseRepository;
         this.quizRepository = quizRepository;
@@ -159,20 +160,19 @@ public class StudentQuizService {
     public QuizSessionDTO startQuizAttempt(Long quizId, Long studentId) {
         LOG.debug("Request to start quiz attempt for quiz: {} and student: {}", quizId, studentId);
 
-        Quiz quiz = quizRepository.findById(quizId)
-                .orElseThrow(() -> new IllegalArgumentException("Quiz not found with id: " + quizId));
+        Quiz quiz = quizRepository.findById(quizId).orElseThrow(() -> new IllegalArgumentException("Quiz not found with id: " + quizId));
 
-        UserProfile student = userProfileRepository.findById(studentId)
-                .orElseThrow(() -> new IllegalArgumentException("Student not found with id: " + studentId));
+        UserProfile student = userProfileRepository
+            .findById(studentId)
+            .orElseThrow(() -> new IllegalArgumentException("Student not found with id: " + studentId));
 
         // Validate quiz is active
         validateQuizActive(quiz);
 
         // Check if student already has an active attempt
-        Optional<StudentQuiz> existingAttempt = studentQuizRepository.findActiveAttemptByStudentAndQuiz(studentId,
-                quizId);
+        Optional<StudentQuiz> existingAttempt = studentQuizRepository.findActiveAttemptByStudentAndQuiz(studentId, quizId);
         if (existingAttempt.isPresent()) {
-            return buildQuizSessionDTO(existingAttempt.get());
+            return buildQuizSessionDTO(existingAttempt.orElseThrow());
         }
 
         // Create new attempt
@@ -208,18 +208,22 @@ public class StudentQuizService {
     public StudentQuizResponseDTO submitAnswer(Long studentQuizId, Long quizQuestionId, String answer) {
         LOG.debug("Request to submit answer for studentQuiz: {} and question: {}", studentQuizId, quizQuestionId);
 
-        StudentQuiz studentQuiz = studentQuizRepository.findById(studentQuizId)
-                .orElseThrow(() -> new IllegalArgumentException("StudentQuiz not found with id: " + studentQuizId));
+        StudentQuiz studentQuiz = studentQuizRepository
+            .findById(studentQuizId)
+            .orElseThrow(() -> new IllegalArgumentException("StudentQuiz not found with id: " + studentQuizId));
 
-        QuizQuestion quizQuestion = quizQuestionRepository.findById(quizQuestionId)
-                .orElseThrow(() -> new IllegalArgumentException("QuizQuestion not found with id: " + quizQuestionId));
+        QuizQuestion quizQuestion = quizQuestionRepository
+            .findById(quizQuestionId)
+            .orElseThrow(() -> new IllegalArgumentException("QuizQuestion not found with id: " + quizQuestionId));
 
         // Validate quiz session
         validateQuizSession(studentQuiz);
 
         // Check if response already exists
-        StudentQuizResponse existingResponse = studentQuizResponseRepository
-                .findByStudentQuizIdAndQuizQuestionId(studentQuizId, quizQuestionId);
+        StudentQuizResponse existingResponse = studentQuizResponseRepository.findByStudentQuizIdAndQuizQuestionId(
+            studentQuizId,
+            quizQuestionId
+        );
 
         if (existingResponse != null) {
             // Update existing response
@@ -253,8 +257,9 @@ public class StudentQuizService {
     public QuizSessionDTO pauseQuizAttempt(Long studentQuizId) {
         LOG.debug("Request to pause quiz attempt: {}", studentQuizId);
 
-        StudentQuiz studentQuiz = studentQuizRepository.findById(studentQuizId)
-                .orElseThrow(() -> new IllegalArgumentException("StudentQuiz not found with id: " + studentQuizId));
+        StudentQuiz studentQuiz = studentQuizRepository
+            .findById(studentQuizId)
+            .orElseThrow(() -> new IllegalArgumentException("StudentQuiz not found with id: " + studentQuizId));
 
         validateQuizSession(studentQuiz);
 
@@ -279,8 +284,9 @@ public class StudentQuizService {
     public QuizSessionDTO resumeQuizAttempt(Long studentQuizId) {
         LOG.debug("Request to resume quiz attempt: {}", studentQuizId);
 
-        StudentQuiz studentQuiz = studentQuizRepository.findById(studentQuizId)
-                .orElseThrow(() -> new IllegalArgumentException("StudentQuiz not found with id: " + studentQuizId));
+        StudentQuiz studentQuiz = studentQuizRepository
+            .findById(studentQuizId)
+            .orElseThrow(() -> new IllegalArgumentException("StudentQuiz not found with id: " + studentQuizId));
 
         validateQuizSession(studentQuiz);
 
@@ -313,8 +319,9 @@ public class StudentQuizService {
     public QuizResultDTO submitQuizAttempt(Long studentQuizId) {
         LOG.debug("Request to submit quiz attempt: {}", studentQuizId);
 
-        StudentQuiz studentQuiz = studentQuizRepository.findById(studentQuizId)
-                .orElseThrow(() -> new IllegalArgumentException("StudentQuiz not found with id: " + studentQuizId));
+        StudentQuiz studentQuiz = studentQuizRepository
+            .findById(studentQuizId)
+            .orElseThrow(() -> new IllegalArgumentException("StudentQuiz not found with id: " + studentQuizId));
 
         if (Boolean.TRUE.equals(studentQuiz.getCompleted())) {
             throw new QuizSessionException("Quiz is already completed");
@@ -386,17 +393,17 @@ public class StudentQuizService {
     public QuizPerformanceStatsDTO getPerformanceStats(Long studentId, Long quizId) {
         LOG.debug("Request to get performance stats for student: {} and quiz: {}", studentId, quizId);
 
-        List<StudentQuiz> attempts = studentQuizRepository.findByStudentIdAndQuizIdOrderByStartTimeDesc(studentId,
-                quizId);
+        List<StudentQuiz> attempts = studentQuizRepository.findByStudentIdAndQuizIdOrderByStartTimeDesc(studentId, quizId);
 
         QuizPerformanceStatsDTO stats = new QuizPerformanceStatsDTO();
         stats.setTotalAttempts((long) attempts.size());
 
         if (!attempts.isEmpty()) {
-            List<Double> scores = attempts.stream()
-                    .filter(a -> Boolean.TRUE.equals(a.getCompleted()) && a.getScore() != null)
-                    .map(StudentQuiz::getScore)
-                    .collect(Collectors.toList());
+            List<Double> scores = attempts
+                .stream()
+                .filter(a -> Boolean.TRUE.equals(a.getCompleted()) && a.getScore() != null)
+                .map(StudentQuiz::getScore)
+                .collect(Collectors.toList());
 
             if (!scores.isEmpty()) {
                 stats.setBestScore(scores.stream().mapToDouble(Double::doubleValue).max().orElse(0.0));
@@ -430,8 +437,7 @@ public class StudentQuizService {
     public Optional<QuizSessionDTO> getCurrentQuizSession(Long studentId, Long quizId) {
         LOG.debug("Request to get current quiz session for student: {} and quiz: {}", studentId, quizId);
 
-        Optional<StudentQuiz> activeAttempt = studentQuizRepository.findActiveAttemptByStudentAndQuiz(studentId,
-                quizId);
+        Optional<StudentQuiz> activeAttempt = studentQuizRepository.findActiveAttemptByStudentAndQuiz(studentId, quizId);
         return activeAttempt.map(this::buildQuizSessionDTO);
     }
 
@@ -523,27 +529,24 @@ public class StudentQuizService {
         Quiz quiz = studentQuiz.getQuiz();
         session.setTimeLimitMinutes(quiz.getTimeLimitMinutes());
 
-        if (quiz.getTimeLimitMinutes() != null && studentQuiz.getStartTime() != null
-                && !Boolean.TRUE.equals(studentQuiz.getCompleted())) {
+        if (quiz.getTimeLimitMinutes() != null && studentQuiz.getStartTime() != null && !Boolean.TRUE.equals(studentQuiz.getCompleted())) {
             Instant timeLimit = studentQuiz.getStartTime().plus(Duration.ofMinutes(quiz.getTimeLimitMinutes()));
             long remainingSeconds = Duration.between(Instant.now(), timeLimit).getSeconds();
             session.setRemainingTimeSeconds(Math.max(0, (int) remainingSeconds));
         }
 
         // Set questions and responses
-        List<QuizQuestion> questions = quizQuestionRepository
-                .findByQuizIdOrderByPosition(studentQuiz.getQuiz().getId());
+        List<QuizQuestion> questions = quizQuestionRepository.findByQuizIdOrderByPosition(studentQuiz.getQuiz().getId());
         session.setQuestions(questions.stream().map(quizQuestionMapper::toDto).collect(Collectors.toList()));
 
-        List<StudentQuizResponse> responses = studentQuizResponseRepository
-                .findByStudentQuizIdOrderByQuizQuestionPosition(studentQuiz.getId());
+        List<StudentQuizResponse> responses = studentQuizResponseRepository.findByStudentQuizIdOrderByQuizQuestionPosition(
+            studentQuiz.getId()
+        );
         session.setResponses(responses.stream().map(studentQuizResponseMapper::toDto).collect(Collectors.toList()));
 
         // Set session controls
-        session.setCanPause(
-                !Boolean.TRUE.equals(studentQuiz.getCompleted()) && !Boolean.TRUE.equals(studentQuiz.getPaused()));
-        session.setCanResume(
-                !Boolean.TRUE.equals(studentQuiz.getCompleted()) && Boolean.TRUE.equals(studentQuiz.getPaused()));
+        session.setCanPause(!Boolean.TRUE.equals(studentQuiz.getCompleted()) && !Boolean.TRUE.equals(studentQuiz.getPaused()));
+        session.setCanResume(!Boolean.TRUE.equals(studentQuiz.getCompleted()) && Boolean.TRUE.equals(studentQuiz.getPaused()));
 
         return session;
     }
@@ -560,8 +563,7 @@ public class StudentQuizService {
         result.setTotalQuestions(studentQuiz.getTotalQuestions());
         result.setAutoSubmitted(studentQuiz.getSubmittedAutomatically());
 
-        if (studentQuiz.getScore() != null && studentQuiz.getTotalQuestions() != null
-                && studentQuiz.getTotalQuestions() > 0) {
+        if (studentQuiz.getScore() != null && studentQuiz.getTotalQuestions() != null && studentQuiz.getTotalQuestions() > 0) {
             result.setPercentage(studentQuiz.getScore());
             result.setPassed(studentQuiz.getScore() >= PASSING_SCORE_PERCENTAGE);
             result.setGrade(calculateGrade(studentQuiz.getScore()));
@@ -574,8 +576,9 @@ public class StudentQuizService {
 
         // Include responses if completed
         if (Boolean.TRUE.equals(studentQuiz.getCompleted())) {
-            List<StudentQuizResponse> responses = studentQuizResponseRepository
-                    .findByStudentQuizIdOrderByQuizQuestionPosition(studentQuiz.getId());
+            List<StudentQuizResponse> responses = studentQuizResponseRepository.findByStudentQuizIdOrderByQuizQuestionPosition(
+                studentQuiz.getId()
+            );
             result.setResponses(responses.stream().map(studentQuizResponseMapper::toDto).collect(Collectors.toList()));
         }
 
@@ -583,36 +586,36 @@ public class StudentQuizService {
     }
 
     private String calculateGrade(Double score) {
-        if (score >= 90)
-            return "A";
-        if (score >= 80)
-            return "B";
-        if (score >= 70)
-            return "C";
-        if (score >= 60)
-            return "D";
+        if (score >= 90) return "A";
+        if (score >= 80) return "B";
+        if (score >= 70) return "C";
+        if (score >= 60) return "D";
         return "F";
     }
 
     private String calculatePerformanceTrend(List<Double> scores) {
-        if (scores.size() < 2)
-            return "INSUFFICIENT_DATA";
+        if (scores.size() < 2) return "INSUFFICIENT_DATA";
 
-        double recentAverage = scores.subList(0, Math.min(3, scores.size())).stream()
-                .mapToDouble(Double::doubleValue).average().orElse(0.0);
-        double olderAverage = scores.subList(Math.max(0, scores.size() - 3), scores.size()).stream()
-                .mapToDouble(Double::doubleValue).average().orElse(0.0);
+        double recentAverage = scores
+            .subList(0, Math.min(3, scores.size()))
+            .stream()
+            .mapToDouble(Double::doubleValue)
+            .average()
+            .orElse(0.0);
+        double olderAverage = scores
+            .subList(Math.max(0, scores.size() - 3), scores.size())
+            .stream()
+            .mapToDouble(Double::doubleValue)
+            .average()
+            .orElse(0.0);
 
-        if (recentAverage > olderAverage + 5)
-            return "IMPROVING";
-        if (recentAverage < olderAverage - 5)
-            return "DECLINING";
+        if (recentAverage > olderAverage + 5) return "IMPROVING";
+        if (recentAverage < olderAverage - 5) return "DECLINING";
         return "STABLE";
     }
 
     private String generateRecommendation(QuizPerformanceStatsDTO stats) {
-        if (stats.getAverageScore() == null)
-            return "Take more quizzes to get personalized recommendations";
+        if (stats.getAverageScore() == null) return "Take more quizzes to get personalized recommendations";
 
         if (stats.getAverageScore() < 60) {
             return "Review course materials and practice more before attempting quizzes";

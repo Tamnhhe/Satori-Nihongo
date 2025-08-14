@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <title th:text="#{notification.quiz.reminder.email.subject(${quiz.title})}">Quiz reminder</title>
+</head>
+
+<body>
+    <p th:text="|Hello ${fullName},|">Hello Student,</p>
+    <p>
+        <span th:text="#{notification.quiz.reminder.push.message(${quiz.title}, ${hoursUntilDue})}">Quiz due
+            soon.</span>
+    </p>
+    <p>
+        <strong>Quiz:</strong> <span th:text="${quiz.title}">Quiz title</span>
+    </p>
+    <hr />
+    <small>onlineSatoriPlatform</small>
+</body>
+
+</html>

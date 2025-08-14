@@ -10,12 +10,11 @@ import com.satori.platform.repository.FlashcardSessionRepository;
 import com.satori.platform.repository.LessonRepository;
 import com.satori.platform.repository.StudentProfileRepository;
 import com.satori.platform.service.dto.FlashcardDTO;
-import com.satori.platform.service.dto.FlashcardSessionDTO;
 import com.satori.platform.service.dto.FlashcardPerformanceDTO;
 import com.satori.platform.service.dto.FlashcardReviewScheduleDTO;
+import com.satori.platform.service.dto.FlashcardSessionDTO;
 import com.satori.platform.service.mapper.FlashcardMapper;
 import com.satori.platform.service.mapper.FlashcardSessionMapper;
-
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -23,7 +22,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -50,13 +48,14 @@ public class FlashcardService {
     private final SpacedRepetitionService spacedRepetitionService;
 
     public FlashcardService(
-            FlashcardRepository flashcardRepository,
-            FlashcardSessionRepository flashcardSessionRepository,
-            LessonRepository lessonRepository,
-            StudentProfileRepository studentProfileRepository,
-            FlashcardMapper flashcardMapper,
-            FlashcardSessionMapper flashcardSessionMapper,
-            SpacedRepetitionService spacedRepetitionService) {
+        FlashcardRepository flashcardRepository,
+        FlashcardSessionRepository flashcardSessionRepository,
+        LessonRepository lessonRepository,
+        StudentProfileRepository studentProfileRepository,
+        FlashcardMapper flashcardMapper,
+        FlashcardSessionMapper flashcardSessionMapper,
+        SpacedRepetitionService spacedRepetitionService
+    ) {
         this.flashcardRepository = flashcardRepository;
         this.flashcardSessionRepository = flashcardSessionRepository;
         this.lessonRepository = lessonRepository;
@@ -160,18 +159,18 @@ public class FlashcardService {
             return new ArrayList<>();
         }
 
-        return flashcardRepository.findByLessonOrderByPosition(lesson.get())
-                .stream()
-                .map(flashcardMapper::toDto)
-                .collect(Collectors.toList());
+        return flashcardRepository
+            .findByLessonOrderByPosition(lesson.orElseThrow())
+            .stream()
+            .map(flashcardMapper::toDto)
+            .collect(Collectors.toList());
     }
 
     /**
      * Start a new flashcard session for a student and lesson
      */
     public FlashcardSessionDTO startFlashcardSession(Long studentId, Long lessonId, DifficultyLevel difficultyLevel) {
-        LOG.debug("Starting flashcard session for student: {}, lesson: {}, difficulty: {}", studentId, lessonId,
-                difficultyLevel);
+        LOG.debug("Starting flashcard session for student: {}, lesson: {}, difficulty: {}", studentId, lessonId, difficultyLevel);
 
         Optional<StudentProfile> student = studentProfileRepository.findById(studentId);
         Optional<Lesson> lesson = lessonRepository.findById(lessonId);
@@ -181,8 +180,9 @@ public class FlashcardService {
         }
 
         // Check for existing incomplete session
-        List<FlashcardSession> incompleteSessions = flashcardSessionRepository
-                .findByStudentAndCompletedFalseOrderBySessionDateDesc(student.get());
+        List<FlashcardSession> incompleteSessions = flashcardSessionRepository.findByStudentAndCompletedFalseOrderBySessionDateDesc(
+            student.orElseThrow()
+        );
 
         if (!incompleteSessions.isEmpty()) {
             LOG.debug("Found existing incomplete session, returning it");
@@ -191,8 +191,8 @@ public class FlashcardService {
 
         // Create new session
         FlashcardSession session = new FlashcardSession();
-        session.setStudent(student.get());
-        session.setLesson(lesson.get());
+        session.setStudent(student.orElseThrow());
+        session.setLesson(lesson.orElseThrow());
         session.setSessionDate(LocalDateTime.now());
         session.setDifficultyLevel(difficultyLevel != null ? difficultyLevel : DifficultyLevel.MEDIUM);
         session.setCompleted(false);
@@ -211,15 +211,14 @@ public class FlashcardService {
      * Record a flashcard response during a session
      */
     public FlashcardSessionDTO recordFlashcardResponse(Long sessionId, Long flashcardId, Boolean correct) {
-        LOG.debug("Recording flashcard response for session: {}, flashcard: {}, correct: {}", sessionId, flashcardId,
-                correct);
+        LOG.debug("Recording flashcard response for session: {}, flashcard: {}, correct: {}", sessionId, flashcardId, correct);
 
         Optional<FlashcardSession> sessionOpt = flashcardSessionRepository.findById(sessionId);
         if (sessionOpt.isEmpty()) {
             throw new IllegalArgumentException("Flashcard session not found");
         }
 
-        FlashcardSession session = sessionOpt.get();
+        FlashcardSession session = sessionOpt.orElseThrow();
 
         // Update session statistics
         session.setCardsStudied(session.getCardsStudied() + 1);
@@ -230,13 +229,17 @@ public class FlashcardService {
         }
 
         // Calculate accuracy percentage
-        double accuracy = (double) session.getCorrectAnswers() / session.getCardsStudied() * 100.0;
+        double accuracy = ((double) session.getCorrectAnswers() / session.getCardsStudied()) * 100.0;
         session.setAccuracyPercentage(accuracy);
 
         session = flashcardSessionRepository.save(session);
 
-        LOG.debug("Updated session statistics - Cards: {}, Correct: {}, Accuracy: {}%",
-                session.getCardsStudied(), session.getCorrectAnswers(), accuracy);
+        LOG.debug(
+            "Updated session statistics - Cards: {}, Correct: {}, Accuracy: {}%",
+            session.getCardsStudied(),
+            session.getCorrectAnswers(),
+            accuracy
+        );
 
         return flashcardSessionMapper.toDto(session);
     }
@@ -252,7 +255,7 @@ public class FlashcardService {
             throw new IllegalArgumentException("Flashcard session not found");
         }
 
-        FlashcardSession session = sessionOpt.get();
+        FlashcardSession session = sessionOpt.orElseThrow();
 
         // Calculate session duration
         if (session.getSessionDate() != null) {
@@ -264,35 +267,42 @@ public class FlashcardService {
         session.setCompleted(true);
 
         // Calculate next review date using spaced repetition
-        List<FlashcardSession> previousSessions = flashcardSessionRepository
-                .findByStudentAndLessonOrderBySessionDateDesc(session.getStudent(), session.getLesson());
+        List<FlashcardSession> previousSessions = flashcardSessionRepository.findByStudentAndLessonOrderBySessionDateDesc(
+            session.getStudent(),
+            session.getLesson()
+        );
 
         int reviewCount = previousSessions.size();
         LocalDateTime nextReviewDate = spacedRepetitionService.calculateNextReviewDate(
-                session.getSessionDate(),
-                session.getAccuracyPercentage(),
-                session.getDifficultyLevel(),
-                reviewCount);
+            session.getSessionDate(),
+            session.getAccuracyPercentage(),
+            session.getDifficultyLevel(),
+            reviewCount
+        );
 
         session.setNextReviewDate(nextReviewDate);
 
         // Adjust difficulty level based on performance
         Double averageAccuracy = flashcardSessionRepository
-                .findAverageAccuracyByStudentAndLesson(session.getStudent(), session.getLesson())
-                .orElse(session.getAccuracyPercentage());
+            .findAverageAccuracyByStudentAndLesson(session.getStudent(), session.getLesson())
+            .orElse(session.getAccuracyPercentage());
 
         DifficultyLevel recommendedDifficulty = spacedRepetitionService.recommendDifficultyLevel(
-                averageAccuracy,
-                session.getDifficultyLevel(),
-                Math.min(reviewCount, 5) // Consider last 5 sessions
+            averageAccuracy,
+            session.getDifficultyLevel(),
+            Math.min(reviewCount, 5) // Consider last 5 sessions
         );
 
         session.setDifficultyLevel(recommendedDifficulty);
 
         session = flashcardSessionRepository.save(session);
 
-        LOG.debug("Completed session - Duration: {} min, Next review: {}, Difficulty: {}",
-                session.getDurationMinutes(), nextReviewDate, recommendedDifficulty);
+        LOG.debug(
+            "Completed session - Duration: {} min, Next review: {}, Difficulty: {}",
+            session.getDurationMinutes(),
+            nextReviewDate,
+            recommendedDifficulty
+        );
 
         return flashcardSessionMapper.toDto(session);
     }
@@ -309,18 +319,17 @@ public class FlashcardService {
             return new ArrayList<>();
         }
 
-        List<FlashcardSession> sessionsNeedingReview = flashcardSessionRepository
-                .findSessionsNeedingReview(student.get(), LocalDateTime.now());
+        List<FlashcardSession> sessionsNeedingReview = flashcardSessionRepository.findSessionsNeedingReview(
+            student.orElseThrow(),
+            LocalDateTime.now()
+        );
 
         List<FlashcardDTO> reviewFlashcards = new ArrayList<>();
 
         for (FlashcardSession session : sessionsNeedingReview) {
-            List<Flashcard> lessonFlashcards = flashcardRepository
-                    .findByLessonOrderByPosition(session.getLesson());
+            List<Flashcard> lessonFlashcards = flashcardRepository.findByLessonOrderByPosition(session.getLesson());
 
-            reviewFlashcards.addAll(lessonFlashcards.stream()
-                    .map(flashcardMapper::toDto)
-                    .collect(Collectors.toList()));
+            reviewFlashcards.addAll(lessonFlashcards.stream().map(flashcardMapper::toDto).collect(Collectors.toList()));
         }
 
         LOG.debug("Found {} flashcards needing review", reviewFlashcards.size());
@@ -341,11 +350,13 @@ public class FlashcardService {
             return new FlashcardPerformanceDTO();
         }
 
-        FlashcardPerformanceDTO performance = new FlashcardPerformanceDTO(studentId, lessonId, lesson.get().getTitle());
+        FlashcardPerformanceDTO performance = new FlashcardPerformanceDTO(studentId, lessonId, lesson.orElseThrow().getTitle());
 
         // Get all sessions for this lesson
-        List<FlashcardSession> sessions = flashcardSessionRepository
-                .findByStudentAndLessonOrderBySessionDateDesc(student.get(), lesson.get());
+        List<FlashcardSession> sessions = flashcardSessionRepository.findByStudentAndLessonOrderBySessionDateDesc(
+            student.orElseThrow(),
+            lesson.orElseThrow()
+        );
 
         if (sessions.isEmpty()) {
             return performance;
@@ -353,21 +364,22 @@ public class FlashcardService {
 
         // Calculate overall statistics
         Double averageAccuracy = flashcardSessionRepository
-                .findAverageAccuracyByStudentAndLesson(student.get(), lesson.get())
-                .orElse(0.0);
+            .findAverageAccuracyByStudentAndLesson(student.orElseThrow(), lesson.orElseThrow())
+            .orElse(0.0);
 
-        Long totalSessions = flashcardSessionRepository
-                .countCompletedSessionsByStudentAndLesson(student.get(), lesson.get());
+        Long totalSessions = flashcardSessionRepository.countCompletedSessionsByStudentAndLesson(
+            student.orElseThrow(),
+            lesson.orElseThrow()
+        );
 
-        Long totalStudyTime = flashcardSessionRepository
-                .findTotalStudyTimeByStudent(student.get())
-                .orElse(0L);
+        Long totalStudyTime = flashcardSessionRepository.findTotalStudyTimeByStudent(student.orElseThrow()).orElse(0L);
 
         // Get recent sessions for trend analysis
-        List<FlashcardSessionDTO> recentSessions = sessions.stream()
-                .limit(5)
-                .map(flashcardSessionMapper::toDto)
-                .collect(Collectors.toList());
+        List<FlashcardSessionDTO> recentSessions = sessions
+            .stream()
+            .limit(5)
+            .map(flashcardSessionMapper::toDto)
+            .collect(Collectors.toList());
 
         // Calculate improvement trend
         Double improvementTrend = calculateImprovementTrend(sessions);
@@ -376,13 +388,10 @@ public class FlashcardService {
         FlashcardSession latestSession = sessions.get(0);
 
         // Calculate total cards studied
-        Integer totalCardsStudied = sessions.stream()
-                .mapToInt(s -> s.getCardsStudied() != null ? s.getCardsStudied() : 0)
-                .sum();
+        Integer totalCardsStudied = sessions.stream().mapToInt(s -> s.getCardsStudied() != null ? s.getCardsStudied() : 0).sum();
 
         // Check if review is needed
-        Boolean needsReview = latestSession.getNextReviewDate() != null &&
-                latestSession.getNextReviewDate().isBefore(LocalDateTime.now());
+        Boolean needsReview = latestSession.getNextReviewDate() != null && latestSession.getNextReviewDate().isBefore(LocalDateTime.now());
 
         // Set performance data
         performance.setOverallAccuracy(averageAccuracy);
@@ -396,8 +405,7 @@ public class FlashcardService {
         performance.setImprovementTrend(improvementTrend);
         performance.setNeedsReview(needsReview);
 
-        LOG.debug("Performance calculated - Accuracy: {}%, Sessions: {}, Needs review: {}",
-                averageAccuracy, totalSessions, needsReview);
+        LOG.debug("Performance calculated - Accuracy: {}%, Sessions: {}, Needs review: {}", averageAccuracy, totalSessions, needsReview);
 
         return performance;
     }
@@ -417,8 +425,7 @@ public class FlashcardService {
         FlashcardReviewScheduleDTO schedule = new FlashcardReviewScheduleDTO(studentId);
 
         // Get latest session per lesson
-        List<FlashcardSession> latestSessions = flashcardSessionRepository
-                .findLatestSessionPerLesson(student.get());
+        List<FlashcardSession> latestSessions = flashcardSessionRepository.findLatestSessionPerLesson(student.orElseThrow());
 
         List<FlashcardReviewScheduleDTO.FlashcardReviewItemDTO> reviewItems = new ArrayList<>();
         int totalEstimatedMinutes = 0;
@@ -431,22 +438,23 @@ public class FlashcardService {
 
             // Calculate days since last review
             Integer daysSinceLastReview = session.getSessionDate() != null
-                    ? (int) ChronoUnit.DAYS.between(session.getSessionDate(), LocalDateTime.now())
-                    : null;
+                ? (int) ChronoUnit.DAYS.between(session.getSessionDate(), LocalDateTime.now())
+                : null;
 
             // Calculate priority
             Integer priority = spacedRepetitionService.calculateReviewPriority(
-                    session.getNextReviewDate(),
-                    session.getAccuracyPercentage(),
-                    daysSinceLastReview);
+                session.getNextReviewDate(),
+                session.getAccuracyPercentage(),
+                daysSinceLastReview
+            );
 
             // Estimate study time
-            Integer estimatedMinutes = spacedRepetitionService.estimateStudyTime(
-                    flashcards.size(),
-                    session.getDifficultyLevel());
+            Integer estimatedMinutes = spacedRepetitionService.estimateStudyTime(flashcards.size(), session.getDifficultyLevel());
 
             FlashcardReviewScheduleDTO.FlashcardReviewItemDTO reviewItem = new FlashcardReviewScheduleDTO.FlashcardReviewItemDTO(
-                    lesson.getId(), lesson.getTitle());
+                lesson.getId(),
+                lesson.getTitle()
+            );
 
             reviewItem.setFlashcardCount(flashcards.size());
             reviewItem.setLastReviewDate(session.getSessionDate());
@@ -463,14 +471,13 @@ public class FlashcardService {
         reviewItems.sort(Comparator.comparing(FlashcardReviewScheduleDTO.FlashcardReviewItemDTO::getPriority));
 
         // Calculate overall recommendations
-        Double averageAccuracy = flashcardSessionRepository
-                .findAverageAccuracyByStudent(student.get())
-                .orElse(75.0);
+        Double averageAccuracy = flashcardSessionRepository.findAverageAccuracyByStudent(student.orElseThrow()).orElse(75.0);
 
         DifficultyLevel recommendedDifficulty = spacedRepetitionService.recommendDifficultyLevel(
-                averageAccuracy,
-                DifficultyLevel.MEDIUM,
-                latestSessions.size());
+            averageAccuracy,
+            DifficultyLevel.MEDIUM,
+            latestSessions.size()
+        );
 
         String recommendationReason = generateRecommendationReason(averageAccuracy, reviewItems.size());
 
@@ -480,8 +487,7 @@ public class FlashcardService {
         schedule.setRecommendedDifficultyLevel(recommendedDifficulty);
         schedule.setRecommendationReason(recommendationReason);
 
-        LOG.debug("Review schedule generated - {} items, {} minutes estimated",
-                reviewItems.size(), totalEstimatedMinutes);
+        LOG.debug("Review schedule generated - {} items, {} minutes estimated", reviewItems.size(), totalEstimatedMinutes);
 
         return schedule;
     }
@@ -499,15 +505,17 @@ public class FlashcardService {
             return 0.0;
         }
 
-        double recentAvg = recent.stream()
-                .mapToDouble(s -> s.getAccuracyPercentage() != null ? s.getAccuracyPercentage() : 0.0)
-                .average()
-                .orElse(0.0);
+        double recentAvg = recent
+            .stream()
+            .mapToDouble(s -> s.getAccuracyPercentage() != null ? s.getAccuracyPercentage() : 0.0)
+            .average()
+            .orElse(0.0);
 
-        double olderAvg = older.stream()
-                .mapToDouble(s -> s.getAccuracyPercentage() != null ? s.getAccuracyPercentage() : 0.0)
-                .average()
-                .orElse(0.0);
+        double olderAvg = older
+            .stream()
+            .mapToDouble(s -> s.getAccuracyPercentage() != null ? s.getAccuracyPercentage() : 0.0)
+            .average()
+            .orElse(0.0);
 
         return recentAvg - olderAvg;
     }

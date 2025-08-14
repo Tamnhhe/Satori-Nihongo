@@ -31,9 +31,10 @@ public class NotificationPreferenceService {
     private final UserProfileRepository userProfileRepository;
 
     public NotificationPreferenceService(
-            NotificationPreferenceRepository notificationPreferenceRepository,
-            NotificationPreferenceMapper notificationPreferenceMapper,
-            UserProfileRepository userProfileRepository) {
+        NotificationPreferenceRepository notificationPreferenceRepository,
+        NotificationPreferenceMapper notificationPreferenceMapper,
+        UserProfileRepository userProfileRepository
+    ) {
         this.notificationPreferenceRepository = notificationPreferenceRepository;
         this.notificationPreferenceMapper = notificationPreferenceMapper;
         this.userProfileRepository = userProfileRepository;
@@ -47,8 +48,7 @@ public class NotificationPreferenceService {
      */
     public NotificationPreferenceDTO save(NotificationPreferenceDTO notificationPreferenceDTO) {
         LOG.debug("Request to save NotificationPreference : {}", notificationPreferenceDTO);
-        NotificationPreference notificationPreference = notificationPreferenceMapper
-                .toEntity(notificationPreferenceDTO);
+        NotificationPreference notificationPreference = notificationPreferenceMapper.toEntity(notificationPreferenceDTO);
         notificationPreference = notificationPreferenceRepository.save(notificationPreference);
         return notificationPreferenceMapper.toDto(notificationPreference);
     }
@@ -61,8 +61,7 @@ public class NotificationPreferenceService {
      */
     public NotificationPreferenceDTO update(NotificationPreferenceDTO notificationPreferenceDTO) {
         LOG.debug("Request to update NotificationPreference : {}", notificationPreferenceDTO);
-        NotificationPreference notificationPreference = notificationPreferenceMapper
-                .toEntity(notificationPreferenceDTO);
+        NotificationPreference notificationPreference = notificationPreferenceMapper.toEntity(notificationPreferenceDTO);
         notificationPreference = notificationPreferenceRepository.save(notificationPreference);
         return notificationPreferenceMapper.toDto(notificationPreference);
     }
@@ -77,14 +76,13 @@ public class NotificationPreferenceService {
         LOG.debug("Request to partially update NotificationPreference : {}", notificationPreferenceDTO);
 
         return notificationPreferenceRepository
-                .findById(notificationPreferenceDTO.getId())
-                .map(existingNotificationPreference -> {
-                    notificationPreferenceMapper.partialUpdate(existingNotificationPreference,
-                            notificationPreferenceDTO);
-                    return existingNotificationPreference;
-                })
-                .map(notificationPreferenceRepository::save)
-                .map(notificationPreferenceMapper::toDto);
+            .findById(notificationPreferenceDTO.getId())
+            .map(existingNotificationPreference -> {
+                notificationPreferenceMapper.partialUpdate(existingNotificationPreference, notificationPreferenceDTO);
+                return existingNotificationPreference;
+            })
+            .map(notificationPreferenceRepository::save)
+            .map(notificationPreferenceMapper::toDto);
     }
 
     /**
@@ -131,10 +129,10 @@ public class NotificationPreferenceService {
     public List<NotificationPreferenceDTO> findByUserProfileId(Long userProfileId) {
         LOG.debug("Request to get NotificationPreferences for user : {}", userProfileId);
         return notificationPreferenceRepository
-                .findByUserProfileId(userProfileId)
-                .stream()
-                .map(notificationPreferenceMapper::toDto)
-                .toList();
+            .findByUserProfileId(userProfileId)
+            .stream()
+            .map(notificationPreferenceMapper::toDto)
+            .toList();
     }
 
     /**
@@ -145,14 +143,15 @@ public class NotificationPreferenceService {
      * @return the notification preference.
      */
     @Transactional(readOnly = true)
-    public Optional<NotificationPreferenceDTO> findByUserProfileIdAndNotificationType(Long userProfileId,
-            NotificationType notificationType) {
+    public Optional<NotificationPreferenceDTO> findByUserProfileIdAndNotificationType(
+        Long userProfileId,
+        NotificationType notificationType
+    ) {
         LOG.debug("Request to get NotificationPreference for user {} and type {}", userProfileId, notificationType);
         return userProfileRepository
-                .findById(userProfileId)
-                .flatMap(userProfile -> notificationPreferenceRepository
-                        .findByUserProfileAndNotificationType(userProfile, notificationType))
-                .map(notificationPreferenceMapper::toDto);
+            .findById(userProfileId)
+            .flatMap(userProfile -> notificationPreferenceRepository.findByUserProfileAndNotificationType(userProfile, notificationType))
+            .map(notificationPreferenceMapper::toDto);
     }
 
     /**
@@ -165,12 +164,15 @@ public class NotificationPreferenceService {
     public List<NotificationPreferenceDTO> findEnabledByUserProfileId(Long userProfileId) {
         LOG.debug("Request to get enabled NotificationPreferences for user : {}", userProfileId);
         return userProfileRepository
-                .findById(userProfileId)
-                .map(userProfile -> notificationPreferenceRepository.findEnabledByUserProfile(userProfile)
-                        .stream()
-                        .map(notificationPreferenceMapper::toDto)
-                        .toList())
-                .orElse(List.of());
+            .findById(userProfileId)
+            .map(userProfile ->
+                notificationPreferenceRepository
+                    .findEnabledByUserProfile(userProfile)
+                    .stream()
+                    .map(notificationPreferenceMapper::toDto)
+                    .toList()
+            )
+            .orElse(List.of());
     }
 
     /**
@@ -194,28 +196,32 @@ public class NotificationPreferenceService {
      * @param notificationPreferenceDTO the notification preference data.
      * @return the saved notification preference.
      */
-    public NotificationPreferenceDTO createOrUpdatePreference(Long userProfileId, NotificationType notificationType,
-            NotificationPreferenceDTO notificationPreferenceDTO) {
-        LOG.debug("Request to create or update NotificationPreference for user {} and type {}", userProfileId,
-                notificationType);
+    public NotificationPreferenceDTO createOrUpdatePreference(
+        Long userProfileId,
+        NotificationType notificationType,
+        NotificationPreferenceDTO notificationPreferenceDTO
+    ) {
+        LOG.debug("Request to create or update NotificationPreference for user {} and type {}", userProfileId, notificationType);
 
         Optional<UserProfile> userProfile = userProfileRepository.findById(userProfileId);
         if (userProfile.isEmpty()) {
             throw new IllegalArgumentException("User profile not found with id: " + userProfileId);
         }
 
-        Optional<NotificationPreference> existingPreference = notificationPreferenceRepository
-                .findByUserProfileAndNotificationType(userProfile.get(), notificationType);
+        Optional<NotificationPreference> existingPreference = notificationPreferenceRepository.findByUserProfileAndNotificationType(
+            userProfile.orElseThrow(),
+            notificationType
+        );
 
         NotificationPreference notificationPreference;
         if (existingPreference.isPresent()) {
             // Update existing preference
-            notificationPreference = existingPreference.get();
+            notificationPreference = existingPreference.orElseThrow();
             notificationPreferenceMapper.partialUpdate(notificationPreference, notificationPreferenceDTO);
         } else {
             // Create new preference
             notificationPreference = notificationPreferenceMapper.toEntity(notificationPreferenceDTO);
-            notificationPreference.setUserProfile(userProfile.get());
+            notificationPreference.setUserProfile(userProfile.orElseThrow());
             notificationPreference.setNotificationType(notificationType);
         }
 
@@ -239,21 +245,24 @@ public class NotificationPreferenceService {
 
         // Create default preferences for all notification types
         List<NotificationPreference> defaultPreferences = List.of(
-                createDefaultPreference(userProfile.get(), NotificationType.SCHEDULE_REMINDER, true, 24),
-                createDefaultPreference(userProfile.get(), NotificationType.CONTENT_UPDATE, true, 0),
-                createDefaultPreference(userProfile.get(), NotificationType.QUIZ_REMINDER, true, 24),
-                createDefaultPreference(userProfile.get(), NotificationType.ASSIGNMENT_DUE, true, 48),
-                createDefaultPreference(userProfile.get(), NotificationType.COURSE_ANNOUNCEMENT, true, 0),
-                createDefaultPreference(userProfile.get(), NotificationType.SYSTEM_NOTIFICATION, true, 0));
+            createDefaultPreference(userProfile.orElseThrow(), NotificationType.SCHEDULE_REMINDER, true, 24),
+            createDefaultPreference(userProfile.orElseThrow(), NotificationType.CONTENT_UPDATE, true, 0),
+            createDefaultPreference(userProfile.orElseThrow(), NotificationType.QUIZ_REMINDER, true, 24),
+            createDefaultPreference(userProfile.orElseThrow(), NotificationType.ASSIGNMENT_DUE, true, 48),
+            createDefaultPreference(userProfile.orElseThrow(), NotificationType.COURSE_ANNOUNCEMENT, true, 0),
+            createDefaultPreference(userProfile.orElseThrow(), NotificationType.SYSTEM_NOTIFICATION, true, 0)
+        );
 
         List<NotificationPreference> savedPreferences = notificationPreferenceRepository.saveAll(defaultPreferences);
-        return savedPreferences.stream()
-                .map(notificationPreferenceMapper::toDto)
-                .toList();
+        return savedPreferences.stream().map(notificationPreferenceMapper::toDto).toList();
     }
 
-    private NotificationPreference createDefaultPreference(UserProfile userProfile, NotificationType type,
-            boolean enabled, int advanceHours) {
+    private NotificationPreference createDefaultPreference(
+        UserProfile userProfile,
+        NotificationType type,
+        boolean enabled,
+        int advanceHours
+    ) {
         NotificationPreference preference = new NotificationPreference();
         preference.setUserProfile(userProfile);
         preference.setNotificationType(type);

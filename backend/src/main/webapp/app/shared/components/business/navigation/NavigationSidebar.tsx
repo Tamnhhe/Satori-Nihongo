@@ -22,6 +22,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useAppSelector } from 'app/config/store';
 import { hasAnyAuthority } from 'app/shared/auth/private-route';
 import { AUTHORITIES } from 'app/config/constants';
+import { Translate } from 'react-jhipster';
 
 interface NavigationSidebarProps {
   open: boolean;
@@ -113,7 +114,7 @@ const NavigationSidebar: React.FC<NavigationSidebarProps> = ({ open, onClose, va
           },
           {
             id: 'students',
-            title: 'Quản lý học viên',
+            title: 'global.entities.studentManagement',
             icon: <SchoolIcon />,
             children: [
               {
@@ -207,6 +208,12 @@ const NavigationSidebar: React.FC<NavigationSidebarProps> = ({ open, onClose, va
                 icon: <MenuBookIcon />,
                 path: '/analytics/courses',
               },
+              {
+                id: 'notification-analytics',
+                title: 'global.entities.notificationAnalytics',
+                icon: <NotificationsIcon />,
+                path: '/analytics/notifications',
+              },
             ],
           },
           {
@@ -220,7 +227,7 @@ const NavigationSidebar: React.FC<NavigationSidebarProps> = ({ open, onClose, va
     // Common menus
     {
       id: 'reports',
-      title: 'Báo cáo',
+      title: 'global.entities.studentReports',
       icon: <AssessmentIcon />,
       path: '/reports',
     },
@@ -268,7 +275,13 @@ const NavigationSidebar: React.FC<NavigationSidebarProps> = ({ open, onClose, va
         >
           <ListItemIcon sx={{ minWidth: 40 }}>{item.icon}</ListItemIcon>
           <ListItemText
-            primary={item.title}
+            primary={
+              typeof item.title === 'string' && item.title.startsWith('global.') ? (
+                <Translate contentKey={item.title} />
+              ) : (
+                <span>{item.title}</span>
+              )
+            }
             primaryTypographyProps={{
               fontSize: level > 0 ? '0.875rem' : '1rem',
               fontWeight: selected ? 600 : 400,

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <title th:text="#{notification.system.email.subject}">System notification</title>
+</head>
+
+<body>
+    <p th:text="#{notification.generic.push.message}">You have a new notification.</p>
+    <p th:text="|User: ${fullName} (${username})|">User: John Doe (jdoe)</p>
+    <div>
+        <p th:if="${context != null}" th:text="${context}">Context details...</p>
+    </div>
+    <hr />
+    <small>onlineSatoriPlatform</small>
+</body>
+
+</html>

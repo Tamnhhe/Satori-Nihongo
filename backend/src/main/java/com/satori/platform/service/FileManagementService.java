@@ -14,7 +14,7 @@ import com.satori.platform.service.mapper.FileMetaDataMapper;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
+// Paths import removed; using Path.of instead
 import java.nio.file.StandardCopyOption;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -42,9 +42,27 @@ public class FileManagementService {
 
     // Allowed file types
     private static final List<String> ALLOWED_FILE_TYPES = Arrays.asList(
-            "pdf", "doc", "docx", "ppt", "pptx", "xls", "xlsx",
-            "txt", "rtf", "jpg", "jpeg", "png", "gif", "mp4",
-            "avi", "mov", "mp3", "wav", "zip", "rar");
+        "pdf",
+        "doc",
+        "docx",
+        "ppt",
+        "pptx",
+        "xls",
+        "xlsx",
+        "txt",
+        "rtf",
+        "jpg",
+        "jpeg",
+        "png",
+        "gif",
+        "mp4",
+        "avi",
+        "mov",
+        "mp3",
+        "wav",
+        "zip",
+        "rar"
+    );
 
     // Maximum file size (50MB)
     private static final long MAX_FILE_SIZE = 50 * 1024 * 1024;
@@ -59,11 +77,12 @@ public class FileManagementService {
     private String fileStoragePath;
 
     public FileManagementService(
-            FileMetaDataRepository fileMetaDataRepository,
-            LessonRepository lessonRepository,
-            UserProfileRepository userProfileRepository,
-            FileMetaDataMapper fileMetaDataMapper,
-            FileSecurityService fileSecurityService) {
+        FileMetaDataRepository fileMetaDataRepository,
+        LessonRepository lessonRepository,
+        UserProfileRepository userProfileRepository,
+        FileMetaDataMapper fileMetaDataMapper,
+        FileSecurityService fileSecurityService
+    ) {
         this.fileMetaDataRepository = fileMetaDataRepository;
         this.lessonRepository = lessonRepository;
         this.userProfileRepository = userProfileRepository;
@@ -84,11 +103,9 @@ public class FileManagementService {
         }
 
         // Check if lesson exists and user has permission
-        Lesson lesson = lessonRepository.findById(lessonId)
-                .orElseThrow(() -> new IllegalArgumentException("Lesson not found"));
+        Lesson lesson = lessonRepository.findById(lessonId).orElseThrow(() -> new IllegalArgumentException("Lesson not found"));
 
-        UserProfile uploader = userProfileRepository.findById(uploaderId)
-                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+        UserProfile uploader = userProfileRepository.findById(uploaderId).orElseThrow(() -> new IllegalArgumentException("User not found"));
 
         // Check if user has permission to upload to this lesson
         if (!hasUploadPermission(lesson, uploader)) {
@@ -102,7 +119,7 @@ public class FileManagementService {
             String fileExtension = getFileExtension(originalFilename);
 
             // Create storage directory if it doesn't exist
-            Path storageDir = Paths.get(fileStoragePath, "lessons", lessonId.toString());
+            Path storageDir = Path.of(fileStoragePath, "lessons", lessonId.toString());
             Files.createDirectories(storageDir);
 
             // Save file to disk
@@ -114,7 +131,7 @@ public class FileManagementService {
 
             // Check for duplicate files
             Optional<FileMetaData> existingFile = fileMetaDataRepository.findByChecksum(checksum);
-            if (existingFile.isPresent() && existingFile.get().getLesson().getId().equals(lessonId)) {
+            if (existingFile.map(f -> f.getLesson().getId().equals(lessonId)).orElse(false)) {
                 // Delete the newly uploaded file since it's a duplicate
                 Files.deleteIfExists(filePath);
                 throw new FileUploadException("File already exists in this lesson");
@@ -138,7 +155,6 @@ public class FileManagementService {
 
             log.debug("File uploaded successfully with ID: {}", savedFile.getId());
             return fileMetaDataMapper.toDto(savedFile);
-
         } catch (IOException e) {
             log.error("Error uploading file", e);
             throw new FileUploadException("Failed to upload file: " + e.getMessage());
@@ -152,8 +168,9 @@ public class FileManagementService {
     public InputStream downloadFile(Long fileId, Long userId) {
         log.debug("Downloading file {} by user {}", fileId, userId);
 
-        FileMetaData fileMetadata = fileMetaDataRepository.findById(fileId)
-                .orElseThrow(() -> new IllegalArgumentException("File not found"));
+        FileMetaData fileMetadata = fileMetaDataRepository
+            .findById(fileId)
+            .orElseThrow(() -> new IllegalArgumentException("File not found"));
 
         // Check access permission
         if (!fileMetaDataRepository.hasAccessToFile(fileId, userId)) {
@@ -161,13 +178,12 @@ public class FileManagementService {
         }
 
         try {
-            Path filePath = Paths.get(fileMetadata.getFilePath());
+            Path filePath = Path.of(fileMetadata.getFilePath());
             if (!Files.exists(filePath)) {
                 throw new FileUploadException("File not found on disk");
             }
 
             return Files.newInputStream(filePath);
-
         } catch (IOException e) {
             log.error("Error downloading file", e);
             throw new FileUploadException("Failed to download file: " + e.getMessage());
@@ -181,8 +197,9 @@ public class FileManagementService {
     public FileMetaDataDTO getFileMetadata(Long fileId, Long userId) {
         log.debug("Getting file metadata {} for user {}", fileId, userId);
 
-        FileMetaData fileMetadata = fileMetaDataRepository.findById(fileId)
-                .orElseThrow(() -> new IllegalArgumentException("File not found"));
+        FileMetaData fileMetadata = fileMetaDataRepository
+            .findById(fileId)
+            .orElseThrow(() -> new IllegalArgumentException("File not found"));
 
         // Check access permission
         if (!fileMetaDataRepository.hasAccessToFile(fileId, userId)) {
@@ -198,8 +215,9 @@ public class FileManagementService {
     public void deleteFile(Long fileId, Long userId) {
         log.debug("Deleting file {} by user {}", fileId, userId);
 
-        FileMetaData fileMetadata = fileMetaDataRepository.findById(fileId)
-                .orElseThrow(() -> new IllegalArgumentException("File not found"));
+        FileMetaData fileMetadata = fileMetaDataRepository
+            .findById(fileId)
+            .orElseThrow(() -> new IllegalArgumentException("File not found"));
 
         // Check if user has permission to delete (must be uploader or teacher of the
         // course)
@@ -209,20 +227,18 @@ public class FileManagementService {
 
         try {
             // Delete file from disk
-            Path filePath = Paths.get(fileMetadata.getFilePath());
+            Path filePath = Path.of(fileMetadata.getFilePath());
             Files.deleteIfExists(filePath);
 
             // Delete metadata from database
             fileMetaDataRepository.delete(fileMetadata);
 
             log.debug("File deleted successfully");
-
         } catch (IOException e) {
             log.error("Error deleting file from disk", e);
             // Still delete from database even if disk deletion fails
             fileMetaDataRepository.delete(fileMetadata);
-            throw new FileUploadException(
-                    "File deleted from database but failed to delete from disk: " + e.getMessage());
+            throw new FileUploadException("File deleted from database but failed to delete from disk: " + e.getMessage());
         }
     }
 
@@ -246,8 +262,7 @@ public class FileManagementService {
         }
 
         if (file.getSize() > MAX_FILE_SIZE) {
-            throw new FileUploadException(
-                    "File size exceeds maximum allowed size of " + (MAX_FILE_SIZE / 1024 / 1024) + "MB");
+            throw new FileUploadException("File size exceeds maximum allowed size of " + (MAX_FILE_SIZE / 1024 / 1024) + "MB");
         }
 
         String originalFilename = file.getOriginalFilename();
@@ -257,8 +272,7 @@ public class FileManagementService {
 
         String fileExtension = getFileExtension(originalFilename);
         if (!ALLOWED_FILE_TYPES.contains(fileExtension.toLowerCase())) {
-            throw new FileUploadException(
-                    "File type not allowed. Allowed types: " + String.join(", ", ALLOWED_FILE_TYPES));
+            throw new FileUploadException("File type not allowed. Allowed types: " + String.join(", ", ALLOWED_FILE_TYPES));
         }
     }
 
@@ -297,7 +311,6 @@ public class FileManagementService {
             }
 
             return hexString.toString();
-
         } catch (NoSuchAlgorithmException | IOException e) {
             log.error("Error calculating checksum", e);
             return null;
@@ -309,8 +322,7 @@ public class FileManagementService {
      */
     private boolean hasUploadPermission(Lesson lesson, UserProfile user) {
         // Teachers can upload to their own courses
-        if (lesson.getCourse().getTeacher() != null &&
-                lesson.getCourse().getTeacher().getId().equals(user.getId())) {
+        if (lesson.getCourse().getTeacher() != null && lesson.getCourse().getTeacher().getId().equals(user.getId())) {
             return true;
         }
 
@@ -330,8 +342,10 @@ public class FileManagementService {
         }
 
         // Teacher of the course can delete any file in their lessons
-        if (fileMetadata.getLesson().getCourse().getTeacher() != null &&
-                fileMetadata.getLesson().getCourse().getTeacher().getId().equals(userId)) {
+        if (
+            fileMetadata.getLesson().getCourse().getTeacher() != null &&
+            fileMetadata.getLesson().getCourse().getTeacher().getId().equals(userId)
+        ) {
             return true;
         }
 

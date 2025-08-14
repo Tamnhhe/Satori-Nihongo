@@ -1,6 +1,7 @@
 import React from 'react';
 import { Box, Stack, Typography, Breadcrumbs, Link as MuiLink, Button, SxProps, Theme } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
+import { Translate } from 'react-jhipster';
 
 export interface Crumb {
   label: string;
@@ -46,7 +47,7 @@ const PageHeader: React.FC<PageHeaderProps> = ({ title, subtitle, breadcrumbs, a
       <Stack direction="row" alignItems="center" justifyContent="space-between" flexWrap="wrap" gap={2}>
         <Box>
           <Typography variant="h4" sx={{ mb: subtitle ? 0.5 : 0 }}>
-            {title}
+            {typeof title === 'string' && title.startsWith('global.') ? <Translate contentKey={title} /> : <span>{title}</span>}
           </Typography>
           {subtitle ? (
             <Typography variant="body2" color="text.secondary">

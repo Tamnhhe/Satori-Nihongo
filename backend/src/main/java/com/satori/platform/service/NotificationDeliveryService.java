@@ -1,5 +1,6 @@
 package com.satori.platform.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.satori.platform.domain.NotificationDelivery;
 import com.satori.platform.domain.UserProfile;
 import com.satori.platform.domain.enumeration.DeliveryStatus;
@@ -7,17 +8,6 @@ import com.satori.platform.domain.enumeration.NotificationType;
 import com.satori.platform.repository.NotificationDeliveryRepository;
 import com.satori.platform.service.dto.NotificationContentDTO;
 import com.satori.platform.service.exception.NotificationDeliveryException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -31,6 +21,15 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Service for managing notification delivery queue, retry mechanism, and
@@ -61,10 +60,11 @@ public class NotificationDeliveryService {
     private int cleanupDays;
 
     public NotificationDeliveryService(
-            NotificationDeliveryRepository notificationDeliveryRepository,
-            MailService mailService,
-            PushNotificationService pushNotificationService,
-            ObjectMapper objectMapper) {
+        NotificationDeliveryRepository notificationDeliveryRepository,
+        MailService mailService,
+        PushNotificationService pushNotificationService,
+        ObjectMapper objectMapper
+    ) {
         this.notificationDeliveryRepository = notificationDeliveryRepository;
         this.mailService = mailService;
         this.pushNotificationService = pushNotificationService;
@@ -75,17 +75,26 @@ public class NotificationDeliveryService {
      * Queue notification for delivery
      * Requirements: 1.1, 1.2, 1.3, 2.1, 2.2, 2.3, 2.4, 3.1, 3.2, 3.3
      */
-    public NotificationDelivery queueNotification(UserProfile recipient, NotificationContentDTO content,
-            NotificationType type, String channel) {
+    public NotificationDelivery queueNotification(
+        UserProfile recipient,
+        NotificationContentDTO content,
+        NotificationType type,
+        String channel
+    ) {
         return queueNotification(recipient, content, type, channel, null, null);
     }
 
     /**
      * Queue notification for scheduled delivery with timezone support
      */
-    public NotificationDelivery queueNotification(UserProfile recipient, NotificationContentDTO content,
-            NotificationType type, String channel,
-            Instant scheduledAt, String timezone) {
+    public NotificationDelivery queueNotification(
+        UserProfile recipient,
+        NotificationContentDTO content,
+        NotificationType type,
+        String channel,
+        Instant scheduledAt,
+        String timezone
+    ) {
         LOG.debug("Queueing {} notification for user: {} via channel: {}", type, recipient.getUsername(), channel);
 
         try {
@@ -96,12 +105,13 @@ public class NotificationDeliveryService {
             String contentText = getContentForChannel(content, channel);
 
             NotificationDelivery delivery = new NotificationDelivery(
-                    recipient.getId(),
-                    recipient.getEmail(),
-                    type,
-                    channel,
-                    subject,
-                    contentText);
+                recipient.getId(),
+                recipient.getEmail(),
+                type,
+                channel,
+                subject,
+                contentText
+            );
 
             delivery.setScheduledAt(adjustedScheduledAt);
             delivery.setMaxRetries(maxRetries);
@@ -120,7 +130,6 @@ public class NotificationDeliveryService {
             LOG.debug("Queued notification with ID: {} for delivery", saved.getId());
 
             return saved;
-
         } catch (Exception e) {
             LOG.error("Failed to queue notification for user: {}", recipient.getUsername(), e);
             throw new NotificationDeliveryException("Failed to queue notification", e);
@@ -130,11 +139,13 @@ public class NotificationDeliveryService {
     /**
      * Queue bulk notifications for batch delivery
      */
-    public List<NotificationDelivery> queueBulkNotifications(List<UserProfile> recipients,
-            NotificationContentDTO content,
-            NotificationType type, String channel) {
-        LOG.debug("Queueing bulk {} notifications for {} recipients via channel: {}",
-                type, recipients.size(), channel);
+    public List<NotificationDelivery> queueBulkNotifications(
+        List<UserProfile> recipients,
+        NotificationContentDTO content,
+        NotificationType type,
+        String channel
+    ) {
+        LOG.debug("Queueing bulk {} notifications for {} recipients via channel: {}", type, recipients.size(), channel);
 
         List<NotificationDelivery> deliveries = new ArrayList<>();
 
@@ -162,10 +173,10 @@ public class NotificationDeliveryService {
 
         try {
             List<NotificationDelivery> pendingNotifications = notificationDeliveryRepository
-                    .findPendingNotifications(DeliveryStatus.PENDING, Instant.now())
-                    .stream()
-                    .limit(batchSize)
-                    .collect(Collectors.toList());
+                .findPendingNotifications(DeliveryStatus.PENDING, Instant.now())
+                .stream()
+                .limit(batchSize)
+                .collect(Collectors.toList());
 
             if (pendingNotifications.isEmpty()) {
                 LOG.debug("No pending notifications to process");
@@ -175,15 +186,15 @@ public class NotificationDeliveryService {
             LOG.debug("Processing {} pending notifications", pendingNotifications.size());
 
             // Process notifications in parallel for better performance
-            List<CompletableFuture<Void>> futures = pendingNotifications.stream()
-                    .map(this::processNotificationAsync)
-                    .collect(Collectors.toList());
+            List<CompletableFuture<Void>> futures = pendingNotifications
+                .stream()
+                .map(this::processNotificationAsync)
+                .collect(Collectors.toList());
 
             // Wait for all to complete
             CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).join();
 
             LOG.debug("Completed processing pending notifications");
-
         } catch (Exception e) {
             LOG.error("Error processing pending notifications", e);
         }
@@ -199,8 +210,11 @@ public class NotificationDeliveryService {
 
         try {
             Instant now = Instant.now();
-            List<NotificationDelivery> scheduledNotifications = notificationDeliveryRepository
-                    .findScheduledNotifications(DeliveryStatus.SCHEDULED, now.minus(10, ChronoUnit.MINUTES), now);
+            List<NotificationDelivery> scheduledNotifications = notificationDeliveryRepository.findScheduledNotifications(
+                DeliveryStatus.SCHEDULED,
+                now.minus(10, ChronoUnit.MINUTES),
+                now
+            );
 
             if (scheduledNotifications.isEmpty()) {
                 LOG.debug("No scheduled notifications ready for delivery");
@@ -215,7 +229,6 @@ public class NotificationDeliveryService {
             }
 
             LOG.debug("Moved {} scheduled notifications to pending", scheduledNotifications.size());
-
         } catch (Exception e) {
             LOG.error("Error processing scheduled notifications", e);
         }
@@ -231,10 +244,10 @@ public class NotificationDeliveryService {
 
         try {
             List<NotificationDelivery> retryNotifications = notificationDeliveryRepository
-                    .findRetryableNotifications(DeliveryStatus.FAILED, Instant.now())
-                    .stream()
-                    .limit(batchSize / 2) // Process fewer retries to avoid overwhelming the system
-                    .collect(Collectors.toList());
+                .findRetryableNotifications(DeliveryStatus.FAILED, Instant.now())
+                .stream()
+                .limit(batchSize / 2) // Process fewer retries to avoid overwhelming the system
+                .collect(Collectors.toList());
 
             if (retryNotifications.isEmpty()) {
                 LOG.debug("No notifications ready for retry");
@@ -251,7 +264,6 @@ public class NotificationDeliveryService {
             }
 
             LOG.debug("Queued {} notifications for retry", retryNotifications.size());
-
         } catch (Exception e) {
             LOG.error("Error processing retry notifications", e);
         }
@@ -268,14 +280,14 @@ public class NotificationDeliveryService {
         try {
             Instant cutoffDate = Instant.now().minus(cleanupDays, ChronoUnit.DAYS);
             List<DeliveryStatus> finalStatuses = Arrays.asList(
-                    DeliveryStatus.DELIVERED,
-                    DeliveryStatus.FAILED,
-                    DeliveryStatus.CANCELLED,
-                    DeliveryStatus.EXPIRED);
+                DeliveryStatus.DELIVERED,
+                DeliveryStatus.FAILED,
+                DeliveryStatus.CANCELLED,
+                DeliveryStatus.EXPIRED
+            );
 
             int deletedCount = notificationDeliveryRepository.deleteOldNotifications(cutoffDate, finalStatuses);
             LOG.info("Cleaned up {} old notifications older than {} days", deletedCount, cleanupDays);
-
         } catch (Exception e) {
             LOG.error("Error cleaning up old notifications", e);
         }
@@ -291,8 +303,10 @@ public class NotificationDeliveryService {
 
         try {
             Instant expiredBefore = Instant.now().minus(24, ChronoUnit.HOURS);
-            List<NotificationDelivery> expiredNotifications = notificationDeliveryRepository
-                    .findExpiredNotifications(DeliveryStatus.PENDING, expiredBefore);
+            List<NotificationDelivery> expiredNotifications = notificationDeliveryRepository.findExpiredNotifications(
+                DeliveryStatus.PENDING,
+                expiredBefore
+            );
 
             for (NotificationDelivery notification : expiredNotifications) {
                 notification.setStatus(DeliveryStatus.EXPIRED);
@@ -303,7 +317,6 @@ public class NotificationDeliveryService {
             if (!expiredNotifications.isEmpty()) {
                 LOG.info("Marked {} notifications as expired", expiredNotifications.size());
             }
-
         } catch (Exception e) {
             LOG.error("Error marking expired notifications", e);
         }
@@ -321,8 +334,7 @@ public class NotificationDeliveryService {
      * Process single notification
      */
     private void processNotification(NotificationDelivery notification) {
-        LOG.debug("Processing notification ID: {} for recipient: {}",
-                notification.getId(), notification.getRecipientEmail());
+        LOG.debug("Processing notification ID: {} for recipient: {}", notification.getId(), notification.getRecipientEmail());
 
         try {
             notification.setStatus(DeliveryStatus.PROCESSING);
@@ -360,7 +372,6 @@ public class NotificationDeliveryService {
             }
 
             notificationDeliveryRepository.save(notification);
-
         } catch (Exception e) {
             LOG.error("Error processing notification ID: {}", notification.getId(), e);
             handleNotificationFailure(notification, e.getMessage());
@@ -373,12 +384,7 @@ public class NotificationDeliveryService {
      */
     private boolean sendEmailNotification(NotificationDelivery notification) {
         try {
-            mailService.sendEmail(
-                    notification.getRecipientEmail(),
-                    notification.getSubject(),
-                    notification.getContent(),
-                    false,
-                    true);
+            mailService.sendEmail(notification.getRecipientEmail(), notification.getSubject(), notification.getContent(), false, true);
             return true;
         } catch (Exception e) {
             LOG.error("Failed to send email notification", e);
@@ -437,8 +443,7 @@ public class NotificationDeliveryService {
             notification.setNextRetryAt(Instant.now().plus(delayMinutes, ChronoUnit.MINUTES));
             LOG.debug("Notification ID: {} will be retried in {} minutes", notification.getId(), delayMinutes);
         } else {
-            LOG.warn("Notification ID: {} failed permanently after {} retries",
-                    notification.getId(), notification.getRetryCount());
+            LOG.warn("Notification ID: {} failed permanently after {} retries", notification.getId(), notification.getRetryCount());
         }
     }
 
@@ -542,8 +547,7 @@ public class NotificationDeliveryService {
      */
     @Transactional(readOnly = true)
     public double getAverageDeliveryTime(Instant startDate, Instant endDate) {
-        Double avgTime = notificationDeliveryRepository.getAverageDeliveryTime(
-                DeliveryStatus.DELIVERED, startDate, endDate);
+        Double avgTime = notificationDeliveryRepository.getAverageDeliveryTime(DeliveryStatus.DELIVERED, startDate, endDate);
         return avgTime != null ? avgTime : 0.0;
     }
 
@@ -554,7 +558,7 @@ public class NotificationDeliveryService {
         Optional<NotificationDelivery> notificationOpt = notificationDeliveryRepository.findByExternalId(externalId);
 
         if (notificationOpt.isPresent()) {
-            NotificationDelivery notification = notificationOpt.get();
+            NotificationDelivery notification = notificationOpt.orElseThrow();
             notification.setStatus(status);
 
             if (status == DeliveryStatus.DELIVERED) {

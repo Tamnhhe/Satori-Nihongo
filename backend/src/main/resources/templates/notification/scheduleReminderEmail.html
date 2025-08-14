@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <title th:text="#{notification.schedule.reminder.email.subject(${course.title})}">Schedule reminder</title>
+</head>
+
+<body>
+    <p th:text="|Hello ${fullName},|">Hello Student,</p>
+    <p>
+        <span th:text="#{notification.schedule.reminder.push.message(${course.title}, ${startTime})}">
+            Your class starts soon.
+        </span>
+    </p>
+    <ul>
+        <li><strong>Course:</strong> <span th:text="${course.title}">Course title</span></li>
+        <li><strong>Date:</strong> <span th:text="${date}">01/01/2025</span></li>
+        <li><strong>Start time:</strong> <span th:text="${startTime}">09:00</span></li>
+    </ul>
+    <hr />
+    <small>onlineSatoriPlatform</small>
+</body>
+
+</html>

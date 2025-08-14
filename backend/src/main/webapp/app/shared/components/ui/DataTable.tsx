@@ -37,6 +37,7 @@ export interface DataTableProps<T> {
   emptyMessage?: string;
   dense?: boolean;
   stickyHeader?: boolean;
+  total?: number; // optional total count for server-side pagination
 }
 
 type Order = 'asc' | 'desc';
@@ -83,6 +84,7 @@ function DataTable<T extends Record<string, any>>(props: DataTableProps<T>) {
     emptyMessage = 'Không có dữ liệu',
     dense = false,
     stickyHeader = false,
+    total,
   } = props;
 
   const [order, setOrder] = React.useState<Order>(initialSortDir);
@@ -187,7 +189,7 @@ function DataTable<T extends Record<string, any>>(props: DataTableProps<T>) {
         <TablePagination
           component="div"
           rowsPerPageOptions={[5, 10, 25, 50]}
-          count={rows.length}
+          count={total ?? rows.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}

@@ -73,14 +73,14 @@ public class QuizQuestionService {
         LOG.debug("Request to partially update QuizQuestion : {}", quizQuestionDTO);
 
         return quizQuestionRepository
-                .findById(quizQuestionDTO.getId())
-                .map(existingQuizQuestion -> {
-                    quizQuestionMapper.partialUpdate(existingQuizQuestion, quizQuestionDTO);
+            .findById(quizQuestionDTO.getId())
+            .map(existingQuizQuestion -> {
+                quizQuestionMapper.partialUpdate(existingQuizQuestion, quizQuestionDTO);
 
-                    return existingQuizQuestion;
-                })
-                .map(quizQuestionRepository::save)
-                .map(quizQuestionMapper::toDto);
+                return existingQuizQuestion;
+            })
+            .map(quizQuestionRepository::save)
+            .map(quizQuestionMapper::toDto);
     }
 
     /**
@@ -126,10 +126,11 @@ public class QuizQuestionService {
     @Transactional(readOnly = true)
     public List<QuizQuestionDTO> findByQuizIdOrderByPosition(Long quizId) {
         LOG.debug("Request to get QuizQuestions for quiz : {} ordered by position", quizId);
-        return quizQuestionRepository.findByQuizIdOrderByPosition(quizId)
-                .stream()
-                .map(quizQuestionMapper::toDto)
-                .collect(Collectors.toList());
+        return quizQuestionRepository
+            .findByQuizIdOrderByPosition(quizId)
+            .stream()
+            .map(quizQuestionMapper::toDto)
+            .collect(Collectors.toList());
     }
 
     /**
@@ -171,8 +172,9 @@ public class QuizQuestionService {
     public QuizQuestionDTO moveQuestionToPosition(Long questionId, Integer newPosition) {
         LOG.debug("Request to move QuizQuestion : {} to position : {}", questionId, newPosition);
 
-        QuizQuestion question = quizQuestionRepository.findById(questionId)
-                .orElseThrow(() -> new IllegalArgumentException("QuizQuestion not found with id: " + questionId));
+        QuizQuestion question = quizQuestionRepository
+            .findById(questionId)
+            .orElseThrow(() -> new IllegalArgumentException("QuizQuestion not found with id: " + questionId));
 
         Long quizId = question.getQuiz().getId();
         Integer currentPosition = question.getPosition();
@@ -200,8 +202,9 @@ public class QuizQuestionService {
     public void removeQuestionAndReorder(Long questionId) {
         LOG.debug("Request to remove QuizQuestion and reorder : {}", questionId);
 
-        QuizQuestion question = quizQuestionRepository.findById(questionId)
-                .orElseThrow(() -> new IllegalArgumentException("QuizQuestion not found with id: " + questionId));
+        QuizQuestion question = quizQuestionRepository
+            .findById(questionId)
+            .orElseThrow(() -> new IllegalArgumentException("QuizQuestion not found with id: " + questionId));
 
         Long quizId = question.getQuiz().getId();
         Integer removedPosition = question.getPosition();
@@ -228,7 +231,7 @@ public class QuizQuestionService {
             Optional<QuizQuestion> questionOpt = quizQuestionRepository.findById(questionId);
 
             if (questionOpt.isPresent()) {
-                QuizQuestion question = questionOpt.get();
+                QuizQuestion question = questionOpt.orElseThrow();
                 if (!question.getQuiz().getId().equals(quizId)) {
                     throw new IllegalArgumentException("Question " + questionId + " does not belong to quiz " + quizId);
                 }
@@ -289,15 +292,11 @@ public class QuizQuestionService {
         }
 
         // Check for gaps in positions
-        List<Integer> sortedPositions = questions.stream()
-                .map(QuizQuestion::getPosition)
-                .sorted()
-                .collect(Collectors.toList());
+        List<Integer> sortedPositions = questions.stream().map(QuizQuestion::getPosition).sorted().collect(Collectors.toList());
 
         for (int i = 0; i < sortedPositions.size(); i++) {
             if (sortedPositions.get(i) != i + 1) {
-                issues.add("Gap in positions detected - expected position " + (i + 1) + " but found "
-                        + sortedPositions.get(i));
+                issues.add("Gap in positions detected - expected position " + (i + 1) + " but found " + sortedPositions.get(i));
             }
         }
 
@@ -344,7 +343,7 @@ public class QuizQuestionService {
 
             Optional<QuizQuestion> questionOpt = quizQuestionRepository.findById(questionId);
             if (questionOpt.isPresent()) {
-                QuizQuestion question = questionOpt.get();
+                QuizQuestion question = questionOpt.orElseThrow();
                 if (!question.getQuiz().getId().equals(quizId)) {
                     throw new IllegalArgumentException("Question " + questionId + " does not belong to quiz " + quizId);
                 }
@@ -357,8 +356,7 @@ public class QuizQuestionService {
     // Private helper methods
 
     private void shiftQuestionsDown(Long quizId, Integer fromPosition) {
-        List<QuizQuestion> questionsToShift = quizQuestionRepository
-                .findByQuizIdAndPositionGreaterThanEqual(quizId, fromPosition);
+        List<QuizQuestion> questionsToShift = quizQuestionRepository.findByQuizIdAndPositionGreaterThanEqual(quizId, fromPosition);
 
         for (QuizQuestion question : questionsToShift) {
             question.setPosition(question.getPosition() + 1);
@@ -367,8 +365,7 @@ public class QuizQuestionService {
     }
 
     private void shiftQuestionsUp(Long quizId, Integer fromPosition) {
-        List<QuizQuestion> questionsToShift = quizQuestionRepository
-                .findByQuizIdAndPositionGreaterThanEqual(quizId, fromPosition + 1);
+        List<QuizQuestion> questionsToShift = quizQuestionRepository.findByQuizIdAndPositionGreaterThanEqual(quizId, fromPosition + 1);
 
         for (QuizQuestion question : questionsToShift) {
             question.setPosition(question.getPosition() - 1);
@@ -379,8 +376,7 @@ public class QuizQuestionService {
     private void reorderQuestions(Long quizId, Integer oldPosition, Integer newPosition) {
         if (oldPosition < newPosition) {
             // Moving down: shift questions up between old and new position
-            List<QuizQuestion> questionsToShift = quizQuestionRepository
-                    .findByQuizIdAndPositionGreaterThanEqual(quizId, oldPosition + 1);
+            List<QuizQuestion> questionsToShift = quizQuestionRepository.findByQuizIdAndPositionGreaterThanEqual(quizId, oldPosition + 1);
 
             for (QuizQuestion question : questionsToShift) {
                 if (question.getPosition() <= newPosition) {
@@ -390,8 +386,7 @@ public class QuizQuestionService {
             }
         } else {
             // Moving up: shift questions down between new and old position
-            List<QuizQuestion> questionsToShift = quizQuestionRepository
-                    .findByQuizIdAndPositionGreaterThanEqual(quizId, newPosition);
+            List<QuizQuestion> questionsToShift = quizQuestionRepository.findByQuizIdAndPositionGreaterThanEqual(quizId, newPosition);
 
             for (QuizQuestion question : questionsToShift) {
                 if (question.getPosition() < oldPosition) {

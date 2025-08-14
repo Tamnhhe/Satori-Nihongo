@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <title th:text="#{notification.content.update.email.subject(${lesson.title})}">Content update</title>
+</head>
+
+<body>
+    <p th:text="|Hello ${fullName},|">Hello Student,</p>
+    <p>
+        <span th:text="#{notification.content.update.push.message(${lesson.title})}">New content available.</span>
+    </p>
+    <p>
+        <strong>Lesson:</strong> <span th:text="${lesson.title}">Lesson title</span>
+    </p>
+    <hr />
+    <small>onlineSatoriPlatform</small>
+</body>
+
+</html>

@@ -31,6 +31,10 @@ import Health from 'app/modules/administration/health/health';
 import Logs from 'app/modules/administration/logs/logs';
 import Metrics from 'app/modules/administration/metrics/metrics';
 
+import StudentsPage from 'app/shared/components/business/students/StudentsPage';
+import SchedulePage from 'app/shared/components/business/schedule/SchedulePage';
+import AdminNotificationAnalyticsPage from 'app/shared/components/business/analytics/AdminNotificationAnalyticsPage';
+import ReportsPage from 'app/shared/components/business/reports/ReportsPage';
 interface PrivateRouteProps {
   children: React.ReactNode;
   hasAnyAuthorities?: string[];
@@ -122,13 +126,10 @@ const BusinessRoutes: React.FC = () => {
         />
 
         <Route
-          path="/student/*"
+          path="/student"
           element={
             <PrivateRoute hasAnyAuthorities={['ROLE_TEACHER', AUTHORITIES.ADMIN]}>
-              <div style={{ padding: '24px' }}>
-                <h2>Quản lý học viên (Coming Soon)</h2>
-                <p>Tính năng quản lý học viên sẽ được phát triển trong giai đoạn tiếp theo.</p>
-              </div>
+              <StudentsPage />
             </PrivateRoute>
           }
         />
@@ -202,34 +203,26 @@ const BusinessRoutes: React.FC = () => {
           path="/schedule"
           element={
             <PrivateRoute hasAnyAuthorities={['ROLE_TEACHER', AUTHORITIES.ADMIN]}>
-              <div style={{ padding: '24px' }}>
-                <h2>Lịch dạy học (Coming Soon)</h2>
-                <p>Tính năng quản lý lịch dạy học sẽ được phát triển trong giai đoạn tiếp theo.</p>
-              </div>
+              <SchedulePage />
             </PrivateRoute>
           }
         />
 
         <Route
-          path="/analytics/*"
+          path="/analytics/notifications"
           element={
             <PrivateRoute hasAnyAuthorities={[AUTHORITIES.ADMIN]}>
-              <div style={{ padding: '24px' }}>
-                <h2>Báo cáo & Phân tích (Coming Soon)</h2>
-                <p>Tính năng báo cáo và phân tích chi tiết sẽ được phát triển trong giai đoạn tiếp theo.</p>
-              </div>
+              <AdminNotificationAnalyticsPage />
             </PrivateRoute>
           }
         />
+        <Route path="/analytics/*" element={<Navigate to="/analytics/notifications" replace />} />
 
         <Route
           path="/reports"
           element={
             <PrivateRoute>
-              <div style={{ padding: '24px' }}>
-                <h2>Báo cáo (Coming Soon)</h2>
-                <p>Tính năng tạo và xem báo cáo sẽ được phát triển trong giai đoạn tiếp theo.</p>
-              </div>
+              <ReportsPage />
             </PrivateRoute>
           }
         />

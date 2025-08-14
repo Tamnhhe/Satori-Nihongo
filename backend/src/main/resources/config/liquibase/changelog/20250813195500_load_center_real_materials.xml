@@ -43,6 +43,9 @@
     </changeSet>
 
     <changeSet id="20250813195500-4-teacher-profile" author="copilot">
+        <preConditions onFail="MARK_RAN">
+            <tableIsEmpty tableName="teacher_profile"/>
+        </preConditions>
         <loadUpdateData
                 primaryKey="id"
                 file="config/liquibase/real-data/teacher_profile.csv"

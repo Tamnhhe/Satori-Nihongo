@@ -20,7 +20,11 @@
         "question": "Question",
         "quizQuestion": "Quiz Question",
         "studentQuiz": "Student Quiz",
-        "flashcard": "Flashcard"
+        "flashcard": "Flashcard",
+        "studentManagement": "Student Management",
+        "teachingSchedule": "Teaching Schedule",
+        "notificationAnalytics": "Notification Analytics",
+        "studentReports": "Student Reports"
       },
       "account": {
         "main": "アカウント",

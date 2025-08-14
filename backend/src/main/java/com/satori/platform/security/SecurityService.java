@@ -6,12 +6,11 @@ import com.satori.platform.domain.User;
 import com.satori.platform.repository.CourseRepository;
 import com.satori.platform.repository.QuizRepository;
 import com.satori.platform.repository.UserRepository;
+import java.util.Optional;
+import java.util.Set;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
-import java.util.Set;
 
 /**
  * Service for security-related operations and access control.
@@ -23,9 +22,7 @@ public class SecurityService {
     private final QuizRepository quizRepository;
     private final UserRepository userRepository;
 
-    public SecurityService(CourseRepository courseRepository,
-            QuizRepository quizRepository,
-            UserRepository userRepository) {
+    public SecurityService(CourseRepository courseRepository, QuizRepository quizRepository, UserRepository userRepository) {
         this.courseRepository = courseRepository;
         this.quizRepository = quizRepository;
         this.userRepository = userRepository;
@@ -92,7 +89,7 @@ public class SecurityService {
         }
 
         // Check course access for the quiz's courses
-        Set<Course> courses = quiz.get().getCourses();
+        Set<Course> courses = quiz.orElseThrow().getCourses();
         if (courses.isEmpty()) {
             return false;
         }
@@ -116,7 +113,7 @@ public class SecurityService {
         String username = authentication.getName();
         Optional<User> user = userRepository.findOneByLogin(username);
 
-        return user.isPresent() && user.get().getId().equals(userId);
+        return user.map(u -> u.getId().equals(userId)).orElse(false);
     }
 
     /**
