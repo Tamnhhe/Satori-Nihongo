@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { AppState, Text, useWindowDimensions, View } from 'react-native';
+import { AppState, useWindowDimensions } from 'react-native';
 import * as Linking from 'expo-linking';
 import * as SplashScreen from 'expo-splash-screen';
 import { NavigationContainer } from '@react-navigation/native';
@@ -9,12 +9,13 @@ import { useReduxDevToolsExtension } from '@react-navigation/devtools';
 import { connect } from 'react-redux';
 
 // import screens
+import SplashScreenComponent from '../modules/splash/splash-screen';
 import WelcomeScreen from '../modules/welcome/welcome-screen';
 import LoginScreen from '../modules/login/login-screen';
 import MainTabNavigator from './tab-navigator';
 import SettingsScreen from '../modules/account/settings/settings-screen';
 import RegisterScreen from '../modules/account/register/register-screen';
-import ForgotPasswordScreen from '../modules/account/password-reset/forgot-password-screen';
+import ForgotPasswordScreen from '../modules/login/forgot-password-screen';
 import ChangePasswordScreen from '../modules/account/password/change-password-screen';
 import AccountActions from '../shared/reducers/account.reducer';
 import EntityStackScreen, { getEntityRoutes } from './entity-stack';
@@ -25,10 +26,27 @@ import NotFound from './not-found-screen';
 import { ModalScreen } from './modal-screen';
 import { DrawerButton } from './drawer/drawer-button';
 
+// Import flashcard screens for full-screen navigation
+import FlashcardListScreen from '../modules/flashcard/flashcard-list-screen';
+import FlashcardScreen from '../modules/flashcard/flashcard-screen';
+import FlashcardCompletionScreen from '../modules/flashcard/flashcard-completion-screen';
+
+// Import quiz screens for full-screen navigation
+import QuizScreen from '../modules/quiz/quiz-screen';
+import QuizCompletionScreen from '../modules/quiz/quiz-completion-screen';
+
+// Import achievements screen
+import AchievementsScreen from '../modules/achievements/achievements-screen';
+
 // Import notification helper
 import notificationNavigationHelper from '../shared/services/notification-navigation-helper';
 
 export const drawerScreens = [
+  {
+    name: 'Splash',
+    component: SplashScreenComponent,
+    auth: false,
+  },
   {
     name: 'Welcome',
     component: WelcomeScreen,
@@ -182,14 +200,10 @@ function NavContainer(props) {
   const dimensions = useWindowDimensions();
   const isAuthed = props.account !== null;
 
-  // Luôn bắt đầu từ Welcome screen để user chọn Login/Register
-  const initialRouteName = 'Welcome';
+  // Bắt đầu từ Splash screen, sau đó chuyển đến Welcome
+  const initialRouteName = 'Splash';
 
-  return !loaded ? (
-    <View>
-      <Text>Loading...</Text>
-    </View>
-  ) : (
+  return (
     <NavigationContainer
       linking={linking}
       ref={navigationRef}
@@ -199,18 +213,25 @@ function NavContainer(props) {
         notificationNavigationHelper.setNavigationRef(navigationRef);
       }}
     >
-      <Stack.Navigator>
-        {/* Luôn hiển thị Auth flow với Welcome screen làm điểm bắt đầu */}
+      <Stack.Navigator initialRouteName={loaded ? 'Auth' : 'Splash'}>
+        {/* Splash Screen - hiển thị ngay khi app khởi động */}
+        <Stack.Screen
+          name="Splash"
+          component={SplashScreenComponent}
+          options={{ headerShown: false }}
+        />
+
+        {/* Main Auth Stack */}
         <Stack.Screen name="Auth" options={{ headerShown: false }}>
           {() => (
             <Drawer.Navigator
               drawerContent={(p) => <DrawerContent {...p} />}
-              initialRouteName={initialRouteName}
+              initialRouteName="Welcome"
               drawerType={dimensions.width >= 768 ? 'permanent' : 'front'}
               screenOptions={{
                 headerShown: true,
                 headerLeft: DrawerButton,
-                headerStyle: { backgroundColor: '#1976D2' },
+                headerStyle: { backgroundColor: '#1E3A8A' },
                 headerTintColor: '#ffffff',
               }}
             >
@@ -226,6 +247,7 @@ function NavContainer(props) {
                 name="Login"
                 component={LoginScreen}
                 options={{
+                  headerShown: false,
                   title: 'Đăng nhập',
                 }}
               />
@@ -243,7 +265,7 @@ function NavContainer(props) {
                   title: 'Quên mật khẩu',
                 }}
               />
-              {/* Thêm Home screen vào drawer để có thể navigate sau khi login */}
+              {/* Home screen sau khi login */}
               {isAuthed && (
                 <Drawer.Screen
                   name="Home"
@@ -257,6 +279,61 @@ function NavContainer(props) {
             </Drawer.Navigator>
           )}
         </Stack.Screen>
+
+        {/* Flashcard screens - full screen without bottom tabs */}
+        <Stack.Screen
+          name="FlashcardList"
+          component={FlashcardListScreen}
+          options={{
+            headerShown: false,
+            title: 'Flashcard List',
+          }}
+        />
+        <Stack.Screen
+          name="Flashcard"
+          component={FlashcardScreen}
+          options={{
+            headerShown: false,
+            title: 'Flashcard',
+          }}
+        />
+        <Stack.Screen
+          name="FlashcardCompletion"
+          component={FlashcardCompletionScreen}
+          options={{
+            headerShown: false,
+            title: 'Hoàn thành',
+          }}
+        />
+
+        {/* Quiz screens - full screen without bottom tabs */}
+        <Stack.Screen
+          name="Quiz"
+          component={QuizScreen}
+          options={{
+            headerShown: false,
+            title: 'Trắc nghiệm',
+          }}
+        />
+        <Stack.Screen
+          name="QuizCompletion"
+          component={QuizCompletionScreen}
+          options={{
+            headerShown: false,
+            title: 'Hoàn thành Quiz',
+          }}
+        />
+
+        {/* Achievements screen - full screen without bottom tabs */}
+        <Stack.Screen
+          name="Achievements"
+          component={AchievementsScreen}
+          options={{
+            headerShown: false,
+            title: 'Thành tựu',
+          }}
+        />
+
         <Stack.Screen
           name="ModalScreen"
           component={ModalScreen}

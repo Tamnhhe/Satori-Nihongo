@@ -101,6 +101,25 @@ class NotificationNavigationHelper {
   }
 
   /**
+   * Navigate to practice screen
+   */
+  navigateToPractice() {
+    try {
+      if (this.navigationRef && this.navigationRef.current) {
+        console.debug('NotificationNavigationHelper: Navigating to practice');
+        this.navigationRef.current.navigate('Practice');
+        return true;
+      } else {
+        console.warn('NotificationNavigationHelper: Navigation ref not available');
+        return false;
+      }
+    } catch (error) {
+      console.error('NotificationNavigationHelper: Navigation to practice failed', error);
+      return false;
+    }
+  }
+
+  /**
    * Check if navigation is available
    * @returns {boolean} Navigation availability
    */

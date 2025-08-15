@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.0.xsd">
+
+    <changeSet id="20250811000002-1" author="system">
+        <comment>Add missing columns using conditional SQL</comment>
+        <sql>
+            -- Add advance_hours column to notification_preference if it doesn't exist
+            SET @col_exists = 0;
+            SELECT COUNT(*) INTO @col_exists 
+            FROM INFORMATION_SCHEMA.COLUMNS 
+            WHERE TABLE_SCHEMA = 'onlineSatoriPlatform' 
+            AND TABLE_NAME = 'notification_preference' 
+            AND COLUMN_NAME = 'advance_hours';
+            
+            SET @sql = IF(@col_exists = 0, 
+                'ALTER TABLE notification_preference ADD COLUMN advance_hours INT NULL', 
+                'SELECT "advance_hours column already exists" as msg');
+            PREPARE stmt FROM @sql;
+            EXECUTE stmt;
+            DEALLOCATE PREPARE stmt;
+            
+            -- Add timezone column to notification_preference if it doesn't exist
+            SET @col_exists = 0;
+            SELECT COUNT(*) INTO @col_exists 
+            FROM INFORMATION_SCHEMA.COLUMNS 
+            WHERE TABLE_SCHEMA = 'onlineSatoriPlatform' 
+            AND TABLE_NAME = 'notification_preference' 
+            AND COLUMN_NAME = 'timezone';
+            
+            SET @sql = IF(@col_exists = 0, 
+                'ALTER TABLE notification_preference ADD COLUMN timezone VARCHAR(255) NULL', 
+                'SELECT "timezone column already exists" as msg');
+            PREPARE stmt FROM @sql;
+            EXECUTE stmt;
+            DEALLOCATE PREPARE stmt;
+            
+            -- Add meet_url column to schedule if it doesn't exist
+            SET @col_exists = 0;
+            SELECT COUNT(*) INTO @col_exists 
+            FROM INFORMATION_SCHEMA.COLUMNS 
+            WHERE TABLE_SCHEMA = 'onlineSatoriPlatform' 
+            AND TABLE_NAME = 'schedule' 
+            AND COLUMN_NAME = 'meet_url';
+            
+            SET @sql = IF(@col_exists = 0, 
+                'ALTER TABLE schedule ADD COLUMN meet_url VARCHAR(255) NULL', 
+                'SELECT "meet_url column already exists" as msg');
+            PREPARE stmt FROM @sql;
+            EXECUTE stmt;
+            DEALLOCATE PREPARE stmt;
+            
+            -- Add created_by column to oauth2_account if it doesn't exist
+            SET @col_exists = 0;
+            SELECT COUNT(*) INTO @col_exists 
+            FROM INFORMATION_SCHEMA.COLUMNS 
+            WHERE TABLE_SCHEMA = 'onlineSatoriPlatform' 
+            AND TABLE_NAME = 'oauth2_account' 
+            AND COLUMN_NAME = 'created_by';
+            
+            SET @sql = IF(@col_exists = 0, 
+                'ALTER TABLE oauth2_account ADD COLUMN created_by VARCHAR(50) NOT NULL DEFAULT "system"', 
+                'SELECT "created_by column already exists" as msg');
+            PREPARE stmt FROM @sql;
+            EXECUTE stmt;
+            DEALLOCATE PREPARE stmt;
+            
+            -- Add created_date column to oauth2_account if it doesn't exist
+            SET @col_exists = 0;
+            SELECT COUNT(*) INTO @col_exists 
+            FROM INFORMATION_SCHEMA.COLUMNS 
+            WHERE TABLE_SCHEMA = 'onlineSatoriPlatform' 
+            AND TABLE_NAME = 'oauth2_account' 
+            AND COLUMN_NAME = 'created_date';
+            
+            SET @sql = IF(@col_exists = 0, 
+                'ALTER TABLE oauth2_account ADD COLUMN created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP', 
+                'SELECT "created_date column already exists" as msg');
+            PREPARE stmt FROM @sql;
+            EXECUTE stmt;
+            DEALLOCATE PREPARE stmt;
+            
+            -- Add last_modified_by column to oauth2_account if it doesn't exist
+            SET @col_exists = 0;
+            SELECT COUNT(*) INTO @col_exists 
+            FROM INFORMATION_SCHEMA.COLUMNS 
+            WHERE TABLE_SCHEMA = 'onlineSatoriPlatform' 
+            AND TABLE_NAME = 'oauth2_account' 
+            AND COLUMN_NAME = 'last_modified_by';
+            
+            SET @sql = IF(@col_exists = 0, 
+                'ALTER TABLE oauth2_account ADD COLUMN last_modified_by VARCHAR(50) NULL', 
+                'SELECT "last_modified_by column already exists" as msg');
+            PREPARE stmt FROM @sql;
+            EXECUTE stmt;
+            DEALLOCATE PREPARE stmt;
+            
+            -- Add last_modified_date column to oauth2_account if it doesn't exist
+            SET @col_exists = 0;
+            SELECT COUNT(*) INTO @col_exists 
+            FROM INFORMATION_SCHEMA.COLUMNS 
+            WHERE TABLE_SCHEMA = 'onlineSatoriPlatform' 
+            AND TABLE_NAME = 'oauth2_account' 
+            AND COLUMN_NAME = 'last_modified_date';
+            
+            SET @sql = IF(@col_exists = 0, 
+                'ALTER TABLE oauth2_account ADD COLUMN last_modified_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP', 
+                'SELECT "last_modified_date column already exists" as msg');
+            PREPARE stmt FROM @sql;
+            EXECUTE stmt;
+            DEALLOCATE PREPARE stmt;
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.0.xsd">
+
+    <changeSet id="20250811000001-1a" author="system">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="notification_preference" columnName="advance_hours"/>
+            </not>
+        </preConditions>
+        <comment>Add advance_hours column to notification_preference table if it doesn't exist</comment>
+        <addColumn tableName="notification_preference">
+            <column name="advance_hours" type="int"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="20250811000001-1b" author="system">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="notification_preference" columnName="preferred_time"/>
+            </not>
+        </preConditions>
+        <comment>Add preferred_time column to notification_preference table if it doesn't exist</comment>
+        <addColumn tableName="notification_preference">
+            <column name="preferred_time" type="varchar(255)"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="20250811000001-1c" author="system">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="notification_preference" columnName="timezone"/>
+            </not>
+        </preConditions>
+        <comment>Add timezone column to notification_preference table if it doesn't exist</comment>
+        <addColumn tableName="notification_preference">
+            <column name="timezone" type="varchar(255)"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="20250811000001-2" author="system">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="schedule" columnName="meet_url"/>
+            </not>
+        </preConditions>
+        <comment>Add meet_url column to schedule table if it doesn't exist</comment>
+        <addColumn tableName="schedule">
+            <column name="meet_url" type="varchar(255)"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="20250811000001-3a" author="system">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="oauth2_account" columnName="created_by"/>
+            </not>
+        </preConditions>
+        <comment>Add created_by column to oauth2_account table if it doesn't exist</comment>
+        <addColumn tableName="oauth2_account">
+            <column name="created_by" type="varchar(50)" defaultValue="system">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="20250811000001-3b" author="system">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="oauth2_account" columnName="created_date"/>
+            </not>
+        </preConditions>
+        <comment>Add created_date column to oauth2_account table if it doesn't exist</comment>
+        <addColumn tableName="oauth2_account">
+            <column name="created_date" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="20250811000001-3c" author="system">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="oauth2_account" columnName="last_modified_by"/>
+            </not>
+        </preConditions>
+        <comment>Add last_modified_by column to oauth2_account table if it doesn't exist</comment>
+        <addColumn tableName="oauth2_account">
+            <column name="last_modified_by" type="varchar(50)"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="20250811000001-3d" author="system">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="oauth2_account" columnName="last_modified_date"/>
+            </not>
+        </preConditions>
+        <comment>Add last_modified_date column to oauth2_account table if it doesn't exist</comment>
+        <addColumn tableName="oauth2_account">
+            <column name="last_modified_date" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"/>
+        </addColumn>
+    </changeSet>
+
+</databaseChangeLog>

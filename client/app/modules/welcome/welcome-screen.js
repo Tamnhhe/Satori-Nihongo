@@ -1,10 +1,20 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
-import { Button, Title, Paragraph, Card } from 'react-native-paper';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import {
+  View,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  Image,
+  StatusBar,
+  Dimensions,
+} from 'react-native';
 import { connect } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
+import { LinearGradient } from 'expo-linear-gradient';
+import { ArrowRight } from 'lucide-react-native';
 import LoginActions from '../login/login.reducer';
+
+const { width, height } = Dimensions.get('window');
 
 function WelcomeScreen(props) {
   const navigation = useNavigation();
@@ -15,55 +25,54 @@ function WelcomeScreen(props) {
     resetLogoutFlag();
   }, [resetLogoutFlag]);
 
-  const handleLogin = () => {
+  const handleContinue = () => {
     navigation.navigate('Login');
-  };
-
-  const handleRegister = () => {
-    navigation.navigate('Register');
   };
 
   return (
     <View style={styles.container}>
+      <StatusBar barStyle="dark-content" backgroundColor="#F3F4F6" />
+
+      {/* Main Content */}
       <View style={styles.content}>
-        {/* Logo */}
-        <View style={styles.logoContainer}>
-          <MaterialCommunityIcons name="flower-tulip" size={100} color="#1976D2" />
+        {/* Image Section */}
+        <View style={styles.imageSection}>
+          <View style={styles.imageContainer}>
+            {/* Blue oval background with gradient */}
+            <LinearGradient
+              colors={['#F0F8FF', '#87CEEB', '#3B82F6']} // Từ trắng gần như -> sky blue -> blue
+              style={styles.ovalBackground}
+            >
+              {/* Student image */}
+              <Image
+                source={require('../../../assets/IMG_3530.png')}
+                style={styles.studentImage}
+                resizeMode="contain"
+              />
+            </LinearGradient>
+          </View>
         </View>
 
-        {/* Welcome Card */}
-        <Card style={styles.welcomeCard}>
-          <Card.Content style={styles.cardContent}>
-            <Title style={styles.welcomeTitle}>Chào mừng đến với</Title>
-            <Title style={styles.appTitle}>Satori Nihongo</Title>
-            <Paragraph style={styles.subtitle}>
-              Khám phá và học tiếng Nhật một cách dễ dàng
-            </Paragraph>
+        {/* Text Section */}
+        <View style={styles.textSection}>
+          <Text style={styles.welcomeText}>Hãy đăng nhập để{'\n'}bắt đầu học!</Text>
+        </View>
 
-            {/* Buttons */}
-            <View style={styles.buttonContainer}>
-              <Button
-                mode="contained"
-                onPress={handleLogin}
-                style={styles.loginButton}
-                contentStyle={styles.buttonContent}
-                icon="login"
-              >
-                Đăng nhập
-              </Button>
+        {/* Continue Button */}
+        <View style={styles.buttonSection}>
+          <TouchableOpacity
+            style={styles.continueButton}
+            onPress={handleContinue}
+            activeOpacity={0.8}
+          >
+            <ArrowRight size={32} color="#FFFFFF" />
+          </TouchableOpacity>
+        </View>
 
-              <Button
-                mode="outlined"
-                onPress={handleRegister}
-                style={styles.registerButton}
-                contentStyle={styles.buttonContent}
-                icon="account-plus"
-              >
-                Đăng ký
-              </Button>
-            </View>
-          </Card.Content>
-        </Card>
+        {/* Home Indicator */}
+        <View style={styles.homeIndicator}>
+          <View style={styles.indicatorBar} />
+        </View>
       </View>
     </View>
   );
@@ -72,70 +81,100 @@ function WelcomeScreen(props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20,
+    backgroundColor: '#F3F4F6', // Light gray background
   },
   content: {
-    width: '100%',
-    maxWidth: 400,
+    flex: 1,
+    justifyContent: 'space-between',
+  },
+  imageSection: {
     alignItems: 'center',
+    marginTop: -50, // Đưa oval lên đỉnh app
   },
-  logoContainer: {
-    marginBottom: 30,
+  imageContainer: {
+    position: 'relative',
+  },
+  ovalBackground: {
+    width: width * 0.7, // 70% width của màn hình
+    height: height * 0.6, // 60% chiều cao màn hình
+    borderTopLeftRadius: width * 0.15, // Vòng cung trên bên trái
+    borderTopRightRadius: width * 0.15, // Vòng cung trên bên phải
+    borderBottomLeftRadius: width * 0.35, // Vòng cung dưới bên trái
+    borderBottomRightRadius: width * 0.35, // Vòng cung dưới bên phải
+    marginTop: 0, // Dính lên đỉnh
+    shadowColor: '#0EA5E9',
+    shadowOffset: {
+      width: 0,
+      height: 8,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 16,
+    elevation: 12,
+    justifyContent: 'center', // Center image vertically
     alignItems: 'center',
+    overflow: 'hidden',
   },
-  welcomeCard: {
-    width: '100%',
-    elevation: 4,
-    borderRadius: 16,
+  studentImage: {
+    width: width * 1.4, // 240% width của màn hình (80% * 3)
+    height: height * 1.5, // 150% height của màn hình (50% * 3)
+    marginTop: 50, // Điều chỉnh vị trí bạn nữ trong oval
   },
-  cardContent: {
+  textSection: {
     alignItems: 'center',
-    padding: 24,
+    marginBottom: 40,
+    paddingHorizontal: 24,
   },
-  welcomeTitle: {
-    fontSize: 20,
+  welcomeText: {
+    fontSize: 28,
+    fontWeight: '500',
+    color: '#4B5563', // Gray-700
     textAlign: 'center',
-    marginBottom: 8,
-    color: '#666',
+    lineHeight: 36,
   },
-  appTitle: {
-    fontSize: 32,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    marginBottom: 16,
-    color: '#1976D2',
-  },
-  subtitle: {
-    fontSize: 16,
-    textAlign: 'center',
+  buttonSection: {
+    alignItems: 'center',
     marginBottom: 32,
-    color: '#666',
-    lineHeight: 24,
   },
-  buttonContainer: {
-    width: '100%',
-    gap: 16,
+  continueButton: {
+    width: 80,
+    height: 80,
+    backgroundColor: '#1E3A8A', // Navy blue
+    borderRadius: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: '#1E3A8A',
+    shadowOffset: {
+      width: 0,
+      height: 8,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 12,
+    elevation: 8,
   },
-  loginButton: {
-    borderRadius: 8,
+  homeIndicator: {
+    alignItems: 'center',
+    paddingBottom: 20,
   },
-  registerButton: {
-    borderRadius: 8,
-  },
-  buttonContent: {
-    paddingVertical: 8,
+  indicatorBar: {
+    width: 128,
+    height: 4,
+    backgroundColor: '#9CA3AF', // Gray-400
+    borderRadius: 2,
   },
 });
 
-const mapStateToProps = (_state) => ({
-  // No need to get account here since navigation handles auth state
-});
+const mapStateToProps = (state) => {
+  return {
+    account: state.account.account,
+    fetching: state.login.fetching,
+    loginError: state.login.error,
+  };
+};
 
-const mapDispatchToProps = (dispatch) => ({
-  resetLogoutFlag: () => dispatch(LoginActions.resetLogoutFlag()),
-});
+const mapDispatchToProps = (dispatch) => {
+  return {
+    resetLogoutFlag: () => dispatch(LoginActions.resetLogoutFlag()),
+  };
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(WelcomeScreen);

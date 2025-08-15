@@ -39,6 +39,9 @@ public class Schedule implements Serializable {
     @Column(name = "location")
     private String location;
 
+    @Column(name = "meet_url", length = 500)
+    private String meetUrl;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties(value = { "lessons", "schedules", "teacher", "quizzes" }, allowSetters = true)
     private Course course;
@@ -110,6 +113,19 @@ public class Schedule implements Serializable {
         this.location = location;
     }
 
+    public String getMeetUrl() {
+        return this.meetUrl;
+    }
+
+    public Schedule meetUrl(String meetUrl) {
+        this.setMeetUrl(meetUrl);
+        return this;
+    }
+
+    public void setMeetUrl(String meetUrl) {
+        this.meetUrl = meetUrl;
+    }
+
     public Course getCourse() {
         return this.course;
     }
@@ -151,6 +167,7 @@ public class Schedule implements Serializable {
             ", startTime='" + getStartTime() + "'" +
             ", endTime='" + getEndTime() + "'" +
             ", location='" + getLocation() + "'" +
+            ", meetUrl='" + getMeetUrl() + "'" +
             "}";
     }
 }

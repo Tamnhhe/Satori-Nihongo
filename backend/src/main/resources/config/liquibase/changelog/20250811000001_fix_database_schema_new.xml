@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <!--
+        Fix database schema issues that don't match entity definitions
+    -->
+    
+    <changeSet id="20250811000001-1" author="system">
+        <comment>Add missing columns to notification_preference table</comment>
+        <sql>
+            ALTER TABLE notification_preference 
+            ADD COLUMN IF NOT EXISTS advance_hours int NULL,
+            ADD COLUMN IF NOT EXISTS preferred_time varchar(255) NULL,
+            ADD COLUMN IF NOT EXISTS timezone varchar(255) NULL;
+        </sql>
+    </changeSet>
+
+    <changeSet id="20250811000001-2" author="system">
+        <comment>Add missing meet_url column to schedule table</comment>
+        <sql>
+            ALTER TABLE schedule 
+            ADD COLUMN IF NOT EXISTS meet_url varchar(255) NULL;
+        </sql>
+    </changeSet>
+
+    <changeSet id="20250811000001-3" author="system">
+        <comment>Add missing auditing columns to oauth2_account table</comment>
+        <sql>
+            ALTER TABLE oauth2_account 
+            ADD COLUMN IF NOT EXISTS created_by varchar(50) NOT NULL DEFAULT 'system',
+            ADD COLUMN IF NOT EXISTS created_date timestamp DEFAULT CURRENT_TIMESTAMP,
+            ADD COLUMN IF NOT EXISTS last_modified_by varchar(50) NULL,
+            ADD COLUMN IF NOT EXISTS last_modified_date timestamp NULL ON UPDATE CURRENT_TIMESTAMP;
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>
