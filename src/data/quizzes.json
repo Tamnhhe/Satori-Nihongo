@@ -1,0 +1,43 @@
+[
+  {
+    "id": "d4cdfd87-aba7-4280-b1c1-e672e4f690e7",
+    "title": "Hiragana Basics",
+    "description": "Test your knowledge of basic Hiragana characters",
+    "teacherId": "teacher1",
+    "isActive": true,
+    "timeLimit": 30,
+    "questions": [
+      {
+        "type": "multiple_choice",
+        "question": "What is the Hiragana character for \"ka\"?",
+        "options": [
+          "か",
+          "が",
+          "き",
+          "け"
+        ],
+        "correctAnswer": "か",
+        "points": 1,
+        "explanation": "か is the hiragana character for \"ka\""
+      },
+      {
+        "id": "7b73889f-d9f0-4fe6-a5f8-16cc4264bf19",
+        "quizId": "d4cdfd87-aba7-4280-b1c1-e672e4f690e7",
+        "type": "multiple_choice",
+        "question": "What is the Hiragana character for \"ki\"?",
+        "options": [
+          "か",
+          "が",
+          "き",
+          "け"
+        ],
+        "correctAnswer": "き",
+        "points": 1,
+        "explanation": "き is the hiragana character for \"ki\"",
+        "order": 1
+      }
+    ],
+    "createdAt": "2025-07-18T17:27:15.602Z",
+    "updatedAt": "2025-07-18T17:27:32.085Z"
+  }
+]
